@@ -18,18 +18,23 @@ end
 -- Main features
 -- ********************************************************************
 function increment_played()
-	local time_played = get_time_played() + 1
+	local time_played = get_time_played()
+	--Remove 'played=xxx' tag: tmsu untag --tags="played" <filename>
+	local cmd_untag_played = "tmsu untag --tags=\"played=" .. time_played .. "\" '" .. get_file_name() .. "'"
+	print(cmd_untag_played)
+	execute_command(cmd_untag_played)
 	
 	--Increment the number of times played: tmsu tag --tags played=123 <filename>
-	local command = "tmsu tag --tags  played=" .. time_played .. " '" .. get_file_name() .. "'"
-	print(command)
-	execute_command(command)
+	time_played = time_played + 1
+	local cmd_inc_time_played = "tmsu tag --tags  played=" .. time_played .. " '" .. get_file_name() .. "'"
+	execute_command(cmd_inc_time_played)
 end
 
 function get_stats()
 	print("-----------------------------------------------------------")
 	print("Filename: " .. get_file_name())
 	print("  Played: " .. get_time_played())
+	print(get_tags())
 	print()
 end
 
@@ -71,6 +76,12 @@ function execute_command(command)
 	local result = handle:read("*a")
 	handle:close()
 	return result
+end
+
+function get_tags()
+	local command = "tmsu tags '" .. get_file_name() .. "'"
+	local line_result = execute_command(command)
+	return line_result
 end
 
 -- ********************************************************************
