@@ -17,18 +17,18 @@ require 'string'
 -- Helper functions
 -- ********************************************************************
 
--- Get the previous played number and add 1.
-function increment_played()
-	local time_played = get_time_played()
-	--Remove 'played=xxx' tag: tmsu untag --tags="played" <filename>
-	local cmd_untag_played = "tmsu untag --tags=\"played=" .. time_played .. "\" '" .. get_file_name() .. "'"
-	print(cmd_untag_played)
-	execute_command(cmd_untag_played)
+-- Get the previous likes number and add 1.
+function increment_likes()
+	local time_likes = get_time_likes()
+	--Remove 'likes=xxx' tag: tmsu untag --tags="likes" <filename>
+	local cmd_untag_likes = "tmsu untag --tags=\"likes=" .. time_likes .. "\" '" .. get_file_name() .. "'"
+	print(cmd_untag_likes)
+	execute_command(cmd_untag_likes)
 	
-	--Increment the number of times played: tmsu tag --tags played=123 <filename>
-	time_played = time_played + 1
-	local cmd_inc_time_played = "tmsu tag --tags  played=" .. time_played .. " '" .. get_file_name() .. "'"
-	execute_command(cmd_inc_time_played)
+	--Increment the number of times likes: tmsu tag --tags likes=123 <filename>
+	time_likes = time_likes + 1
+	local cmd_inc_time_likes = "tmsu tag --tags  likes=" .. time_likes .. " '" .. get_file_name() .. "'"
+	execute_command(cmd_inc_time_likes)
 	
 end
 
@@ -42,21 +42,21 @@ function get_length()
 	return length
 end
 
--- Return number of times played.
-function get_time_played()
+-- Return number of times likes.
+function get_time_likes()
 	-- Get tags of current play file: tmsu tags <filename>
 	local command = "tmsu tags '" .. get_file_name() .. "'"
 	local line_result = execute_command(command)
 	
-	-- Extract the number of time played.
-	local time_played = 0
+	-- Extract the number of time likes.
+	local time_likes = 0
 	for token in string.gmatch(line_result, "%S+") do
-		if string.starts(token, "played=") then
-			time_played = string.gsub(token, "played=", "")
+		if string.starts(token, "likes=") then
+			time_likes = string.gsub(token, "likes=", "")
 		end
 	end
 	
-	return time_played
+	return time_likes
 end
 
 -- Return filename.
@@ -82,8 +82,8 @@ function get_tags()
 	-- Remove <filename> from result.
 	cmd_results = string.gsub(cmd_results, "^.*: ", "")
 
-	-- Remove 'played=' tag from result.
-	cmd_results = string.gsub(cmd_results, "played=.* ", "")
+	-- Remove 'likes=' tag from result.
+	cmd_results = string.gsub(cmd_results, "likes=.* ", "")
 	
 	-- Remove newline from result.
 	cmd_results = string.gsub(cmd_results, "\n", "")
@@ -115,16 +115,16 @@ end
 -- Main features
 -- ********************************************************************
 
--- Auto increment the number of times played, when playback has elapsed
+-- Auto increment the number of times likes, when playback has elapsed
 --	for more than half.
-function auto_increment_played(event)
-	mp.add_timeout((get_length()/2), increment_played)
+function auto_increment_likes(event)
+	mp.add_timeout((get_length()/2), increment_likes)
 end
 
 function print_stats()
 	print("-----------------------------------------------------------")
 	print("Filename: " .. get_file_name())
-	print("  Played: " .. get_time_played())
+	print("  likes: " .. get_time_likes())
 	print("    Tags: " .. get_tags())
 	print()
 end
@@ -136,8 +136,8 @@ end
 --	Note: Ensure this section to be at the end of file
 --			so that all functions needed are defined.
 ------------------------------------------------------------------------
-mp.add_key_binding("Alt+l", "increment_played", increment_played)
+mp.add_key_binding("Alt+l", "increment_likes", increment_likes)
 mp.add_key_binding("Alt+i", "show_statistics", print_stats)
 
 -- Auto increment after X seconds.
-mp.register_event("file-loaded", auto_increment_played)
+mp.register_event("file-loaded", auto_increment_likes)
