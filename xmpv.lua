@@ -15,8 +15,10 @@ end
 
 
 -- ********************************************************************
--- Main features
+-- Helper functions
 -- ********************************************************************
+
+-- Get the previous played number and add 1.
 function increment_played()
 	local time_played = get_time_played()
 	--Remove 'played=xxx' tag: tmsu untag --tags="played" <filename>
@@ -28,28 +30,20 @@ function increment_played()
 	time_played = time_played + 1
 	local cmd_inc_time_played = "tmsu tag --tags  played=" .. time_played .. " '" .. get_file_name() .. "'"
 	execute_command(cmd_inc_time_played)
+	
 end
 
-function get_stats()
-	print("-----------------------------------------------------------")
-	print("Filename: " .. get_file_name())
-	print("  Played: " .. get_time_played())
-	print("    Tags: " .. get_tags())
-	print()
+-- Return length in seconds.
+function get_length()
+	local length = mp.get_property("length")
+	
+	-- Discard miliseconds
+	length = string.gsub(length, "%.%d*", "")
+	
+	return length
 end
 
-
----------------------------------------
--- Set key bindings.
----------------------------------------
-mp.add_key_binding("a", "increment_played", increment_played)
-mp.add_key_binding("i", "show_statistics", get_stats)
-
-
-
--- ********************************************************************
--- Helper functions
--- ********************************************************************
+-- Return number of times played.
 function get_time_played()
 	-- Get tags of current play file: tmsu tags <filename>
 	local command = "tmsu tags '" .. get_file_name() .. "'"
@@ -66,6 +60,7 @@ function get_time_played()
 	return time_played
 end
 
+-- Return filename.
 function get_file_name()
 	return mp.get_property("path")
 end
@@ -114,3 +109,36 @@ end
 function string.starts(String,Start)
 	return string.sub(String,1,string.len(Start))==Start
 end
+
+
+
+-- ********************************************************************
+-- Main features
+-- ********************************************************************
+
+-- Auto increment the number of times played, when playback has elapsed
+--	for more than half.
+function auto_increment_played(event)
+	mp.add_timeout((get_length()/2), increment_played)
+end
+
+function print_stats()
+	print("-----------------------------------------------------------")
+	print("Filename: " .. get_file_name())
+	print("  Played: " .. get_time_played())
+	print("    Tags: " .. get_tags())
+	print()
+end
+
+
+
+------------------------------------------------------------------------
+-- Set key bindings.
+--	Note: Ensure this section to be at the end of file
+--			so that all functions needed are defined.
+------------------------------------------------------------------------
+mp.add_key_binding("a", "increment_played", increment_played)
+mp.add_key_binding("i", "show_statistics", print_stats)
+
+-- Auto increment after X seconds.
+mp.register_event("file-loaded", auto_increment_played)
