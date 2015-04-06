@@ -166,26 +166,27 @@ function print_top_favorites()
 	
 	-- Get top favorites
 	local max_favorites = 10
-	local n=0	-- n will get the final number of favorites.
+	local n=1	-- n will get the final number of favorites.
 	local top_favorites = {}
 	for i=index,1,-1 do
 		-- Put files into top_favorites array.
 		local cmd_get_top_favorites = string.format("tmsu files \"%s=%d\"", likes_tag, likes_values[i])
 		local cmd_results = execute_command(cmd_get_top_favorites)
 		for line in string.gmatch(cmd_results, "[^\r\n]+") do 
-			n = n + 1
 			top_favorites[n] = string.format("[%4d] %s", likes_values[i], line)
+			n = n + 1
 		end
 		
 		-- Stop looping if it reaches max_favorites.
 		if n > max_favorites then
+			n = n - 1 -- Discard last increment of the loop above.
 			break -- Terminate the loop instantly and do not repeat.
 		end
 	end
 	
 	-- Print top favorites
-	--	Use n instead of max_favorites. Drawback: If you have a lot 1s,
-	--		then, it will display all of them.
+	--	Use n instead of max_favorites. Drawback: It will display all
+	--		the 10th likes.
 	print("-----------------------------------------------------------")
 	print("[Likes]--------------- TOP FAVORITES ----------------------")
 	for j=1,n do
