@@ -1,17 +1,16 @@
--- Description: Print "Hello World" when press 'g'.
---	This script should be put in ~/.mpv/lua/ directory.
--- Reference: http://bamos.github.io/2014/07/05/mpv-lua-scripting/
+-- DESCRIPTION: xmpv.lua integrates MPV and TMSU to provide the following features:
+--		-Tag files that you liked.
+-- USAGE:
+--	Alt+l: Increment like.
+--	Alt+i: Print info.
+
+-- INSTALL: This script should be put in ~/.mpv/lua/ directory.
+-- REFERENCE: http://bamos.github.io/2014/07/05/mpv-lua-scripting/
 -- 			https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
 
 require 'os'
 require 'io'
 require 'string'
-
-
-function get_properties()
-	print(mp.get_property("length"))
-end
-
 
 
 -- ********************************************************************
@@ -137,8 +136,8 @@ end
 --	Note: Ensure this section to be at the end of file
 --			so that all functions needed are defined.
 ------------------------------------------------------------------------
-mp.add_key_binding("a", "increment_played", increment_played)
-mp.add_key_binding("i", "show_statistics", print_stats)
+mp.add_key_binding("Alt+l", "increment_played", increment_played)
+mp.add_key_binding("Alt+i", "show_statistics", print_stats)
 
 -- Auto increment after X seconds.
 mp.register_event("file-loaded", auto_increment_played)
