@@ -144,6 +144,56 @@ function check_tmsu()
 	end	
 end
 
+-- Print top favorites/likes
+function print_top_favorites()
+	
+	-- Get likes values: 'tmsu values <tagname>'.
+	local cmd_get_likes_values = string.format("tmsu values %s", likes_tag)
+	local cmd_results = execute_command(cmd_get_likes_values)
+	
+	-- Put likes values in array.
+	local likes_values = {}
+	local index = 0 -- In lua index starts from 1 instead of 0.
+	for token in string.gmatch(cmd_results, "%S+") do
+		if(token~=nil) then
+			index = index + 1
+			likes_values[index] = token
+		end
+	end	
+	
+	-- Sort likes values in ascending order by numerical value.
+	table.sort(likes_values, function(a,b) return tonumber(a)<tonumber(b) end)
+	
+	-- Get top favorites
+	local max_favorites = 10
+	local n=0	-- n will get the final number of favorites.
+	local top_favorites = {}
+	for i=index,1,-1 do
+		-- Put files into top_favorites array.
+		local cmd_get_top_favorites = string.format("tmsu files \"%s=%d\"", likes_tag, likes_values[i])
+		local cmd_results = execute_command(cmd_get_top_favorites)
+		for line in string.gmatch(cmd_results, "[^\r\n]+") do 
+			n = n + 1
+			top_favorites[n] = string.format("[%4d] %s", likes_values[i], line)
+		end
+		
+		-- Stop looping if it reaches max_favorites.
+		if n > max_favorites then
+			break -- Terminate the loop instantly and do not repeat.
+		end
+	end
+	
+	-- Print top favorites
+	--	Use n instead of max_favorites. Drawback: If you have a lot 1s,
+	--		then, it will display all of them.
+	print("-----------------------------------------------------------")
+	print("[Likes]--------------- TOP FAVORITES ----------------------")
+	for j=1,n do
+		print(top_favorites[j]) 
+	end
+	
+end
+
 -- ********************************************************************
 -- Library functions
 -- ********************************************************************
@@ -161,6 +211,13 @@ end
 --	for more than half.
 function auto_increment_likes(event)
 	mp.add_timeout((get_length()/2), increment_likes)
+end
+
+-- Remove trailing and leading whitespace from string.
+-- 	http://en.wikipedia.org/wiki/Trim_(8programming)
+function trim(s)
+  -- from PiL2 20.4
+  return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
 -- Decrement the previous likes number by 1.
@@ -210,6 +267,7 @@ end
 mp.add_key_binding("Alt+l", "increment_likes", increment_likes)
 mp.add_key_binding("Alt+d", "decrement_likes", decrement_likes)
 mp.add_key_binding("Alt+r", "reset_likes", reset_likes)
+mp.add_key_binding("Alt+t", "top_favorites", print_top_favorites)
 mp.add_key_binding("Alt+i", "show_statistics", print_stats)
 
 -- Auto increment after X seconds.
