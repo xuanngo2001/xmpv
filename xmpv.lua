@@ -78,6 +78,7 @@ function execute_command(command)
 	return result
 end
 
+-- Extract tags of file from tmsu.
 function get_tags()
 	local filename = get_file_name()
 	-- Get tags: tmsu tags <filename>
@@ -93,7 +94,8 @@ function get_tags()
 	-- Remove newline tag from result.
 	cmd_results = string.gsub(cmd_results, "\n", "")
 		
-	print("[" .. cmd_results .. "]")
+	
+	-- Concatenate all tags with comma.
 	local tags = ""
 	for token in string.gmatch(cmd_results, "%S+") do
 		-- Concatenate tags
