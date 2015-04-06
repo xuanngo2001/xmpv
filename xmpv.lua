@@ -12,6 +12,7 @@ require 'os'
 require 'io'
 require 'string'
 
+likes_tag="likes"
 
 -- ********************************************************************
 -- Helper functions
@@ -19,16 +20,16 @@ require 'string'
 
 -- Get the previous likes number and add 1.
 function increment_likes()
-	local time_likes = get_time_likes()
+	local likes_number = get_likes_number()
 	--Remove 'likes=xxx' tag: tmsu untag --tags="likes" <filename>
-	local cmd_untag_likes = "tmsu untag --tags=\"likes=" .. time_likes .. "\" '" .. get_file_name() .. "'"
+	local cmd_untag_likes = "tmsu untag --tags=\"likes=" .. likes_number .. "\" '" .. get_file_name() .. "'"
 	print(cmd_untag_likes)
 	execute_command(cmd_untag_likes)
 	
 	--Increment the number of times likes: tmsu tag --tags likes=123 <filename>
-	time_likes = time_likes + 1
-	local cmd_inc_time_likes = "tmsu tag --tags  likes=" .. time_likes .. " '" .. get_file_name() .. "'"
-	execute_command(cmd_inc_time_likes)
+	likes_number = likes_number + 1
+	local cmd_inc_likes_number = "tmsu tag --tags  likes=" .. likes_number .. " '" .. get_file_name() .. "'"
+	execute_command(cmd_inc_likes_number)
 	
 end
 
@@ -42,21 +43,21 @@ function get_length()
 	return length
 end
 
--- Return number of times likes.
-function get_time_likes()
+-- Return number of likes.
+function get_likes_number()
 	-- Get tags of current play file: tmsu tags <filename>
 	local command = "tmsu tags '" .. get_file_name() .. "'"
 	local line_result = execute_command(command)
 	
 	-- Extract the number of time likes.
-	local time_likes = 0
+	local likes_number = 0
 	for token in string.gmatch(line_result, "%S+") do
 		if string.starts(token, "likes=") then
-			time_likes = string.gsub(token, "likes=", "")
+			likes_number = string.gsub(token, "likes=", "")
 		end
 	end
 	
-	return time_likes
+	return likes_number
 end
 
 -- Return filename.
@@ -124,7 +125,7 @@ end
 function print_stats()
 	print("-----------------------------------------------------------")
 	print("Filename: " .. get_file_name())
-	print("  likes: " .. get_time_likes())
+	print("   Likes: " .. get_likes_number())
 	print("    Tags: " .. get_tags())
 	print()
 end
