@@ -80,9 +80,9 @@ end
 
 -- Extract tags of file from tmsu.
 function get_tags()
-	local filename = get_file_name()
+
 	-- Get tags: tmsu tags <filename>
-	local cmd_get_tags = "tmsu tags '" .. filename .. "'"
+	local cmd_get_tags = "tmsu tags '" .. get_file_name() .. "'"
 	local cmd_results = execute_command(cmd_get_tags)
 	
 	-- Remove <filename> from result.
@@ -91,7 +91,7 @@ function get_tags()
 	-- Remove 'played=' tag from result.
 	cmd_results = string.gsub(cmd_results, "played=.* ", "")
 	
-	-- Remove newline tag from result.
+	-- Remove newline from result.
 	cmd_results = string.gsub(cmd_results, "\n", "")
 		
 	
