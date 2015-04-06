@@ -21,11 +21,12 @@ file_name_for_cmd = ""
 -- On "file-loaded", this function will run.
 function initialization()
 	file_name_for_cmd = get_file_name_for_cmd()
+	check_tmsu()
 end
 
 
 -- ********************************************************************
--- Helper functions
+-- Private functions
 -- ********************************************************************
 
 -- Increment the previous likes number by 1.
@@ -129,6 +130,18 @@ function get_file_name_for_cmd(filename)
 	--Escape double quotes.
 	filename = string.format('%q', filename)
 	return filename
+end
+
+-- Log error if TMSU is not found.
+function check_tmsu()
+	local cmd_get_tmsu_version = "tmsu --version"
+	local cmd_results = execute_command(cmd_get_tmsu_version)
+	
+	if (string.find(cmd_results, "TMSU")==nil) then
+		local message = 	 string.format("ERROR: %s can't run.",mp.get_script_name()) .. "\n"
+		message = message .. string.format("ERROR: It requires TMSU. Download it at http://tmsu.org/.")
+		mp.msg.error(message)
+	end	
 end
 
 -- ********************************************************************
