@@ -34,13 +34,17 @@ function increment_likes()
 
 	local likes_number = get_likes_number()
 	
-	--Remove 'likes=xxx' tag: tmsu untag --tags="likes" <filename>
-	local cmd_untag_likes = string.format("tmsu untag --tags=\"%s=%d\" %s", likes_tag, likes_number, file_name_for_cmd)
-	execute_command(cmd_untag_likes)
+	if(likes_number=="") then
+		likes_number = 0
+	else
+		--Remove 'likes=xxx' tag: tmsu untag --tags="likes" <filename>
+		local cmd_untag_likes = string.format("tmsu untag --tags=\"%s=%s\" %s", likes_tag, likes_number, file_name_for_cmd)
+		execute_command(cmd_untag_likes)
+	end
 	
 	--Increment the number of likes: tmsu tag --tags likes=123 <filename>
 	likes_number = likes_number + 1
-	local cmd_inc_likes_number = string.format("tmsu tag --tags=\"%s=%d\" %s", likes_tag, likes_number, file_name_for_cmd)
+	local cmd_inc_likes_number = string.format("tmsu tag --tags=\"%s=%s\" %s", likes_tag, likes_number, file_name_for_cmd)
 	print(cmd_inc_likes_number)
 	execute_command(cmd_inc_likes_number)
 	
@@ -63,7 +67,7 @@ function get_likes_number()
 	local cmd_results = get_raw_tags()	
 	
 	-- Extract the number of likes.
-	local likes_number = 0
+	local likes_number = ""
 	for token in string.gmatch(cmd_results, "%S+") do
 		if string.starts(token, "likes=") then
 			likes_number = string.gsub(token, "likes=", "")
@@ -226,13 +230,17 @@ function decrement_likes()
 
 	local likes_number = get_likes_number()
 	
-	--Remove 'likes=xxx' tag: tmsu untag --tags="likes" <filename>
-	local cmd_untag_likes = string.format("tmsu untag --tags=\"%s=%d\" %s", likes_tag, likes_number, file_name_for_cmd)
-	execute_command(cmd_untag_likes)
+	if(likes_number=="") then
+		likes_number = 0
+	else
+		--Remove 'likes=xxx' tag: tmsu untag --tags="likes" <filename>
+		local cmd_untag_likes = string.format("tmsu untag --tags=\"%s=%s\" %s", likes_tag, likes_number, file_name_for_cmd)
+		execute_command(cmd_untag_likes)
+	end	
 	
 	--Decrement the number of likes: tmsu tag --tags likes=123 <filename>
 	likes_number = likes_number - 1
-	local cmd_inc_likes_number = string.format("tmsu tag --tags=\"%s=%d\" %s", likes_tag, likes_number, file_name_for_cmd)
+	local cmd_inc_likes_number = string.format("tmsu tag --tags=\"%s=%s\" %s", likes_tag, likes_number, file_name_for_cmd)
 	print(cmd_inc_likes_number)
 	execute_command(cmd_inc_likes_number)
 	
@@ -240,10 +248,20 @@ end
 
 -- Reset likes number to 0.
 function reset_likes()
+
+	local likes_number = get_likes_number()
+	
+	if(likes_number=="") then
+		likes_number = 0
+	else
+		--Remove 'likes=xxx' tag: tmsu untag --tags="likes" <filename>
+		local cmd_untag_likes = string.format("tmsu untag --tags=\"%s=%s\" %s", likes_tag, likes_number, file_name_for_cmd)
+		execute_command(cmd_untag_likes)
+	end	
 	
 	--Set the number of likes to zero: tmsu tag --tags likes=0 <filename>
-	local likes_number = 0
-	local cmd_inc_likes_number = string.format("tmsu tag --tags=\"%s=%d\" %s", likes_tag, likes_number, file_name_for_cmd)
+	likes_number = 0
+	local cmd_inc_likes_number = string.format("tmsu tag --tags=\"%s=%s\" %s", likes_tag, likes_number, file_name_for_cmd)
 	print(cmd_inc_likes_number)
 	execute_command(cmd_inc_likes_number)
 	
