@@ -47,9 +47,9 @@ end
 
 -- Return number of likes.
 function get_likes_number()
-	-- Get tags of current file: tmsu tags <filename>
-	local cmd_get_tags = string.format("tmsu tags '%s'", get_file_name())
-	local cmd_results = execute_command(cmd_get_tags)
+	
+	-- Get raw tags of current file.
+	local cmd_results = get_raw_tags()	
 	
 	-- Extract the number of likes.
 	local likes_number = 0
@@ -75,12 +75,11 @@ function execute_command(command)
 	return result
 end
 
--- Extract tags of file from tmsu.
+-- Extract tags of file from TMSU.
 function get_tags()
 
-	-- Get tags of current file: tmsu tags <filename>
-	local cmd_get_tags = string.format("tmsu tags '%s'", get_file_name())
-	local cmd_results = execute_command(cmd_get_tags)	
+	-- Get raw tags of current file.
+	local cmd_results = get_raw_tags()
 	
 	-- Remove <filename> from result.
 	cmd_results = string.gsub(cmd_results, "^.*: ", "")
@@ -104,6 +103,14 @@ function get_tags()
 	tags = string.gsub(tags, "^, ", "")
 	
 	return tags
+end
+
+-- Return raw tags, unformatted from TMSU.
+function get_raw_tags()
+	-- Get tags of current file: tmsu tags <filename>
+	local cmd_get_tags = string.format("tmsu tags '%s'", get_file_name())
+	return execute_command(cmd_get_tags)	
+
 end
 
 -- ********************************************************************
