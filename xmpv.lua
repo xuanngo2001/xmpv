@@ -90,7 +90,6 @@ function get_tags()
 	
 	-- Remove newline from result.
 	cmd_results = string.gsub(cmd_results, "\n", "")
-		
 	
 	-- Concatenate all tags with comma.
 	local tags = ""
@@ -111,6 +110,11 @@ function get_raw_tags()
 	local cmd_get_tags = string.format("tmsu tags '%s'", get_file_name())
 	return execute_command(cmd_get_tags)	
 
+end
+
+function get_file_name_for_cmd(filename)
+	local filename = get_file_name()
+	return filename
 end
 
 -- ********************************************************************
