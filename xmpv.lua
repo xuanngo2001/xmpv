@@ -13,6 +13,13 @@ require 'io'
 require 'string'
 
 likes_tag="likes"
+file_name_for_cmd = ""
+
+-- On "file-loaded", this function will run.
+function initialization()
+	file_name_for_cmd = get_file_name_for_cmd()
+end
+
 
 -- ********************************************************************
 -- Helper functions
@@ -24,12 +31,12 @@ function increment_likes()
 	local likes_number = get_likes_number()
 	
 	--Remove 'likes=xxx' tag: tmsu untag --tags="likes" <filename>
-	local cmd_untag_likes = string.format("tmsu untag --tags=\"%s=%d\" '%s'", likes_tag, likes_number, get_file_name())
+	local cmd_untag_likes = string.format("tmsu untag --tags=\"%s=%d\" %s", likes_tag, likes_number, file_name_for_cmd)
 	execute_command(cmd_untag_likes)
 	
 	--Increment the number of times likes: tmsu tag --tags likes=123 <filename>
 	likes_number = likes_number + 1
-	local cmd_inc_likes_number = string.format("tmsu tag --tags=\"%s=%d\" '%s'", likes_tag, likes_number, get_file_name())
+	local cmd_inc_likes_number = string.format("tmsu tag --tags=\"%s=%d\" %s", likes_tag, likes_number, file_name_for_cmd)
 	print(cmd_inc_likes_number)
 	execute_command(cmd_inc_likes_number)
 	
@@ -85,7 +92,7 @@ function get_tags()
 	cmd_results = string.gsub(cmd_results, "^.*: ", "")
 
 	-- Remove 'likes=' tag from result.
-	local likes_tag_pattern = likes_tag .. "=.* "
+	local likes_tag_pattern = likes_tag .. "=%d*"
 	cmd_results = string.gsub(cmd_results, likes_tag_pattern, "")
 	
 	-- Remove newline from result.
@@ -107,13 +114,16 @@ end
 -- Return raw tags, unformatted from TMSU.
 function get_raw_tags()
 	-- Get tags of current file: tmsu tags <filename>
-	local cmd_get_tags = string.format("tmsu tags '%s'", get_file_name())
+	local cmd_get_tags = string.format("tmsu tags %s", file_name_for_cmd)
 	return execute_command(cmd_get_tags)	
 
 end
 
 function get_file_name_for_cmd(filename)
 	local filename = get_file_name()
+	
+	--Escape double quotes.
+	filename = string.format('%q', filename)
 	return filename
 end
 
@@ -155,4 +165,6 @@ mp.add_key_binding("Alt+l", "increment_likes", increment_likes)
 mp.add_key_binding("Alt+i", "show_statistics", print_stats)
 
 -- Auto increment after X seconds.
+mp.register_event("file-loaded", initialization)
 mp.register_event("file-loaded", auto_increment_likes)
+
