@@ -34,7 +34,7 @@ function get_stats()
 	print("-----------------------------------------------------------")
 	print("Filename: " .. get_file_name())
 	print("  Played: " .. get_time_played())
-	print(get_tags())
+	print("    Tags: " .. get_tags())
 	print()
 end
 
@@ -79,9 +79,31 @@ function execute_command(command)
 end
 
 function get_tags()
-	local command = "tmsu tags '" .. get_file_name() .. "'"
-	local line_result = execute_command(command)
-	return line_result
+	local filename = get_file_name()
+	-- Get tags: tmsu tags <filename>
+	local cmd_get_tags = "tmsu tags '" .. filename .. "'"
+	local cmd_results = execute_command(cmd_get_tags)
+	
+	-- Remove <filename> from result.
+	cmd_results = string.gsub(cmd_results, "^.*: ", "")
+
+	-- Remove 'played=' tag from result.
+	cmd_results = string.gsub(cmd_results, "played=.* ", "")
+	
+	-- Remove newline tag from result.
+	cmd_results = string.gsub(cmd_results, "\n", "")
+		
+	print("[" .. cmd_results .. "]")
+	local tags = ""
+	for token in string.gmatch(cmd_results, "%S+") do
+		-- Concatenate tags
+		tags = tags .. ", " .. token
+	end	
+	
+	-- Quick clean up of comma if there is only 1 tag.
+	tags = string.gsub(tags, "^, ", "")
+	
+	return tags
 end
 
 -- ********************************************************************
