@@ -4,7 +4,7 @@
 --	Alt+l: Increment like.
 --	Alt+i: Print info.
 
--- INSTALL: This script should be put in ~/.mpv/lua/ directory.
+-- INSTALL: This script should be put in ~/.mpv/lua/ directory. /root/.config/mpv/scripts
 -- REFERENCE: http://bamos.github.io/2014/07/05/mpv-lua-scripting/
 -- 			https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
 
@@ -20,15 +20,17 @@ likes_tag="likes"
 
 -- Increment the previous likes number by 1.
 function increment_likes()
+
 	local likes_number = get_likes_number()
+	
 	--Remove 'likes=xxx' tag: tmsu untag --tags="likes" <filename>
-	local cmd_untag_likes = "tmsu untag --tags=\"likes=" .. likes_number .. "\" '" .. get_file_name() .. "'"
-	print(cmd_untag_likes)
+	local cmd_untag_likes = string.format("tmsu untag --tags=\"%s=%d\" '%s'", likes_tag, likes_number, get_file_name())
 	execute_command(cmd_untag_likes)
 	
 	--Increment the number of times likes: tmsu tag --tags likes=123 <filename>
 	likes_number = likes_number + 1
-	local cmd_inc_likes_number = "tmsu tag --tags  likes=" .. likes_number .. " '" .. get_file_name() .. "'"
+	local cmd_inc_likes_number = string.format("tmsu tag --tags=\"%s=%d\" '%s'", likes_tag, likes_number, get_file_name())
+	print(cmd_inc_likes_number)
 	execute_command(cmd_inc_likes_number)
 	
 end
@@ -45,13 +47,13 @@ end
 
 -- Return number of likes.
 function get_likes_number()
-	-- Get tags of current play file: tmsu tags <filename>
-	local command = "tmsu tags '" .. get_file_name() .. "'"
-	local line_result = execute_command(command)
+	-- Get tags of current file: tmsu tags <filename>
+	local cmd_get_tags = string.format("tmsu tags '%s'", get_file_name())
+	local cmd_results = execute_command(cmd_get_tags)
 	
-	-- Extract the number of time likes.
+	-- Extract the number of likes.
 	local likes_number = 0
-	for token in string.gmatch(line_result, "%S+") do
+	for token in string.gmatch(cmd_results, "%S+") do
 		if string.starts(token, "likes=") then
 			likes_number = string.gsub(token, "likes=", "")
 		end
@@ -76,15 +78,16 @@ end
 -- Extract tags of file from tmsu.
 function get_tags()
 
-	-- Get tags: tmsu tags <filename>
-	local cmd_get_tags = "tmsu tags '" .. get_file_name() .. "'"
-	local cmd_results = execute_command(cmd_get_tags)
+	-- Get tags of current file: tmsu tags <filename>
+	local cmd_get_tags = string.format("tmsu tags '%s'", get_file_name())
+	local cmd_results = execute_command(cmd_get_tags)	
 	
 	-- Remove <filename> from result.
 	cmd_results = string.gsub(cmd_results, "^.*: ", "")
 
 	-- Remove 'likes=' tag from result.
-	cmd_results = string.gsub(cmd_results, "likes=.* ", "")
+	local likes_tag_pattern = likes_tag .. "=.* "
+	cmd_results = string.gsub(cmd_results, likes_tag_pattern, "")
 	
 	-- Remove newline from result.
 	cmd_results = string.gsub(cmd_results, "\n", "")
