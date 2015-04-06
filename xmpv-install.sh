@@ -5,7 +5,7 @@
 # Requirements: 
 # Reference: 
 
-LUA_DIR=/root/.mpv/lua/
+LUA_DIR=/root/.config/mpv/scripts
 mkdir -p ${LUA_DIR}
 
 # Add lua scripts

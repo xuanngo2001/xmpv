@@ -4,7 +4,7 @@
 --	Alt+l: Increment like.
 --	Alt+i: Print info.
 
--- INSTALL: This script should be put in ~/.mpv/lua/ directory. /root/.config/mpv/scripts
+-- INSTALL: This script should be copied to ~/root/.config/mpv/scripts/ directory.
 -- REFERENCE: http://bamos.github.io/2014/07/05/mpv-lua-scripting/
 -- 			https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
 
