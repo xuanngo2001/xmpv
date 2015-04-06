@@ -94,7 +94,8 @@ function get_tags()
 	cmd_results = string.gsub(cmd_results, "^.*: ", "")
 
 	-- Remove 'likes=' tag from result.
-	local likes_tag_pattern = likes_tag .. "=%d*"
+	--	Handle negative value too.
+	local likes_tag_pattern = likes_tag .. "=[-]?%d*"
 	cmd_results = string.gsub(cmd_results, likes_tag_pattern, "")
 	
 	-- Remove newline from result.
