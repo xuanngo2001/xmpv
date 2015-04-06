@@ -7,7 +7,7 @@
 --			Alt+r: Reset likes to zero.
 --			Alt+i: Print info.
 
--- INSTALL: This script should be copied to ~/root/.config/mpv/scripts/ directory.
+-- INSTALL: This script should be copied to ~/.config/mpv/scripts/ directory.
 -- REFERENCE: http://bamos.github.io/2014/07/05/mpv-lua-scripting/
 -- 			https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
 
