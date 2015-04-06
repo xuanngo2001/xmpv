@@ -18,7 +18,7 @@ likes_tag="likes"
 -- Helper functions
 -- ********************************************************************
 
--- Get the previous likes number and add 1.
+-- Increment the previous likes number by 1.
 function increment_likes()
 	local likes_number = get_likes_number()
 	--Remove 'likes=xxx' tag: tmsu untag --tags="likes" <filename>
