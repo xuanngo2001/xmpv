@@ -35,7 +35,7 @@ Copy this script(`xmpv.lua`) to `~/.config/mpv/scripts/` directory.
 ```
 [xmpv] ----------------------------------------------------------- 
 [xmpv]   Filename: some_music_file_name.mp3 
-[xmpv]      Likes: 10 
+[xmpv]      Likes: 11 
 [xmpv]       Tags: music, funky 
 [xmpv] Marked Pos: 00:01:04, 00:02:41 
 [xmpv] 
@@ -45,7 +45,7 @@ Copy this script(`xmpv.lua`) to `~/.config/mpv/scripts/` directory.
 [xmpv] ----------------------------------------------------------- 
 [xmpv] [Likes]--------------- TOP FAVORITES ---------------------- 
 [xmpv] [  34] /x/audio/UnderInfluence/Books, Books, Books_20120526_33300.mp3 
-[xmpv] [  11] ./01 Myriiam - Nca Fazi Pa Mal.mp3 
+[xmpv] [  11] ./some_music_file_name.mp3 
 [xmpv] [   9] /x/audio/UnderInfluence/Brand.Envy_20120512_72214.mp3 
 [xmpv] [   2] /x/audio/UnderInfluence/Colour.Schemes-How.Colours.Make.Us.Buy_2012-05-05.mp3 
 [xmpv] [   1] ./00 file name& weird.mp3 
