@@ -1,5 +1,6 @@
 # DESCRIPTION
   `xmpv.lua` is an extension of **MPV** that integrates with **TMSU** to provide the following features:
+  
     * Tag files that you liked.
     * Display your favorite files.
     * Mark time position.
