@@ -1,6 +1,7 @@
 # DESCRIPTION
-`xmpv.lua` integrates **MPV** and **TMSU** to provide the following features:
+`xmpv.lua` is an extension of **MPV** and integrates with **TMSU** to provide the following features:
 * Tag files that you liked.
+* Show your favorite files.
 
 # USAGE
 
