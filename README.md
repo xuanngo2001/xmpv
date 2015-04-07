@@ -9,7 +9,7 @@
   * Delete previous marked time position.
 
 # USAGE
-* Hot keys:
+* Hotkeys:
   * `Alt+l`: Increment likes.
   * `Alt+d`: Decrement likes.
   * `Alt+r`: Reset likes to zero.
