@@ -148,6 +148,29 @@ function check_tmsu()
 	end	
 end
 
+
+-- ********************************************************************
+-- Library functions
+-- ********************************************************************
+function string.starts(String,Start)
+	return string.sub(String,1,string.len(Start))==Start
+end
+
+
+
+-- ********************************************************************
+-- Main features
+-- ********************************************************************
+
+-- TODO: Experimental
+function tag_file()
+	io.write("\nTags:")
+	--io.flush()
+	local tags = io.read()
+	
+	print(tags)
+end
+
 -- Print top favorites/likes
 function print_top_favorites()
 	
@@ -199,18 +222,6 @@ function print_top_favorites()
 	
 end
 
--- ********************************************************************
--- Library functions
--- ********************************************************************
-function string.starts(String,Start)
-	return string.sub(String,1,string.len(Start))==Start
-end
-
-
-
--- ********************************************************************
--- Main features
--- ********************************************************************
 
 -- Auto increment the number of times likes, when playback has elapsed
 --	for more than half.
@@ -286,6 +297,7 @@ end
 mp.add_key_binding("Alt+l", "increment_likes", increment_likes)
 mp.add_key_binding("Alt+d", "decrement_likes", decrement_likes)
 mp.add_key_binding("Alt+r", "reset_likes", reset_likes)
+mp.add_key_binding("Alt+g", "tag_file", tag_file)
 mp.add_key_binding("Alt+t", "top_favorites", print_top_favorites)
 mp.add_key_binding("Alt+i", "show_statistics", print_stats)
 
