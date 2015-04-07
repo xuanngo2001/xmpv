@@ -248,6 +248,8 @@ end
 -- Main features
 -- ********************************************************************
 
+
+
 --  It breeds from goto_previous_mark_position().
 function delete_previous_mark_position()
 
@@ -262,7 +264,7 @@ function delete_previous_mark_position()
     local previous_pos = mark_positions[mark_positions_size] -- Initialize previous position to be the last pos.
     for i, mark_position in ipairs(mark_positions) do
       if tonumber(current_pos) < tonumber(mark_position) then
-        --mp.commandv("seek", previous_pos, "absolute", "exact")
+        tmsu_untag(mark_tag, previous_pos, file_name_for_cmd)
         found_previous_pos = true
         local warn_msg = string.format("WARN: Delete marked position %s.", toTimeFormat(previous_pos))
         mp.msg.warn(warn_msg)        
@@ -275,7 +277,7 @@ function delete_previous_mark_position()
     -- 'Make it goes around logic' here: If previous pos not found, then goes to the last pos.
     if ( not found_previous_pos ) then
       previous_pos = mark_positions[mark_positions_size]
-      mp.commandv("seek", previous_pos, "absolute", "exact")
+      tmsu_untag(mark_tag, previous_pos, file_name_for_cmd)
       local warn_msg = string.format("WARN: Delete marked position %s.", toTimeFormat(previous_pos))
       mp.msg.warn(warn_msg)
     end
@@ -410,6 +412,11 @@ end
 function tmsu_tag(tag_name, tag_value, cmd_file_path)
   local cmd_tag = string.format("tmsu tag --tags=\"%s=%s\" %s", tag_name, tag_value, cmd_file_path)
   execute_command(cmd_tag)
+end
+
+function tmsu_untag(tag_name, tag_value, cmd_file_path)
+  local cmd_untag = string.format("tmsu untag --tags=\"%s=%s\" %s", tag_name, tag_value, cmd_file_path)
+  execute_command(cmd_untag)
 end
 
 -- Auto increment the number of times likes, when playback has elapsed
