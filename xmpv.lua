@@ -175,7 +175,7 @@ function print_top_favorites()
 	
 	-- Put likes values in array.
 	local likes_values = {}
-	local index = 0 -- In lua index starts from 1 instead of 0.
+	local index = 0 -- In lua, index starts from 1 instead of 0.
 	for token in string.gmatch(cmd_results, "%S+") do
 		if(token~=nil) then
 			index = index + 1
@@ -188,21 +188,20 @@ function print_top_favorites()
 	
 	-- Get top favorites
 	local max_favorites = 10
-	local n=1	-- n will get the final number of favorites.
+	local n=0	-- n will get the final number of favorites.
 	local top_favorites = {}
 	for i=index,1,-1 do
 		-- Put files into top_favorites array.
 		local cmd_get_top_favorites = string.format("tmsu files \"%s=%d\"", likes_tag, likes_values[i])
 		local cmd_results = execute_command(cmd_get_top_favorites)
 		for line in string.gmatch(cmd_results, "[^\r\n]+") do 
+      n = n + 1
 			top_favorites[n] = string.format("[%4d] %s", likes_values[i], line)
-			n = n + 1
 		end
 		
 		-- Stop looping if it reaches max_favorites.
 		if n > max_favorites then
-			n = n - 1 -- Discard last increment of the loop above.
-			break -- Terminate the loop instantly and do not repeat.
+			break -- Terminate the loop instantly.
 		end
 	end
 	
@@ -224,11 +223,67 @@ function string.starts(String,Start)
 	return string.sub(String,1,string.len(Start))==Start
 end
 
-
+-- http://lua-users.org/wiki/SplitJoin
+function string.gsplit(s, sep, plain)
+  local start = 1
+  local done = false
+  local function pass(i, j, ...)
+    if i then
+      local seg = s:sub(start, i - 1)
+      start = j + 1
+      return seg, ...
+    else
+      done = true
+      return s:sub(start)
+    end
+  end
+  return function()
+    if done then return end
+    if sep == '' then done = true return s end
+    return pass(s:find(sep, start, plain))
+  end
+end
 
 -- ********************************************************************
 -- Main features
 -- ********************************************************************
+
+--  It breeds from goto_previous_mark_position().
+function delete_previous_mark_position()
+
+  local mark_positions = get_mark_positions()
+  local mark_positions_size = table.getn(mark_positions) 
+  if(mark_positions_size < 1) then
+    mp.msg.warn("WARN: No marked position.")
+  else
+  
+    local current_pos = mp.get_property("time-pos")
+    local found_previous_pos = false
+    local previous_pos = mark_positions[mark_positions_size] -- Initialize previous position to be the last pos.
+    for i, mark_position in ipairs(mark_positions) do
+      if tonumber(current_pos) < tonumber(mark_position) then
+        --mp.commandv("seek", previous_pos, "absolute", "exact")
+        found_previous_pos = true
+        local warn_msg = string.format("WARN: Delete marked position %s.", toTimeFormat(previous_pos))
+        mp.msg.warn(warn_msg)        
+        break
+      else
+        previous_pos = mark_position
+      end
+    end
+  
+    -- 'Make it goes around logic' here: If previous pos not found, then goes to the last pos.
+    if ( not found_previous_pos ) then
+      previous_pos = mark_positions[mark_positions_size]
+      mp.commandv("seek", previous_pos, "absolute", "exact")
+      local warn_msg = string.format("WARN: Delete marked position %s.", toTimeFormat(previous_pos))
+      mp.msg.warn(warn_msg)
+    end
+    
+  end
+
+end
+
 
 -- Go to the next marked position.
 --  Make it goes around: If it is the end, start over.
@@ -250,15 +305,17 @@ function goto_next_mark_position()
       if tonumber(current_pos) < tonumber(mark_position) then
         mp.commandv("seek", mark_position, "absolute", "exact")
         found_next_pos = true
-        mp.msg.warn("Goto ".. mark_position .. " => ".. toTimeFormat(mark_position))
+        local warn_msg = string.format("Goto %d => %s.", mark_position, toTimeFormat(mark_position))
+        mp.msg.warn(warn_msg)        
         break
       end
     end
   
     -- 'Make it goes around logic' here.
     if ( not found_next_pos ) then
-      mp.msg.warn("WARN: No more next marked position. RESTART.")
       mp.commandv("seek", mark_positions[1], "absolute", "exact")
+      local warn_msg = string.format("WARN: No more next marked position. Go to the first position at %s.", toTimeFormat(mark_positions[1]))
+      mp.msg.warn(warn_msg)
     end
     
   end
@@ -267,6 +324,7 @@ end
 
 -- Go to the previous marked position.
 --  Make it goes around: If it is the beginning, go to the last position.
+--  It breeds from goto_next_mark_position().
 --  Special cases:
 --    -No marked position.
 --    -Only 1 marked position.
@@ -279,14 +337,15 @@ function goto_previous_mark_position()
     mp.msg.warn("WARN: No marked position.")
   else
   
-    local current_pos = mp.get_property("time-pos")
+    local current_pos = mp.get_property("time-pos") - 2 --  Minus 2 seconds to allow time for user to do Previous, Previous, ... 
     local found_previous_pos = false
     local previous_pos = mark_positions[mark_positions_size] -- Initialize previous position to be the last pos.
     for i, mark_position in ipairs(mark_positions) do
       if tonumber(current_pos) < tonumber(mark_position) then
         mp.commandv("seek", previous_pos, "absolute", "exact")
         found_previous_pos = true
-        mp.msg.warn("Back to ".. previous_pos .. " => ".. toTimeFormat(previous_pos))
+        local warn_msg = string.format("Back to %d => %s.", previous_pos, toTimeFormat(previous_pos))
+        mp.msg.warn(warn_msg)        
         break
       else
         previous_pos = mark_position
@@ -295,8 +354,10 @@ function goto_previous_mark_position()
   
     -- 'Make it goes around logic' here: If previous pos not found, then goes to the last pos.
     if ( not found_previous_pos ) then
-      mp.msg.warn("WARN: No more next marked position. RESTART.")
-      mp.commandv("seek", mark_positions[mark_positions_size], "absolute", "exact")
+      previous_pos = mark_positions[mark_positions_size]
+      mp.commandv("seek", previous_pos, "absolute", "exact")
+      local warn_msg = string.format("WARN: No more previous marked position. Back to the last position at %s.", toTimeFormat(previous_pos))
+      mp.msg.warn(warn_msg)
     end
     
   end
@@ -425,6 +486,7 @@ mp.add_key_binding("Alt+i", "show_statistics", print_stats)
 mp.add_key_binding("Alt+m", "mark_position", mark_position)
 mp.add_key_binding("Alt+n", "goto_next_mark_position", goto_next_mark_position)
 mp.add_key_binding("Alt+b", "goto_previous_mark_position", goto_previous_mark_position)
+mp.add_key_binding("Alt+v", "delete_previous_mark_position", delete_previous_mark_position)
 
 -- Auto increment after X seconds.
 mp.register_event("file-loaded", initialization)
