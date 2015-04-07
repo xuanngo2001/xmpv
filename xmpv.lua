@@ -102,8 +102,8 @@ function get_likes_number()
 	return likes_number
 end
 
--- Return filename.
-function get_file_name()
+-- Return file path.
+function get_file_path()
 	return mp.get_property("path")
 end
 
@@ -159,7 +159,7 @@ function get_raw_tags()
 end
 
 function get_file_name_for_cmd(filename)
-	local filename = get_file_name()
+	local filename = get_file_path()
 	
 	--Escape double quotes.
 	filename = string.format('%q', filename)
@@ -483,7 +483,7 @@ end
 -- Print information about this file.
 function print_stats()
 	print("-----------------------------------------------------------")
-	print("  Filename: " .. get_file_name())
+	print("  Filename: " .. get_file_path())
 	print("     Likes: " .. get_likes_number())
 	print("      Tags: " .. get_tags())
   print("Marked Pos: " .. get_formatted_mark_positions())
