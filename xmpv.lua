@@ -63,16 +63,14 @@ function increment_likes()
 	if(likes_number=="") then
 		likes_number = 0
 	else
-		--Remove 'likes=xxx' tag: tmsu untag --tags="likes" <filename>
-		local cmd_untag_likes = string.format("tmsu untag --tags=\"%s=%s\" %s", likes_tag, likes_number, file_name_for_cmd)
-		execute_command(cmd_untag_likes)
+		--Remove current 'likes=xxx' tag number.
+		tmsu_untag(likes_tag, likes_number, file_name_for_cmd)
 	end
 	
-	--Increment the number of likes: tmsu tag --tags likes=123 <filename>
+	--Increment the number of likes.
 	likes_number = likes_number + 1
-	local cmd_inc_likes_number = string.format("tmsu tag --tags=\"%s=%s\" %s", likes_tag, likes_number, file_name_for_cmd)
-	print(cmd_inc_likes_number)
-	execute_command(cmd_inc_likes_number)
+	tmsu_tag(likes_tag, likes_number, file_name_for_cmd)
+	mp.msg.info(string.format("INFO: Increased likes to %d.", likes_number))
 	
 end
 
@@ -80,7 +78,7 @@ end
 function get_length()
 	local length = mp.get_property("length")
 	
-	-- Discard miliseconds
+	-- Discard milliseconds
 	length = string.gsub(length, "%.%d*", "")
 	
 	return length
