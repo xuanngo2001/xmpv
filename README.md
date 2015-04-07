@@ -26,7 +26,6 @@ Copy this script(`xmpv.lua`) to `~/.config/mpv/scripts/` directory.
 
 
 # REFERENCE: 
-* http://bamos.github.io/2014/07/05/mpv-lua-scripting/
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/input.rst
 * `mpv --list-properties` lists all properties available.
@@ -50,4 +49,3 @@ Copy this script(`xmpv.lua`) to `~/.config/mpv/scripts/` directory.
 [xmpv] [   2] /x/audio/UnderInfluence/Colour.Schemes-How.Colours.Make.Us.Buy_2012-05-05.mp3 
 [xmpv] [   1] ./00 file name& weird.mp3 
 ```
-

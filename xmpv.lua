@@ -27,7 +27,6 @@ Copy this script(`xmpv.lua`) to `~/.config/mpv/scripts/` directory.
 
 
 # REFERENCE: 
-* http://bamos.github.io/2014/07/05/mpv-lua-scripting/
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/input.rst
 * `mpv --list-properties` lists all properties available.
