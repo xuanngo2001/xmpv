@@ -45,9 +45,15 @@ file_name_for_cmd = ""
 
 
 -- On "file-loaded", this function will run.
-function initialization()
+function on_file_loaded_init()
+
 	file_name_for_cmd = get_file_name_for_cmd()
 	tmsu_check()
+	
+  -- Auto increment the number of likes, when playback has elapsed
+  --  for more than half.
+  mp.add_timeout((get_length()/2), increment_likes)
+	
 end
 
 
@@ -443,11 +449,7 @@ function get_mark_positions()
 end
 
 
--- Auto increment the number of times likes, when playback has elapsed
---	for more than half.
-function auto_increment_likes(event)
-	mp.add_timeout((get_length()/2), increment_likes)
-end
+
 
 
 -- Decrement the previous likes number by 1.
@@ -517,7 +519,4 @@ mp.add_key_binding("Alt+n", "goto_next_mark_position", goto_next_mark_position)
 mp.add_key_binding("Alt+b", "goto_previous_mark_position", goto_previous_mark_position)
 mp.add_key_binding("Alt+v", "delete_previous_mark_position", delete_previous_mark_position)
 
--- Auto increment after X seconds.
-mp.register_event("file-loaded", initialization)
-mp.register_event("file-loaded", auto_increment_likes)
-
+mp.register_event("file-loaded", on_file_loaded_init)
