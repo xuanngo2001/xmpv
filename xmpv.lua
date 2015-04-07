@@ -47,7 +47,7 @@ file_name_for_cmd = ""
 -- On "file-loaded", this function will run.
 function initialization()
 	file_name_for_cmd = get_file_name_for_cmd()
-	check_tmsu()
+	tmsu_check()
 end
 
 
@@ -88,7 +88,7 @@ end
 function get_likes_number()
 	
 	-- Get raw tags of current file.
-	local cmd_results = get_raw_tags()	
+	local cmd_results = tmsu_get_tags()	
 	
 	-- Extract the number of likes.
 	local likes_number = ""
@@ -107,19 +107,13 @@ function get_file_path()
 	return mp.get_property("path")
 end
 
--- Execute command and return result.
-function execute_command(command)
-	local handle = io.popen(command)
-	local result = handle:read("*a")
-	handle:close()
-	return result
-end
+
 
 -- Extract tags of file from TMSU.
 function get_tags()
 
 	-- Get raw tags of current file.
-	local cmd_results = get_raw_tags()
+	local cmd_results = tmsu_get_tags()
 	
 	-- Remove <filename> from result.
   --    [ ]? => With or without a space. No space when no tag at all.
@@ -150,14 +144,9 @@ function get_tags()
 	return tags
 end
 
--- Return raw tags, unformatted from TMSU.
-function get_raw_tags()
-	-- Get tags of current file: tmsu tags <filename>
-	local cmd_get_tags = string.format("tmsu tags %s", file_name_for_cmd)
-	return execute_command(cmd_get_tags)	
 
-end
-
+-- Return sanitized file path for command line execution
+--  string.format('%q', 'a string with "quotes"') => "a string with \"quotes\""
 function get_file_name_for_cmd(filename)
 	local filename = get_file_path()
 	
@@ -166,19 +155,8 @@ function get_file_name_for_cmd(filename)
 	return filename
 end
 
--- Log error if TMSU is not found.
-function check_tmsu()
-	local cmd_get_tmsu_version = "tmsu --version"
-	local cmd_results = execute_command(cmd_get_tmsu_version)
-	
-	if (string.find(cmd_results, "TMSU")==nil) then
-		local message = 	 string.format("ERROR: %s can't run.",mp.get_script_name()) .. "\n"
-		message = message .. string.format("ERROR: It requires TMSU. Download it at http://tmsu.org/.")
-		mp.msg.error(message)
-	end	
-end
 
--- Print top favorites/likes
+-- Print top (max_favorites=10) favorites/likes
 function print_top_favorites()
 	
 	-- Get likes values: 'tmsu values <tagname>'.
@@ -229,6 +207,42 @@ function print_top_favorites()
 end
 
 -- ********************************************************************
+-- TMSU functions
+-- ********************************************************************
+
+function tmsu_tag(tag_name, tag_value, cmd_file_path)
+  local cmd_tag = string.format("tmsu tag --tags=\"%s=%s\" %s", tag_name, tag_value, cmd_file_path)
+  execute_command(cmd_tag)
+end
+
+function tmsu_untag(tag_name, tag_value, cmd_file_path)
+  local cmd_untag = string.format("tmsu untag --tags=\"%s=%s\" %s", tag_name, tag_value, cmd_file_path)
+  execute_command(cmd_untag)
+end
+
+-- Return raw tags, unformatted from TMSU.
+function tmsu_get_tags()
+  -- Get tags of current file: tmsu tags <filename>
+  local cmd_get_tags = string.format("tmsu tags %s", file_name_for_cmd)
+  return execute_command(cmd_get_tags)  
+
+end
+
+-- Log error if TMSU is not found.
+function tmsu_check()
+  local cmd_get_tmsu_version = "tmsu --version"
+  local cmd_results = execute_command(cmd_get_tmsu_version)
+  
+  if (string.find(cmd_results, "TMSU")==nil) then
+    local message =            string.format("ERROR: %s can't run.\n", mp.get_script_name())
+          message = message .. string.format("ERROR: It requires TMSU. Download it at http://tmsu.org/.")
+    mp.msg.error(message)
+  end 
+end
+
+
+
+-- ********************************************************************
 -- Library functions
 -- ********************************************************************
 function string.starts(String,Start)
@@ -254,6 +268,14 @@ function string.gsplit(s, sep, plain)
     if sep == '' then done = true return s end
     return pass(s:find(sep, start, plain))
   end
+end
+
+-- Execute command and return result.
+function execute_command(command)
+  local handle = io.popen(command)
+  local result = handle:read("*a")
+  handle:close()
+  return result
 end
 
 -- ********************************************************************
@@ -404,7 +426,7 @@ end
 -- Return marked positions in ascending order
 function get_mark_positions()
 
-  local raw_tags = get_raw_tags()
+  local raw_tags = tmsu_get_tags()
   
   local mark_tag_label = mark_tag .."="
   local i = 1
@@ -421,16 +443,6 @@ function get_mark_positions()
 end
 
 
-function tmsu_tag(tag_name, tag_value, cmd_file_path)
-  local cmd_tag = string.format("tmsu tag --tags=\"%s=%s\" %s", tag_name, tag_value, cmd_file_path)
-  execute_command(cmd_tag)
-end
-
-function tmsu_untag(tag_name, tag_value, cmd_file_path)
-  local cmd_untag = string.format("tmsu untag --tags=\"%s=%s\" %s", tag_name, tag_value, cmd_file_path)
-  execute_command(cmd_untag)
-end
-
 -- Auto increment the number of times likes, when playback has elapsed
 --	for more than half.
 function auto_increment_likes(event)
@@ -446,16 +458,14 @@ function decrement_likes()
 	if(likes_number=="") then
 		likes_number = 0
 	else
-		--Remove 'likes=xxx' tag: tmsu untag --tags="likes" <filename>
-		local cmd_untag_likes = string.format("tmsu untag --tags=\"%s=%s\" %s", likes_tag, likes_number, file_name_for_cmd)
-		execute_command(cmd_untag_likes)
+    --Remove current 'likes=xxx' tag number.
+    tmsu_untag(likes_tag, likes_number, file_name_for_cmd)		
 	end	
 	
 	--Decrement the number of likes: tmsu tag --tags likes=123 <filename>
 	likes_number = likes_number - 1
-	local cmd_inc_likes_number = string.format("tmsu tag --tags=\"%s=%s\" %s", likes_tag, likes_number, file_name_for_cmd)
-	print(cmd_inc_likes_number)
-	execute_command(cmd_inc_likes_number)
+  tmsu_tag(likes_tag, likes_number, file_name_for_cmd)
+  mp.msg.info(string.format("INFO: Decreased likes to %d.", likes_number))	
 	
 end
 
