@@ -9,8 +9,11 @@
   * Play previous marked time position.
   * Delete previous marked time position.
 
+# INSTALL
+Copy this script(`xmpv.lua`) to `~/.config/mpv/scripts/` directory.
+
 # USAGE
-* Hotkeys:
+* Run your **MPV** as usual but now you have the following new hot keys:
   * `Alt+l`: Increment likes.
   * `Alt+d`: Decrement likes.
   * `Alt+r`: Reset likes to zero.
@@ -21,8 +24,7 @@
   * `Alt+b`: Play previous marked time position.
   * `Alt+v`: Delete previous marked time position.  
 
-# INSTALL
-This script should be copied to `~/.config/mpv/scripts/` directory.
+
 
 # REFERENCE: 
 * http://bamos.github.io/2014/07/05/mpv-lua-scripting/
