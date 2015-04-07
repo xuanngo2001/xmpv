@@ -74,7 +74,7 @@ function increment_likes()
 	
 end
 
--- Return length in seconds.
+-- Return time length in seconds.
 function get_length()
 	local length = mp.get_property("length")
 	
