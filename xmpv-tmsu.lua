@@ -9,8 +9,8 @@ Tmsu = {
 
 -- ***** Functions *****
 function Tmsu:tag(tag_name, tag_value, cmd_file_path)
-  local cmd_tag = string.format("tmsu tag --tags=\"%s=%s\" %s", tag_name, tag_value, cmd_file_path)
-  execute_command(cmd_tag)
+  cmd_tag = string.format("tmsu tag --tags=\"%s=%s\" %s", tag_name, tag_value, cmd_file_path)
+  return execute_command(cmd_tag)
 end
 
 function Tmsu:untag(tag_name, tag_value, cmd_file_path)
