@@ -2,15 +2,15 @@
 # DESCRIPTION
 `xmpv.lua` is an extension of **MPV** that integrates with **TMSU** to provide the following features:
   
-  * Tag files that you liked.
-  * Display your favorite files.
+  * Tag files that you like.
+  * Display your top favorite files.
   * Mark time position.
   * Play next marked time position.
   * Play previous marked time position.
   * Delete previous marked time position.
 
 # INSTALL
-Copy this script(`xmpv.lua`) to `~/.config/mpv/scripts/` directory.
+Copy this script, `xmpv.lua`, to `~/.config/mpv/scripts/` directory.
 
 # USAGE
 * Run your **MPV** as usual but now you have the following new hot keys:
