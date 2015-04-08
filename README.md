@@ -25,7 +25,7 @@ Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
   * `Alt+d`: Decrement likes.
   * `Alt+r`: Reset likes to zero.
   * `Alt+i`: Print info.
-  * `Alt+t`: Print top favorites files.
+  * `Alt+i`: Print information of current playing file.
   * `Alt+m`: Mark time position.
   * `Alt+n`: Play next marked time position.
   * `Alt+b`: Play previous marked time position.
