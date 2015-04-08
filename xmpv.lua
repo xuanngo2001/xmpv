@@ -61,7 +61,7 @@ Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
 * Sample lua scripts: https://github.com/mpv-player/mpv/wiki/User-Scripts
 * http://docs.aegisub.org/3.2/ASS_Tags/
 * http://www.linuxquestions.org/questions/slackware-14/mplayer-shows-question-marks-for-some-characters-on-subtitle-works-fine-on-xine-906077/
-
+* http://boards.4chan.org/g/thread/47352550/mpv-mpv-general
 
 </readme>
 ]]--
