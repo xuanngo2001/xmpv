@@ -7,6 +7,14 @@ Tmsu = {
   
 }
 
+-- 'Constructor'
+function Tmsu:new(o)
+  o = o or {}
+  setmetatable(o, self)
+  self.__index = self
+  return o
+end
+
 -- ***** Functions *****
 function Tmsu:tag(tag_name, tag_value, cmd_file_path)
   cmd_tag = string.format("tmsu tag --tags=\"%s=%s\" %s", tag_name, tag_value, cmd_file_path)
