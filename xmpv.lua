@@ -10,7 +10,7 @@
   * Delete previous marked time position.
 
 # INSTALL
-Copy this script, `xmpv.lua`, to `~/.config/mpv/scripts/` directory.
+Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
 
 # USAGE
 * Run your **MPV** as usual but now you have the following new hot keys:
