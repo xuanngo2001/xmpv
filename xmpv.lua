@@ -58,6 +58,7 @@ Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/input.rst
 * `mpv --list-properties` lists all properties available.
+* Sample lua scripts: https://github.com/mpv-player/mpv/wiki/User-Scripts
 
 
 
@@ -74,7 +75,6 @@ mark_tag  = "xmark"
 
 file_name_for_cmd = ""
 
-
 -- On "file-loaded", this function will run.
 function on_file_loaded_init()
 
@@ -84,7 +84,7 @@ function on_file_loaded_init()
   -- Auto increment the number of likes, when playback has elapsed
   --  for more than half.
   mp.add_timeout((get_length()/2), increment_likes)
-	
+  
 end
 
 
@@ -441,6 +441,10 @@ end
 function mark_position()
   local current_position = math.floor(mp.get_property("time-pos"))
   tmsu_tag(mark_tag, current_position, file_name_for_cmd)
+  
+  -- OSD display
+  local osd_text = string.format("M %s", toTimeFormat(current_position))
+  mp.osd_message(osd_text, 1)
 end
 
 
