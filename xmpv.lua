@@ -10,6 +10,14 @@
   * Delete previous marked time position.
 
 # INSTALL
+
+## Requirements
+* MPV: A media player. 
+  * http://mpv.io/
+* TMSU: A tool for tagging your files. 
+  * http://tmsu.org/
+  
+## Install
 Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
 
 # USAGE

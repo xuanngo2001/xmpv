@@ -9,6 +9,14 @@
   * Delete previous marked time position.
 
 # INSTALL
+
+## Requirements
+* MPV: A media player. 
+  * http://mpv.io/
+* TMSU: A tool for tagging your files. 
+  * http://tmsu.org/
+  
+## Install
 Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
 
 # USAGE
@@ -49,3 +57,4 @@ Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
 [xmpv] [   2] /x/audio/UnderInfluence/Colour.Schemes-How.Colours.Make.Us.Buy_2012-05-05.mp3 
 [xmpv] [   1] ./00 file name& weird.mp3 
 ```
+
