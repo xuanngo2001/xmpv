@@ -1,3 +1,5 @@
+
+
 # DESCRIPTION
 `xmpv.lua` is an extension script for **MPV** that uses **TMSU** to provide the following features:
   
@@ -24,8 +26,8 @@ Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
   * `Alt+l`: Increment likes.
   * `Alt+d`: Decrement likes.
   * `Alt+r`: Reset likes to zero.
-  * `Alt+i`: Print info.
   * `Alt+i`: Print information of current playing file.
+  * `Alt+t`: Print top favorites files.
   * `Alt+m`: Mark time position.
   * `Alt+n`: Play next marked time position.
   * `Alt+b`: Play previous marked time position.
@@ -55,3 +57,7 @@ Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/input.rst
 * `mpv --list-properties` lists all properties available.
+
+
+
+

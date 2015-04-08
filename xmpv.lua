@@ -1,4 +1,6 @@
 --[[
+<readme>
+
 # DESCRIPTION
 `xmpv.lua` is an extension script for **MPV** that uses **TMSU** to provide the following features:
   
@@ -57,7 +59,11 @@ Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/input.rst
 * `mpv --list-properties` lists all properties available.
 
+
+
+</readme>
 ]]--
+
 
 require 'os'
 require 'io'
