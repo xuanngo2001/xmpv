@@ -32,13 +32,6 @@ Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
   * `Alt+b`: Play previous marked time position.
   * `Alt+v`: Delete previous marked time position.  
 
-
-
-# REFERENCE: 
-* https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
-* https://github.com/mpv-player/mpv/blob/master/DOCS/man/input.rst
-* `mpv --list-properties` lists all properties available.
-
 # EXAMPLES:
 ```
 [xmpv] ----------------------------------------------------------- 
@@ -59,7 +52,10 @@ Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
 [xmpv] [   1] ./00 file name& weird.mp3 
 ```
 
-
+# REFERENCE: 
+* https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
+* https://github.com/mpv-player/mpv/blob/master/DOCS/man/input.rst
+* `mpv --list-properties` lists all properties available.
 
 ]]--
 

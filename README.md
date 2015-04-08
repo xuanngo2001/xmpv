@@ -13,7 +13,7 @@
 ## Requirements
 * MPV: A media player. 
   * http://mpv.io/
-* TMSU: A tool for tagging files.
+* TMSU: A tool for tagging files. 
   * http://tmsu.org/
   
 ## Install
@@ -30,13 +30,6 @@ Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
   * `Alt+n`: Play next marked time position.
   * `Alt+b`: Play previous marked time position.
   * `Alt+v`: Delete previous marked time position.  
-
-
-
-# REFERENCE: 
-* https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
-* https://github.com/mpv-player/mpv/blob/master/DOCS/man/input.rst
-* `mpv --list-properties` lists all properties available.
 
 # EXAMPLES:
 ```
@@ -58,3 +51,7 @@ Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
 [xmpv] [   1] ./00 file name& weird.mp3 
 ```
 
+# REFERENCE: 
+* https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
+* https://github.com/mpv-player/mpv/blob/master/DOCS/man/input.rst
+* `mpv --list-properties` lists all properties available.
