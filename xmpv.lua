@@ -14,7 +14,7 @@
 ## Requirements
 * MPV: A media player. 
   * http://mpv.io/
-* TMSU: A tool for tagging your files. 
+* TMSU: A tool for tagging files. 
   * http://tmsu.org/
   
 ## Install
