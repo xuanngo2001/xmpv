@@ -71,16 +71,25 @@ require 'os'
 require 'io'
 require 'string'
 
+dofile("/root/.config/mpv/scripts/xmpv-utils.lua")
+dofile("/root/.config/mpv/scripts/xmpv-tmsu.lua")
+dofile("/root/.config/mpv/scripts/xmpv-likes.lua")
+dofile("/root/.config/mpv/scripts/xmpv-mark.lua")
+
 likes_tag = "xlikes"
 mark_tag  = "xmark"
 
 file_name_for_cmd = ""
 
+
+tmsu = Tmsu:new()
+mark = Mark:new(nil, file_name_for_cmd)
+  
 -- On "file-loaded", this function will run.
 function on_file_loaded_init()
 
 	file_name_for_cmd = get_file_name_for_cmd()
-	tmsu_check()
+	tmsu:exists()
 	
   -- Auto increment the number of likes, when playback has elapsed
   --  for more than half.
@@ -112,8 +121,7 @@ end
 
 -- Extract tags of file from TMSU.
 function get_tags()
-  
-  tmsu = Tmsu:new()
+
 	-- Get raw tags of current file.
 	local cmd_results = tmsu:get_tags()
 	
@@ -160,40 +168,12 @@ end
 
 
 
--- ********************************************************************
--- TMSU functions
--- ********************************************************************
-
-
--- Log error if TMSU is not found.
-function tmsu_check()
-  local cmd_get_tmsu_version = "tmsu --version"
-  local cmd_results = execute_command(cmd_get_tmsu_version)
-  
-  if (string.find(cmd_results, "TMSU")==nil) then
-    local message =            string.format("ERROR: %s can't run.\n", mp.get_script_name())
-          message = message .. string.format("ERROR: It requires TMSU. Download it at http://tmsu.org/.")
-    mp.msg.error(message)
-  end 
-end
 
 
 
--- ********************************************************************
--- Library functions
--- ********************************************************************
-function string.starts(String,Start)
-	return string.sub(String,1,string.len(Start))==Start
-end
 
 
--- Execute command and return result.
-function execute_command(command)
-  local handle = io.popen(command)
-  local result = handle:read("*a")
-  handle:close()
-  return result
-end
+
 
 -- ********************************************************************
 -- Main features
@@ -207,10 +187,6 @@ end
 
 
 
--- Return seconds formatted as HH:MM:SS
-function toTimeFormat(seconds)
-  return string.format("%.2d:%.2d:%.2d", seconds/(60*60), seconds/60%60, seconds%60)
-end
 
 
 
@@ -241,9 +217,9 @@ end
 --			so that all functions needed are defined.
 ------------------------------------------------------------------------
 
-dofile("/root/.config/mpv/scripts/xmpv-likes.lua")
 
 
+-- Likes
 function increment_likes()
   likes = Likes:new(nil, file_name_for_cmd)
   likes:increment()
@@ -266,9 +242,10 @@ end
 
 
 
-dofile("/root/.config/mpv/scripts/xmpv-mark.lua")
-mark = Mark:new(nil, file_name_for_cmd)
 
+
+
+-- Mark
 function mark_position()
   mark:mark_position()
 end

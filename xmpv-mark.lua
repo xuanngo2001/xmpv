@@ -39,7 +39,7 @@ function Mark:delete_previous_position()
       if tonumber(current_pos) < tonumber(mark_position) then
         self.tmsu:untag(self.TAG_NAME, previous_pos, self.file_path)
         found_previous_pos = true
-        local warn_msg = string.format("WARN: Delete marked position %s.", toTimeFormat(previous_pos))
+        local warn_msg = string.format("WARN: Delete marked position %s.", time_to_string(previous_pos))
         mp.msg.warn(warn_msg)        
         break
       else
@@ -51,7 +51,7 @@ function Mark:delete_previous_position()
     if ( not found_previous_pos ) then
       previous_pos = mark_positions[mark_positions_size]
       self.tmsu:untag(self.TAG_NAME, previous_pos, self.file_path)
-      local warn_msg = string.format("WARN: Delete marked position %s.", toTimeFormat(previous_pos))
+      local warn_msg = string.format("WARN: Delete marked position %s.", time_to_string(previous_pos))
       mp.msg.warn(warn_msg)
     end
     
@@ -80,7 +80,7 @@ function Mark:goto_next_position()
       if tonumber(current_pos) < tonumber(mark_position) then
         mp.commandv("seek", mark_position, "absolute", "exact")
         found_next_pos = true
-        local warn_msg = string.format("Goto %d => %s.", mark_position, toTimeFormat(mark_position))
+        local warn_msg = string.format("Goto %d => %s.", mark_position, time_to_string(mark_position))
         mp.msg.warn(warn_msg)        
         break
       end
@@ -89,7 +89,7 @@ function Mark:goto_next_position()
     -- 'Make it goes around logic' here.
     if ( not found_next_pos ) then
       mp.commandv("seek", mark_positions[1], "absolute", "exact")
-      local warn_msg = string.format("WARN: No more next marked position. Go to the first position at %s.", toTimeFormat(mark_positions[1]))
+      local warn_msg = string.format("WARN: No more next marked position. Go to the first position at %s.", time_to_string(mark_positions[1]))
       mp.msg.warn(warn_msg)
     end
     
@@ -119,7 +119,7 @@ function Mark:goto_previous_position()
       if tonumber(current_pos) < tonumber(mark_position) then
         mp.commandv("seek", previous_pos, "absolute", "exact")
         found_previous_pos = true
-        local warn_msg = string.format("Back to %d => %s.", previous_pos, toTimeFormat(previous_pos))
+        local warn_msg = string.format("Back to %d => %s.", previous_pos, time_to_string(previous_pos))
         mp.msg.warn(warn_msg)        
         break
       else
@@ -131,7 +131,7 @@ function Mark:goto_previous_position()
     if ( not found_previous_pos ) then
       previous_pos = mark_positions[mark_positions_size]
       mp.commandv("seek", previous_pos, "absolute", "exact")
-      local warn_msg = string.format("WARN: No more previous marked position. Back to the last position at %s.", toTimeFormat(previous_pos))
+      local warn_msg = string.format("WARN: No more previous marked position. Back to the last position at %s.", time_to_string(previous_pos))
       mp.msg.warn(warn_msg)
     end
     
@@ -145,7 +145,7 @@ function Mark:mark_position()
   self.tmsu:tag(self.TAG_NAME, current_position, self.file_path)
   
   -- OSD display
-  local osd_text = string.format("M %s", toTimeFormat(current_position))
+  local osd_text = string.format("M %s", time_to_string(current_position))
   mp.osd_message(osd_text, 1)
 end
 
@@ -155,7 +155,7 @@ end
 function Mark:get_formatted_positions()
   local mark_positions = self:get_mark_positions()
   for i, mark_position in ipairs(mark_positions) do
-    mark_positions[i] = toTimeFormat(mark_position)
+    mark_positions[i] = time_to_string(mark_position)
   end
   
   return table.concat(mark_positions, ", ")
