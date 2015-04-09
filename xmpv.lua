@@ -267,24 +267,21 @@ end
 
 
 dofile("/root/.config/mpv/scripts/xmpv-mark.lua")
+mark = Mark:new(nil, file_name_for_cmd)
 
 function mark_position()
-  mark = Mark:new(nil, file_name_for_cmd)
   mark:mark_position()
 end
 
 function goto_next_mark_position()
-  mark = Mark:new(nil, file_name_for_cmd)
   mark:goto_next_position()
 end
 
 function goto_previous_mark_position()
-  mark = Mark:new(nil, file_name_for_cmd)
   mark:goto_previous_position()
 end
 
 function delete_previous_mark_position()
-  mark = Mark:new(nil, file_name_for_cmd)
   mark:delete_previous_position()
 end
 
@@ -297,6 +294,6 @@ mp.add_key_binding("Alt+i", "show_statistics", print_stats)
 mp.add_key_binding("Alt+m", "mark_position", mark_position)
 mp.add_key_binding("Alt+n", "goto_next_mark_position", goto_next_mark_position)
 mp.add_key_binding("Alt+b", "goto_previous_mark_position", goto_previous_mark_position)
-mp.add_key_binding("Alt+v", "delete_previous_mark_position", delete_previous_mark_position)
+mp.add_key_binding("Alt+x", "delete_previous_mark_position", delete_previous_mark_position)
 
 mp.register_event("file-loaded", on_file_loaded_init)
