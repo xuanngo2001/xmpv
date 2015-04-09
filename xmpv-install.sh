@@ -12,6 +12,7 @@ mkdir -p ${LUA_DIR}
 # Add lua scripts
 TEST_DIR=test
 
+yes | cp xmpv.lua ${LUA_DIR}
 yes | cp xmpv-*.lua ${LUA_DIR}
 
 yes | cp ${TEST_DIR}/xmpv-unit-tests.lua ${LUA_DIR}

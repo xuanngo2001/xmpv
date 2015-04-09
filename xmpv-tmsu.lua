@@ -23,7 +23,7 @@ end
 
 function Tmsu:untag(tag_name, tag_value, cmd_file_path)
   local cmd_untag = string.format("tmsu untag --tags=\"%s=%s\" %s", tag_name, tag_value, cmd_file_path)
-  execute_command(cmd_untag)
+  return execute_command(cmd_untag)
 end
 
 -- Return raw tags, unformatted from TMSU.
