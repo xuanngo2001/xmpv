@@ -75,6 +75,7 @@ dofile("/root/.config/mpv/scripts/xmpv-utils.lua")
 dofile("/root/.config/mpv/scripts/xmpv-tmsu.lua")
 dofile("/root/.config/mpv/scripts/xmpv-likes.lua")
 dofile("/root/.config/mpv/scripts/xmpv-mark.lua")
+dofile("/root/.config/mpv/scripts/xmpv-stats.lua")
 
 likes_tag = "xlikes"
 mark_tag  = "xmark"
@@ -82,18 +83,114 @@ mark_tag  = "xmark"
 file_name_for_cmd = ""
 
 
-tmsu = Tmsu:new()
-mark = Mark:new(nil, file_name_for_cmd)
+
   
+  
+
+-- Return time length in seconds.
+function get_length()
+  local length = mp.get_property("length")
+  
+  -- Discard milliseconds
+  length = string.gsub(length, "%.%d*", "")
+  
+  return length
+end
+
+-- Return file path.
+function get_file_path()
+  return mp.get_property("path")
+end
+
+-- Return sanitized file path for command line execution
+--  string.format('%q', 'a string with "quotes"') => "a string with \"quotes\""
+function get_file_name_for_cmd(filename)
+  local filename = get_file_path()
+  
+  --Escape double quotes.
+  filename = string.format('%q', filename)
+  return filename
+end
+
+
 -- On "file-loaded", this function will run.
 function on_file_loaded_init()
 
 	file_name_for_cmd = get_file_name_for_cmd()
+	
+tmsu = Tmsu:new()
+mark = Mark:new(nil, file_name_for_cmd)
+likes = Likes:new(nil, file_name_for_cmd)
+stats = Stats:new(nil, file_name_for_cmd)
+	
 	tmsu:exists()
 	
   -- Auto increment the number of likes, when playback has elapsed
   --  for more than half.
   mp.add_timeout((get_length()/2), increment_likes)
+  
+  
+  
+-- Likes
+function increment_likes()
+--  likes = Likes:new(nil, file_name_for_cmd)
+  likes:increment()
+end
+
+function decrement_likes()
+--  likes = Likes:new(nil, file_name_for_cmd)
+  likes:decrement()
+end
+
+function reset_likes()
+--  likes = Likes:new(nil, file_name_for_cmd)
+  likes:reset()
+end
+
+function print_top_favorites()
+--  likes = Likes:new(nil, file_name_for_cmd)
+  likes:print_top_favorites()
+end
+
+
+
+
+
+
+-- Mark
+function mark_position()
+  mark:mark_position()
+end
+
+function goto_next_mark_position()
+  mark:goto_next_position()
+end
+
+function goto_previous_mark_position()
+  mark:goto_previous_position()
+end
+
+function delete_previous_mark_position()
+  mark:delete_previous_position()
+end
+
+
+function print_stats()
+  stats:print()
+
+end
+
+mp.add_key_binding("Alt+l", "increment_likes", increment_likes)
+mp.add_key_binding("Alt+d", "decrement_likes", decrement_likes)
+mp.add_key_binding("Alt+r", "reset_likes", reset_likes)
+mp.add_key_binding("Alt+t", "top_favorites", print_top_favorites)
+mp.add_key_binding("Alt+i", "show_statistics", print_stats)
+mp.add_key_binding("Alt+m", "mark_position", mark_position)
+mp.add_key_binding("Alt+n", "goto_next_mark_position", goto_next_mark_position)
+mp.add_key_binding("Alt+b", "goto_previous_mark_position", goto_previous_mark_position)
+mp.add_key_binding("Alt+x", "delete_previous_mark_position", delete_previous_mark_position)
+
+
   
 end
 
@@ -102,20 +199,8 @@ end
 -- Private functions
 -- ********************************************************************
 
--- Return time length in seconds.
-function get_length()
-	local length = mp.get_property("length")
-	
-	-- Discard milliseconds
-	length = string.gsub(length, "%.%d*", "")
-	
-	return length
-end
 
--- Return file path.
-function get_file_path()
-	return mp.get_property("path")
-end
+
 
 
 
@@ -155,15 +240,7 @@ function get_tags()
 end
 
 
--- Return sanitized file path for command line execution
---  string.format('%q', 'a string with "quotes"') => "a string with \"quotes\""
-function get_file_name_for_cmd(filename)
-	local filename = get_file_path()
-	
-	--Escape double quotes.
-	filename = string.format('%q', filename)
-	return filename
-end
+
 
 
 
@@ -197,7 +274,7 @@ end
 
 
 -- Print information about this file.
-function print_stats()
+function print_stats_old()
   likes = Likes:new(nil, file_name_for_cmd)
   mark = Mark:new(nil, file_name_for_cmd)
   
@@ -218,59 +295,5 @@ end
 ------------------------------------------------------------------------
 
 
+mp.register_event("file-loaded", on_file_loaded_init)  
 
--- Likes
-function increment_likes()
-  likes = Likes:new(nil, file_name_for_cmd)
-  likes:increment()
-end
-
-function decrement_likes()
-  likes = Likes:new(nil, file_name_for_cmd)
-  likes:decrement()
-end
-
-function reset_likes()
-  likes = Likes:new(nil, file_name_for_cmd)
-  likes:reset()
-end
-
-function print_top_favorites()
-  likes = Likes:new(nil, file_name_for_cmd)
-  likes:print_top_favorites()
-end
-
-
-
-
-
-
--- Mark
-function mark_position()
-  mark:mark_position()
-end
-
-function goto_next_mark_position()
-  mark:goto_next_position()
-end
-
-function goto_previous_mark_position()
-  mark:goto_previous_position()
-end
-
-function delete_previous_mark_position()
-  mark:delete_previous_position()
-end
-
-
-mp.add_key_binding("Alt+l", "increment_likes", increment_likes)
-mp.add_key_binding("Alt+d", "decrement_likes", decrement_likes)
-mp.add_key_binding("Alt+r", "reset_likes", reset_likes)
-mp.add_key_binding("Alt+t", "top_favorites", print_top_favorites)
-mp.add_key_binding("Alt+i", "show_statistics", print_stats)
-mp.add_key_binding("Alt+m", "mark_position", mark_position)
-mp.add_key_binding("Alt+n", "goto_next_mark_position", goto_next_mark_position)
-mp.add_key_binding("Alt+b", "goto_previous_mark_position", goto_previous_mark_position)
-mp.add_key_binding("Alt+x", "delete_previous_mark_position", delete_previous_mark_position)
-
-mp.register_event("file-loaded", on_file_loaded_init)
