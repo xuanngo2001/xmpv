@@ -20,7 +20,12 @@
   * http://tmsu.org/
   
 ## Install
-Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
+Copy `xmpv.lua` and `xmpv-*.lua` to `~/.config/mpv/scripts/` directory.
+
+```
+cp xmpv.lua   ~/.config/mpv/scripts/
+cp xmpv-*.lua ~/.config/mpv/scripts/
+```
 
 # USAGE
 * Run your **MPV** as usual but now you have the following new hot keys:
