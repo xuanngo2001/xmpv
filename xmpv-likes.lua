@@ -141,7 +141,6 @@ function Likes:reset()
     self.tmsu:untag(self.TAG_NAME, likes_number, self.file_path)
     self.msg:print(string.format("RESET %s", self.TAG_NAME))
   else
-    mp.msg.info(string.format("INFO: Not reset as %s tag is not even set.", self.TAG_NAME))
     self.msg:print("NOTHING to RESET")
   end
   
