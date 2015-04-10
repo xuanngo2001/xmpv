@@ -2,7 +2,7 @@
 <readme>
 
 # DESCRIPTION
-`xmpv` is a set of scripts for **MPV** that uses **TMSU** to provide the following features:
+`xmpv` is a set of scripts for **MPV** that uses **TMSU** to provide the following extra features:
   
   * Tag files that you like.
   * Display your top favorite files.
@@ -20,8 +20,7 @@
   * http://tmsu.org/
   
 ## Install
-Copy `xmpv.lua` and `xmpv-*.lua` to `~/.config/mpv/scripts/` directory.
-
+Copy `xmpv.lua` and `xmpv-*.lua` to `~/.config/mpv/scripts/` directory:
 ```
 cp xmpv.lua   ~/.config/mpv/scripts/
 cp xmpv-*.lua ~/.config/mpv/scripts/
