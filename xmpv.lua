@@ -70,12 +70,14 @@ Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
 require 'os'
 require 'io'
 require 'string'
+require 'mp'
 
-dofile("/root/.config/mpv/scripts/xmpv-utils.lua")
-dofile("/root/.config/mpv/scripts/xmpv-tmsu.lua")
-dofile("/root/.config/mpv/scripts/xmpv-likes.lua")
-dofile("/root/.config/mpv/scripts/xmpv-mark.lua")
-dofile("/root/.config/mpv/scripts/xmpv-stats.lua")
+local home_dir = os.getenv ("HOME")
+dofile(home_dir .. "/.config/mpv/scripts/xmpv-utils.lua")
+dofile(home_dir .. "/.config/mpv/scripts/xmpv-tmsu.lua")
+dofile(home_dir .. "/.config/mpv/scripts/xmpv-likes.lua")
+dofile(home_dir .. "/.config/mpv/scripts/xmpv-mark.lua")
+dofile(home_dir .. "/.config/mpv/scripts/xmpv-stats.lua")
 
 likes_tag = "xlikes"
 mark_tag  = "xmark"
@@ -84,7 +86,7 @@ file_name_for_cmd = ""
 
 
 
-  
+
   
 
 -- Return time length in seconds.
@@ -159,7 +161,7 @@ function on_file_loaded_init()
   -- Auto increment the number of likes, when playback has elapsed
   --  for more than half.
   mp.add_timeout((get_length()/2), increment_likes)
-    
+  
 end
 
 

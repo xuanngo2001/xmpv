@@ -2,10 +2,10 @@
 -- Stats class. 
 -----------------------------------------------------------------------------
 
-
-dofile("/root/.config/mpv/scripts/xmpv-tmsu.lua")
-dofile("/root/.config/mpv/scripts/xmpv-likes.lua")
-dofile("/root/.config/mpv/scripts/xmpv-mark.lua")
+local home_dir = os.getenv ("HOME")
+dofile(home_dir .. "/.config/mpv/scripts/xmpv-tmsu.lua")
+dofile(home_dir .. "/.config/mpv/scripts/xmpv-likes.lua")
+dofile(home_dir .. "/.config/mpv/scripts/xmpv-mark.lua")
 
 
 -- ***** Variables *****

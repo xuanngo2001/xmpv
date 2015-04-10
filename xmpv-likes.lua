@@ -1,7 +1,9 @@
 -----------------------------------------------------------------------------
 -- Likes class. 
 -----------------------------------------------------------------------------
-dofile("/root/.config/mpv/scripts/xmpv-tmsu.lua")
+
+local home_dir = os.getenv ("HOME")
+dofile(home_dir .. "/.config/mpv/scripts/xmpv-tmsu.lua")
 
 -- ***** Variables *****
 Likes = {
