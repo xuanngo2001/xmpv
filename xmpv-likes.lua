@@ -61,13 +61,14 @@ function Likes:decrement()
 end
 
 -- Return number of likes.
+--  Should always returns an integer. If it is empty, then return 0.
 function Likes:get_number()
   
   -- Get raw tags of current file.
   local cmd_results = self.tmsu:get_tags() 
 
   -- Extract the number of likes.
-  local likes_number = ""
+  local likes_number = 0
   local tag_pattern = self.TAG_NAME .. "="
   for token in string.gmatch(cmd_results, "%S+") do
     if string.starts(token, tag_pattern) then
