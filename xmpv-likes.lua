@@ -4,6 +4,7 @@
 
 local home_dir = os.getenv ("HOME")
 dofile(home_dir .. "/.config/mpv/scripts/xmpv-tmsu.lua")
+dofile(home_dir .. "/.config/mpv/scripts/xmpv-msg.lua")
 
 -- ***** Variables *****
 Likes = {
@@ -11,6 +12,7 @@ Likes = {
   file_path="",
   
   tmsu = Tmsu:new(),
+  msg = Msg:new(),  
 }
 
 -- 'Constructor'
@@ -39,7 +41,7 @@ function Likes:increment()
   --Increment the number of likes.
   likes_number = likes_number + 1
   self.tmsu:tag(self.TAG_NAME, likes_number, self.file_path)
-  mp.msg.info(string.format("INFO: Increased likes to %d.", likes_number))
+  self.msg:print(string.format("(+) %d", likes_number))
   
 end
 
@@ -58,7 +60,7 @@ function Likes:decrement()
   --Decrement the number of likes: tmsu tag --tags likes=123 <filename>
   likes_number = likes_number - 1
   self.tmsu:tag(self.TAG_NAME, likes_number, self.file_path)
-  mp.msg.info(string.format("INFO: Decreased likes to %d.", likes_number))
+  self.msg:print(string.format("(-) %d", likes_number))
   
 end
 
@@ -137,9 +139,10 @@ function Likes:reset()
   if(likes_number~="") then
     --Remove current 'likes=xxx' tag.
     self.tmsu:untag(self.TAG_NAME, likes_number, self.file_path)
-    mp.msg.info(string.format("INFO: Reset by removing completely the %s tag.", self.TAG_NAME))
+    self.msg:print(string.format("RESET %s", self.TAG_NAME))
   else
     mp.msg.info(string.format("INFO: Not reset as %s tag is not even set.", self.TAG_NAME))
+    self.msg:print("NOTHING to RESET")
   end
   
 end
