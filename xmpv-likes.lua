@@ -76,7 +76,7 @@ function Likes:get_number()
     end
   end
   
-  return likes_number
+  return tonumber(likes_number)
 end
 
 -- Print top (max_favorites=10) favorites/likes
