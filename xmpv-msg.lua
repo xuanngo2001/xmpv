@@ -16,7 +16,7 @@ function Msg:new(o)
   return o
 end
 
-function Mark:print(con_text, osd_text)
+function Msg:print(con_text, osd_text)
   
   if(con_text~=nil) then
     mp.msg.info(con_text)
