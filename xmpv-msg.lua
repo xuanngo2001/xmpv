@@ -28,3 +28,14 @@ function Msg:print(con_text, osd_text)
   
 end
 
+function Msg:warn(con_text, osd_text)
+  
+  if(con_text~=nil) then
+    mp.msg.warn("WARN: " .. con_text)
+  end
+
+  if(osd_text~=nil) then
+    mp.osd_message("WARN: " .. osd_text, self.duration)
+  end
+  
+end
