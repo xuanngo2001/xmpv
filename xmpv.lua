@@ -118,10 +118,10 @@ function on_file_loaded_init()
 
 	file_name_for_cmd = get_file_name_for_cmd()
 	
-tmsu = Tmsu:new()
-mark = Mark:new(nil, file_name_for_cmd)
-likes = Likes:new(nil, file_name_for_cmd)
-stats = Stats:new(nil, file_name_for_cmd)
+  tmsu = Tmsu:new()
+  mark = Mark:new(nil, file_name_for_cmd)
+  likes = Likes:new(nil, file_name_for_cmd)
+  stats = Stats:new(nil, file_name_for_cmd)
 	
 	tmsu:exists()
 	
@@ -131,168 +131,63 @@ stats = Stats:new(nil, file_name_for_cmd)
   
   
   
--- Likes
-function increment_likes()
---  likes = Likes:new(nil, file_name_for_cmd)
-  likes:increment()
-end
-
-function decrement_likes()
---  likes = Likes:new(nil, file_name_for_cmd)
-  likes:decrement()
-end
-
-function reset_likes()
---  likes = Likes:new(nil, file_name_for_cmd)
-  likes:reset()
-end
-
-function print_top_favorites()
---  likes = Likes:new(nil, file_name_for_cmd)
-  likes:print_top_favorites()
-end
-
-
-
-
-
-
--- Mark
-function mark_position()
-  mark:mark_position()
-end
-
-function goto_next_mark_position()
-  mark:goto_next_position()
-end
-
-function goto_previous_mark_position()
-  mark:goto_previous_position()
-end
-
-function delete_previous_mark_position()
-  mark:delete_previous_position()
-end
-
-
-function print_stats()
-  stats:print()
-
-end
-
-mp.add_key_binding("Alt+l", "increment_likes", increment_likes)
-mp.add_key_binding("Alt+d", "decrement_likes", decrement_likes)
-mp.add_key_binding("Alt+r", "reset_likes", reset_likes)
-mp.add_key_binding("Alt+t", "top_favorites", print_top_favorites)
-mp.add_key_binding("Alt+i", "show_statistics", print_stats)
-mp.add_key_binding("Alt+m", "mark_position", mark_position)
-mp.add_key_binding("Alt+n", "goto_next_mark_position", goto_next_mark_position)
-mp.add_key_binding("Alt+b", "goto_previous_mark_position", goto_previous_mark_position)
-mp.add_key_binding("Alt+x", "delete_previous_mark_position", delete_previous_mark_position)
+  -- Likes
+  function increment_likes()
+    likes:increment()
+  end
+  
+  function decrement_likes()
+    likes:decrement()
+  end
+  
+  function reset_likes()
+    likes:reset()
+  end
+  
+  function print_top_favorites()
+    likes:print_top_favorites()
+  end
+  
+  
+  
+  
+  
+  
+  -- Mark
+  function mark_position()
+    mark:mark_position()
+  end
+  
+  function goto_next_mark_position()
+    mark:goto_next_position()
+  end
+  
+  function goto_previous_mark_position()
+    mark:goto_previous_position()
+  end
+  
+  function delete_previous_mark_position()
+    mark:delete_previous_position()
+  end
+  
+  
+  function print_stats()
+    stats:print()
+  end
+  
+  mp.add_key_binding("Alt+l", "increment_likes", increment_likes)
+  mp.add_key_binding("Alt+d", "decrement_likes", decrement_likes)
+  mp.add_key_binding("Alt+r", "reset_likes", reset_likes)
+  mp.add_key_binding("Alt+t", "top_favorites", print_top_favorites)
+  mp.add_key_binding("Alt+i", "show_statistics", print_stats)
+  mp.add_key_binding("Alt+m", "mark_position", mark_position)
+  mp.add_key_binding("Alt+n", "goto_next_mark_position", goto_next_mark_position)
+  mp.add_key_binding("Alt+b", "goto_previous_mark_position", goto_previous_mark_position)
+  mp.add_key_binding("Alt+x", "delete_previous_mark_position", delete_previous_mark_position)
 
 
   
 end
-
-
--- ********************************************************************
--- Private functions
--- ********************************************************************
-
-
-
-
-
-
--- Extract tags of file from TMSU.
-function get_tags()
-
-	-- Get raw tags of current file.
-	local cmd_results = tmsu:get_tags()
-	
-	-- Remove <filename> from result.
-  --    [ ]? => With or without a space. No space when no tag at all.
-	cmd_results = string.gsub(cmd_results, "^.*:[ ]?", "")
-
-	-- Remove 'likes=XXX' tag from result.
-	--	Handle negative value too.
-	local likes_tag_pattern = likes_tag .. "=[-]?%d*"
-	cmd_results = string.gsub(cmd_results, likes_tag_pattern, "")
-
-	-- Remove 'mark=XXXXX' tag from result.
-	local mark_tag_pattern = mark_tag .. "=%d*[.]?%d*"
-	cmd_results = string.gsub(cmd_results, mark_tag_pattern, "")
-	
-	-- Remove newline from result.
-	cmd_results = string.gsub(cmd_results, "\n", "")
-	
-	-- Concatenate all tags with comma.
-	local tags = ""
-	for token in string.gmatch(cmd_results, "%S+") do
-		-- Concatenate tags
-		tags = tags .. ", " .. token
-	end	
-	
-	-- Quick clean up of comma if there is only 1 tag.
-	tags = string.gsub(tags, "^, ", "")
-	
-	return tags
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- ********************************************************************
--- Main features
--- ********************************************************************
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- Print information about this file.
-function print_stats_old()
-  likes = Likes:new(nil, file_name_for_cmd)
-  mark = Mark:new(nil, file_name_for_cmd)
-  
-	print("-----------------------------------------------------------")
-	print("      File: " .. get_file_path())
-	print("     Likes: " .. likes:get_number())
-	print("      Tags: " .. get_tags())
-  print("Marked Pos: " .. mark:get_formatted_positions())
-	print()
-end
-
-
-
-------------------------------------------------------------------------
--- Set key bindings.
---	Note: Ensure this section to be at the end of file
---			so that all functions needed are defined.
-------------------------------------------------------------------------
 
 
 mp.register_event("file-loaded", on_file_loaded_init)  
