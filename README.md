@@ -1,7 +1,7 @@
 
 
 # DESCRIPTION
-`xmpv.lua` is an extension script for **MPV** that uses **TMSU** to provide the following features:
+`xmpv` is a set of scripts for **MPV** that uses **TMSU** to provide the following features:
   
   * Tag files that you like.
   * Display your top favorite files.
@@ -27,7 +27,7 @@ cp xmpv-*.lua ~/.config/mpv/scripts/
 ```
 
 # USAGE
-* Run your **MPV** as usual but now you have the following new hot keys:
+* Run your **MPV** as usual but now you have the following extra hot keys:
   * `Alt+l`: Increment likes.
   * `Alt+d`: Decrement likes.
   * `Alt+r`: Reset likes to zero.
