@@ -79,21 +79,6 @@ dofile(home_dir .. "/.config/mpv/scripts/xmpv-likes.lua")
 dofile(home_dir .. "/.config/mpv/scripts/xmpv-mark.lua")
 dofile(home_dir .. "/.config/mpv/scripts/xmpv-stats.lua")
 
-likes_tag = "xlikes"
-mark_tag  = "xmark"
-
-  
-
--- Return time length in seconds.
-function get_length()
-  local length = mp.get_property("length")
-  
-  -- Discard milliseconds
-  length = string.gsub(length, "%.%d*", "")
-  
-  return length
-end
-
 
 -- On "file-loaded", this function will run.
 function on_file_loaded_init()
@@ -140,7 +125,8 @@ function on_file_loaded_init()
 
   -- Auto increment the number of likes, when playback has elapsed
   --  for more than half.
-  mp.add_timeout((get_length()/2), increment_likes)
+  local length_in_secs = math.floor(mp.get_property("length"))  -- Discard fraction of seconds.
+  mp.add_timeout((length_in_secs/2), increment_likes)
   
 end
 
