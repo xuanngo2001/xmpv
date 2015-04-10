@@ -32,7 +32,7 @@ Copy `xmpv.lua` to `~/.config/mpv/scripts/` directory.
   * `Alt+m`: Mark time position.
   * `Alt+n`: Play next marked time position.
   * `Alt+b`: Play previous marked time position.
-  * `Alt+v`: Delete previous marked time position.  
+  * `Alt+x`: Delete previous marked time position.  
 
 # EXAMPLES:
 ```
@@ -125,56 +125,26 @@ function on_file_loaded_init()
 	
 	tmsu:exists()
 	
-  -- Auto increment the number of likes, when playback has elapsed
-  --  for more than half.
-  mp.add_timeout((get_length()/2), increment_likes)
+
   
-  
-  
+  -- Binding functions
+  -- ******************************
   -- Likes
-  function increment_likes()
-    likes:increment()
-  end
-  
-  function decrement_likes()
-    likes:decrement()
-  end
-  
-  function reset_likes()
-    likes:reset()
-  end
-  
-  function print_top_favorites()
-    likes:print_top_favorites()
-  end
-  
-  
-  
-  
-  
+  function increment_likes    () likes:increment() end
+  function decrement_likes    () likes:decrement() end
+  function reset_likes        () likes:reset()  end
+  function print_top_favorites() likes:print_top_favorites()end
   
   -- Mark
-  function mark_position()
-    mark:mark_position()
-  end
+  function mark_position                () mark:mark_position() end
+  function goto_next_mark_position      () mark:goto_next_position() end
+  function goto_previous_mark_position  () mark:goto_previous_position() end
+  function delete_previous_mark_position() mark:delete_previous_position() end
   
-  function goto_next_mark_position()
-    mark:goto_next_position()
-  end
+  -- Stats
+  function print_stats() stats:print() end
   
-  function goto_previous_mark_position()
-    mark:goto_previous_position()
-  end
-  
-  function delete_previous_mark_position()
-    mark:delete_previous_position()
-  end
-  
-  
-  function print_stats()
-    stats:print()
-  end
-  
+  -- Set binding keys
   mp.add_key_binding("Alt+l", "increment_likes", increment_likes)
   mp.add_key_binding("Alt+d", "decrement_likes", decrement_likes)
   mp.add_key_binding("Alt+r", "reset_likes", reset_likes)
@@ -183,10 +153,13 @@ function on_file_loaded_init()
   mp.add_key_binding("Alt+m", "mark_position", mark_position)
   mp.add_key_binding("Alt+n", "goto_next_mark_position", goto_next_mark_position)
   mp.add_key_binding("Alt+b", "goto_previous_mark_position", goto_previous_mark_position)
-  mp.add_key_binding("Alt+x", "delete_previous_mark_position", delete_previous_mark_position)
+  mp.add_key_binding("Alt+x", "delete_previous_mark_position", delete_previous_mark_position) -- Key should be far away from the others to prevent accidental deletes.
 
 
-  
+  -- Auto increment the number of likes, when playback has elapsed
+  --  for more than half.
+  mp.add_timeout((get_length()/2), increment_likes)
+    
 end
 
 
