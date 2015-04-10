@@ -135,9 +135,8 @@ function Likes:reset()
 
   local likes_number = self:get_number()
   if(likes_number~="") then
-    --Remove 'likes=xxx' tag: tmsu untag --tags="likes" <filename>
-    local cmd_untag_likes = string.format("tmsu untag --tags=\"%s=%s\" %s", self.TAG_NAME, likes_number, self.file_path)
-    execute_command(cmd_untag_likes)
+    --Remove current 'likes=xxx' tag.
+    self.tmsu:untag(self.TAG_NAME, likes_number, self.file_path)
     mp.msg.info(string.format("INFO: Reset by removing completely the %s tag.", self.TAG_NAME))
   else
     mp.msg.info(string.format("INFO: Not reset as %s tag is not even set.", self.TAG_NAME))
