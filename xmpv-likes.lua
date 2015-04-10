@@ -58,19 +58,18 @@ function Likes:decrement()
   --Decrement the number of likes: tmsu tag --tags likes=123 <filename>
   likes_number = likes_number - 1
   self.tmsu:tag(self.TAG_NAME, likes_number, self.file_path)
-  mp.msg.info(string.format("INFO: Decreased likes to %d.", likes_number))  
+  mp.msg.info(string.format("INFO: Decreased likes to %d.", likes_number))
   
 end
 
--- Return number of likes.
---  Should always returns an integer. If it is empty, then return 0.
+-- Return number of likes. Otherwise, return empty string.
 function Likes:get_number()
   
   -- Get raw tags of current file.
   local cmd_results = self.tmsu:get_tags() 
 
   -- Extract the number of likes.
-  local likes_number = 0
+  local likes_number = ""
   local tag_pattern = self.TAG_NAME .. "="
   for token in string.gmatch(cmd_results, "%S+") do
     if string.starts(token, tag_pattern) then
@@ -78,7 +77,7 @@ function Likes:get_number()
     end
   end
   
-  return tonumber(likes_number)
+  return likes_number
 end
 
 -- Print top (max_favorites=10) favorites/likes
@@ -131,23 +130,17 @@ function Likes:print_top_favorites()
   
 end
 
--- Reset likes number to 0.
+-- Reset by removing completely the likes tag.
 function Likes:reset()
 
   local likes_number = self:get_number()
-  
-  if(likes_number=="") then
-    likes_number = 0
-  else  
+  if(likes_number~="") then
     --Remove 'likes=xxx' tag: tmsu untag --tags="likes" <filename>
     local cmd_untag_likes = string.format("tmsu untag --tags=\"%s=%s\" %s", self.TAG_NAME, likes_number, self.file_path)
     execute_command(cmd_untag_likes)
-  end 
-  
-  --Set the number of likes to zero: tmsu tag --tags likes=0 <filename>
-  likes_number = 0
-  local cmd_inc_likes_number = string.format("tmsu tag --tags=\"%s=%s\" %s", self.TAG_NAME, likes_number, self.file_path)
-  print(cmd_inc_likes_number)
-  execute_command(cmd_inc_likes_number)
+    mp.msg.info(string.format("INFO: Reset by removing completely the %s tag.", self.TAG_NAME))
+  else
+    mp.msg.info(string.format("INFO: Not reset as %s tag is not even set.", self.TAG_NAME))
+  end
   
 end
