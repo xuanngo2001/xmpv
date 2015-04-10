@@ -82,11 +82,6 @@ dofile(home_dir .. "/.config/mpv/scripts/xmpv-stats.lua")
 likes_tag = "xlikes"
 mark_tag  = "xmark"
 
-file_name_for_cmd = ""
-
-
-
-
   
 
 -- Return time length in seconds.
@@ -99,26 +94,11 @@ function get_length()
   return length
 end
 
--- Return file path.
-function get_file_path()
-  return mp.get_property("path")
-end
-
--- Return sanitized file path for command line execution
---  string.format('%q', 'a string with "quotes"') => "a string with \"quotes\""
-function get_file_name_for_cmd(filename)
-  local filename = get_file_path()
-  
-  --Escape double quotes.
-  filename = string.format('%q', filename)
-  return filename
-end
-
 
 -- On "file-loaded", this function will run.
 function on_file_loaded_init()
 
-	file_name_for_cmd = get_file_name_for_cmd()
+	file_name_for_cmd = string.format('%q', mp.get_property("path")) -- file path with double quote escaped.
 	
   tmsu = Tmsu:new()
   mark = Mark:new(nil, file_name_for_cmd)
