@@ -39,7 +39,7 @@ function Stats:print()
   print("      File: " .. self.file_path)
   print("     Likes: " .. self.likes:get_number())
   print("      Tags: " .. self:get_tags())
-  print("Marked Pos: " .. self.mark:get_formatted_positions())
+  print("Marked (X): " .. self.mark:get_formatted_positions())
   print()
 
 end
