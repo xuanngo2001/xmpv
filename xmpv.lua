@@ -67,6 +67,9 @@ cp xmpv-*.lua ~/.config/mpv/scripts/
 * http://www.linuxquestions.org/questions/slackware-14/mplayer-shows-question-marks-for-some-characters-on-subtitle-works-fine-on-xine-906077/
 * http://boards.4chan.org/g/thread/47352550/mpv-mpv-general
 
+# TODO: 
+* Queue
+* Playlist
 </readme>
 ]]--
 
