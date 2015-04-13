@@ -15,6 +15,18 @@ function time_to_string(seconds)
   return string.format("%.2d:%.2d:%.2d", seconds/(60*60), seconds/60%60, seconds%60)
 end
 
+-- Return correct path depending on the operating system
+function get_script_path(script_name)
+print("xuan")
+  local home_dir = os.getenv ("HOME")
+  if (home_dir==nil) then
+    home_dir = os.getenv ("APPDATA")
+    return home_dir .. "\\mpv\\scripts\\" .. script_name
+  else
+      return home_dir .. "/.config/mpv/scripts/" .. script_name
+  end
+
+end
 
 -- ********************************************************************
 -- Library functions
