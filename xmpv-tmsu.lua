@@ -1,10 +1,12 @@
 -----------------------------------------------------------------------------
 -- Tmsu class will manipulate TMSU application. 
 -----------------------------------------------------------------------------
+require 'xmpv-utils'
+dofile(get_script_path("xmpv-msg.lua"))
 
 -- ***** Variables *****
 Tmsu = {
-  
+  msg = Msg:new(),  
 }
 
 -- 'Constructor'
@@ -28,10 +30,8 @@ end
 
 -- Return raw tags, unformatted from TMSU.
 function Tmsu:get_tags()
-  -- Get tags of current file: tmsu tags <filename>
   local cmd_get_tags = string.format("tmsu tags %s", file_name_for_cmd)
   return execute_command(cmd_get_tags)  
-
 end
 
 -- Check if TMSU application exists.
@@ -40,8 +40,9 @@ function Tmsu:exists()
   local cmd_results = execute_command(cmd_get_tmsu_version)
   
   if (string.find(cmd_results, "TMSU")==nil) then
-    local message =            string.format("ERROR: %s can't run.\n", mp.get_script_name())
-          message = message .. string.format("ERROR: It requires TMSU. Download it at http://tmsu.org/.")
-    mp.msg.error(message)
+    local error_msg = string.format("%s can't run.\n", mp.get_script_name())
+		  error_msg = error_msg .. string.format("It requires TMSU. Download it at http://tmsu.org/.")
+		  self.msg:error(error_msg)
+	
   end 
 end
