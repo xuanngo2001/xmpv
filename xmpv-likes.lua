@@ -1,10 +1,10 @@
 -----------------------------------------------------------------------------
 -- Likes class. 
 -----------------------------------------------------------------------------
+require 'xmpv-utils'
+dofile(get_script_path("xmpv-tmsu.lua"))
+dofile(get_script_path("xmpv-msg.lua"))
 
-local home_dir = os.getenv ("HOME")
-dofile(home_dir .. "/.config/mpv/scripts/xmpv-tmsu.lua")
-dofile(home_dir .. "/.config/mpv/scripts/xmpv-msg.lua")
 
 -- ***** Variables *****
 Likes = {
@@ -41,7 +41,7 @@ function Likes:increment()
   --Increment the number of likes.
   likes_number = likes_number + 1
   self.tmsu:tag(self.TAG_NAME, likes_number, self.file_path)
-  self.msg:print(string.format("(+) %d", likes_number))
+  self.msg:print(string.format("L(+) %d", likes_number))
   
 end
 
@@ -60,7 +60,7 @@ function Likes:decrement()
   --Decrement the number of likes: tmsu tag --tags likes=123 <filename>
   likes_number = likes_number - 1
   self.tmsu:tag(self.TAG_NAME, likes_number, self.file_path)
-  self.msg:print(string.format("(-) %d", likes_number))
+  self.msg:print(string.format("L(-) %d", likes_number))
   
 end
 
