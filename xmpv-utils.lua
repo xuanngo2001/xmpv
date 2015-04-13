@@ -17,7 +17,6 @@ end
 
 -- Return correct path depending on the operating system
 function get_script_path(script_name)
-print("xuan")
   local home_dir = os.getenv ("HOME")
   if (home_dir==nil) then
     home_dir = os.getenv ("APPDATA")
