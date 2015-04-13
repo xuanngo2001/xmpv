@@ -87,7 +87,6 @@ require 'string'
 require 'mp'
 
 require 'xmpv-utils'
-require 'xmpv-utils'
 require 'xmpv-tmsu'
 require 'xmpv-likes'
 require 'xmpv-mark'
