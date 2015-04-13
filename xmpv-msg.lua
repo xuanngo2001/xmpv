@@ -18,7 +18,7 @@ function Msg:new(o)
 end
 
 function Msg:print(osd_text)
-  mp.osd_message(con_text, self.duration)
+  mp.osd_message(osd_text, self.duration)
 end
 
 function Msg:info(con_text, osd_text)
