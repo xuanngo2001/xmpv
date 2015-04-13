@@ -92,8 +92,8 @@ function Mark:goto_next_position()
     -- 'Make it goes around logic' here.
     if ( not found_next_pos ) then
       mp.commandv("seek", mark_positions[1], "absolute", "exact")
-      local warn_msg = string.format("-> %s", time_to_string(mark_positions[1]))
-      self.msg:warn(warn_msg) 
+      local msg = string.format("@-> %s", time_to_string(mark_positions[1]))
+      self.msg:print(msg) 
     end
     
   end
@@ -134,8 +134,8 @@ function Mark:goto_previous_position()
     if ( not found_previous_pos ) then
       previous_pos = mark_positions[mark_positions_size]
       mp.commandv("seek", previous_pos, "absolute", "exact")
-      local warn_msg = string.format("%s <-", time_to_string(previous_pos))
-      self.msg:warn(warn_msg)
+      local msg = string.format("%s <-@", time_to_string(previous_pos))
+      self.msg:print(msg)
     end
     
   end
