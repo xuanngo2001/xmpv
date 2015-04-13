@@ -1,7 +1,7 @@
 
 
 # DESCRIPTION
-`xmpv` is a set of scripts for **MPV** that uses **TMSU** to provide the following extra features:
+`xmpv` is a set of Lua scripts for **MPV** media player that uses **TMSU** to provide the following extra features:
   
   * Tag files that you like.
   * Display your top favorite files.
@@ -19,10 +19,17 @@
   * http://tmsu.org/
   
 ## Install
-Copy `xmpv.lua` and `xmpv-*.lua` to `~/.config/mpv/scripts/` directory:
+Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of MPV:
 ```
+# In Linux
 cp xmpv.lua   ~/.config/mpv/scripts/
 cp xmpv-*.lua ~/.config/mpv/scripts/
+```
+
+```
+:: In Windows
+copy /Y xmpv.lua   %APPDATA%\mpv\scripts\
+copy /Y xmpv-*.lua %APPDATA%\mpv\scripts\
 ```
 
 # USAGE
@@ -31,7 +38,7 @@ cp xmpv-*.lua ~/.config/mpv/scripts/
   * `Alt+d`: Decrement likes.
   * `Alt+r`: Reset likes to zero.
   * `Alt+i`: Print information of current playing file.
-  * `Alt+t`: Print top favorites files.
+  * `Alt+t`: Print top favorite files.
   * `Alt+m`: Mark time position.
   * `Alt+n`: Play next marked time position.
   * `Alt+b`: Play previous marked time position.
