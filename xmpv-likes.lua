@@ -124,12 +124,10 @@ function Likes:print_top_favorites()
   -- Print top favorites
   --  Use n instead of max_favorites. Drawback: It will display all
   --    the 10th likes.
-  print("-----------------------------------------------------------")
-  print("[Likes]--------------- TOP FAVORITES ----------------------")
-  for j=1,n do
-    print(top_favorites[j]) 
-  end
-  
+  local favorites_msg = "TOP FAVORITES\n"
+  favorites_msg = favorites_msg .. table.concat(top_favorites, '\n')
+  self.msg:print(favorites_msg)
+  print(favorites_msg)
 end
 
 -- Reset by removing completely the likes tag.
