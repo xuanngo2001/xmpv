@@ -84,11 +84,11 @@ require 'string'
 require 'mp'
 
 require 'xmpv-utils'
-dofile(get_script_path("xmpv-utils.lua"))
-dofile(get_script_path("xmpv-tmsu.lua"))
-dofile(get_script_path("xmpv-likes.lua"))
-dofile(get_script_path("xmpv-mark.lua"))
-dofile(get_script_path("xmpv-stats.lua"))
+require 'xmpv-utils'
+require 'xmpv-tmsu'
+require 'xmpv-likes'
+require 'xmpv-mark'
+require 'xmpv-stats'
 
 
 -- On "file-loaded", this function will run.

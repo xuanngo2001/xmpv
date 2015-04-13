@@ -2,7 +2,7 @@
 -- Tmsu class will manipulate TMSU application. 
 -----------------------------------------------------------------------------
 require 'xmpv-utils'
-dofile(get_script_path("xmpv-msg.lua"))
+require 'xmpv-msg'
 
 -- ***** Variables *****
 Tmsu = {

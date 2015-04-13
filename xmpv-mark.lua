@@ -2,8 +2,8 @@
 -- Mark class. 
 -----------------------------------------------------------------------------
 require 'xmpv-utils'
-dofile(get_script_path("xmpv-tmsu.lua"))
-dofile(get_script_path("xmpv-msg.lua"))
+require 'xmpv-tmsu'
+require 'xmpv-msg'
 
 -- ***** Variables *****
 Mark = {

@@ -3,10 +3,10 @@
 -----------------------------------------------------------------------------
 require 'xmpv-utils'
 require 'mp.options'
-dofile(get_script_path("xmpv-tmsu.lua"))
-dofile(get_script_path("xmpv-likes.lua"))
-dofile(get_script_path("xmpv-mark.lua"))
-dofile(get_script_path("xmpv-msg.lua"))
+require 'xmpv-tmsu'
+require 'xmpv-likes'
+require 'xmpv-mark'
+require 'xmpv-msg'
 
 -- ***** Variables *****
 Stats = {
