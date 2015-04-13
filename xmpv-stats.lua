@@ -1,18 +1,19 @@
 -----------------------------------------------------------------------------
 -- Stats class. 
 -----------------------------------------------------------------------------
-
-local home_dir = os.getenv ("HOME")
-dofile(home_dir .. "/.config/mpv/scripts/xmpv-tmsu.lua")
-dofile(home_dir .. "/.config/mpv/scripts/xmpv-likes.lua")
-dofile(home_dir .. "/.config/mpv/scripts/xmpv-mark.lua")
-
+require 'xmpv-utils'
+require 'mp.options'
+dofile(get_script_path("xmpv-tmsu.lua"))
+dofile(get_script_path("xmpv-likes.lua"))
+dofile(get_script_path("xmpv-mark.lua"))
+dofile(get_script_path("xmpv-msg.lua"))
 
 -- ***** Variables *****
 Stats = {
   file_path="",
 
   tmsu = Tmsu:new(),  
+  msg = Msg:new(),
   likes = nil,
   mark = nil,
 }
@@ -34,14 +35,13 @@ end
 
 -- Print information about current playing file.
 function Stats:print()
-
-  print("-----------------------------------------------------------")
-  print("      File: " .. self.file_path)
-  print("     Likes: " .. self.likes:get_number())
-  print("      Tags: " .. self:get_tags())
-  print("Marked Pos: " .. self.mark:get_formatted_positions())
-  print()
-
+  local indent = "   "
+  local file   = string.format("%6s: %s\n", "File", mp.get_property_osd("filename"))
+  local likes  = string.format("%6s: %s\n", "Likes", self.likes:get_number())
+  local tags   = string.format("%6s: %s\n", "Tags", self:get_tags())
+  local marked = string.format("%6s\n%s%s\n", "Marked", indent, self.mark:get_formatted_positions())
+  
+  self.msg:print(file .. likes .. tags .. marked)
 end
 
 
