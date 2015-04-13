@@ -5,6 +5,7 @@
 -- ***** Variables *****
 Msg = {
   duration = 1,
+  error_duration = 5, 
 }
 
 -- 'Constructor'
@@ -33,7 +34,7 @@ end
 function Msg:info(con_text, osd_text)
   
   if(con_text~=nil) then
-    mp.msg.warn("INFO: " .. con_text)
+    mp.msg.info("INFO: " .. con_text)
   end
 
   if(osd_text==nil) then
@@ -61,13 +62,13 @@ end
 function Msg:error(con_text, osd_text)
   
   if(con_text~=nil) then
-    mp.msg.warn("ERROR: " .. con_text)
+    mp.msg.error("ERROR: " .. con_text)
   end
 
   if(osd_text==nil) then
-    mp.osd_message("ERROR: " .. con_text, self.duration)
+    mp.osd_message("ERROR: " .. con_text, self.error_duration)
   else
-    mp.osd_message(osd_text, self.duration)    
+    mp.osd_message(osd_text, self.error_duration)    
   end
   
 end
