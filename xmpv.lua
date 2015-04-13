@@ -2,7 +2,7 @@
 <readme>
 
 # DESCRIPTION
-`xmpv` is a set of scripts for **MPV** that uses **TMSU** to provide the following extra features:
+`xmpv` is a set of Lua scripts for **MPV** media player that uses **TMSU** to provide the following extra features:
   
   * Tag files that you like.
   * Display your top favorite files.
@@ -20,10 +20,17 @@
   * http://tmsu.org/
   
 ## Install
-Copy `xmpv.lua` and `xmpv-*.lua` to `~/.config/mpv/scripts/` directory:
+Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of MPV:
 ```
+# In Linux
 cp xmpv.lua   ~/.config/mpv/scripts/
 cp xmpv-*.lua ~/.config/mpv/scripts/
+```
+
+```
+:: In Windows
+copy /Y xmpv.lua   %APPDATA%\mpv\scripts\
+copy /Y xmpv-*.lua %APPDATA%\mpv\scripts\
 ```
 
 # USAGE
@@ -32,7 +39,7 @@ cp xmpv-*.lua ~/.config/mpv/scripts/
   * `Alt+d`: Decrement likes.
   * `Alt+r`: Reset likes to zero.
   * `Alt+i`: Print information of current playing file.
-  * `Alt+t`: Print top favorites files.
+  * `Alt+t`: Print top favorite files.
   * `Alt+m`: Mark time position.
   * `Alt+n`: Play next marked time position.
   * `Alt+b`: Play previous marked time position.
@@ -76,12 +83,12 @@ require 'io'
 require 'string'
 require 'mp'
 
-local home_dir = os.getenv ("HOME")
-dofile(home_dir .. "/.config/mpv/scripts/xmpv-utils.lua")
-dofile(home_dir .. "/.config/mpv/scripts/xmpv-tmsu.lua")
-dofile(home_dir .. "/.config/mpv/scripts/xmpv-likes.lua")
-dofile(home_dir .. "/.config/mpv/scripts/xmpv-mark.lua")
-dofile(home_dir .. "/.config/mpv/scripts/xmpv-stats.lua")
+require 'xmpv-utils'
+dofile(get_script_path("xmpv-utils.lua"))
+dofile(get_script_path("xmpv-tmsu.lua"))
+dofile(get_script_path("xmpv-likes.lua"))
+dofile(get_script_path("xmpv-mark.lua"))
+dofile(get_script_path("xmpv-stats.lua"))
 
 
 -- On "file-loaded", this function will run.
