@@ -126,8 +126,8 @@ function Likes:print_top_favorites()
   --    the 10th likes.
   local favorites_msg = "TOP FAVORITES\n"
   favorites_msg = favorites_msg .. table.concat(top_favorites, '\n')
-  self.msg:print(favorites_msg)
   print(favorites_msg)
+  self.msg:print("See console for your favorites")
 end
 
 -- Reset by removing completely the likes tag.
