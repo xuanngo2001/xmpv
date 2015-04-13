@@ -1,9 +1,9 @@
 -----------------------------------------------------------------------------
 -- Mark class. 
 -----------------------------------------------------------------------------
-local home_dir = os.getenv ("HOME")
-dofile(home_dir .. "/.config/mpv/scripts/xmpv-tmsu.lua")
-dofile(home_dir .. "/.config/mpv/scripts/xmpv-msg.lua")
+require 'xmpv-utils'
+dofile(get_script_path("xmpv-tmsu.lua"))
+dofile(get_script_path("xmpv-msg.lua"))
 
 -- ***** Variables *****
 Mark = {
