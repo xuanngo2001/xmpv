@@ -35,6 +35,7 @@ end
 
 -- Print information about current playing file.
 function Stats:print()
+
   local indent = "   "
   local file   = string.format("%6s: %s\n", "File", mp.get_property_osd("filename"))
   local likes  = string.format("%6s: %s\n", "Likes", self.likes:get_number())
