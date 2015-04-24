@@ -120,6 +120,7 @@ function on_file_loaded_init()
   function goto_next_mark_position      () mark:goto_next_position() end
   function goto_previous_mark_position  () mark:goto_previous_position() end
   function delete_previous_mark_position() mark:delete_previous_position() end
+  function export_mark_position         () mark:export() end
   
   -- Stats
   function print_stats() stats:print() end
@@ -134,6 +135,7 @@ function on_file_loaded_init()
   mp.add_key_binding("Alt+n", "goto_next_mark_position", goto_next_mark_position)
   mp.add_key_binding("Alt+b", "goto_previous_mark_position", goto_previous_mark_position)
   mp.add_key_binding("Alt+x", "delete_previous_mark_position", delete_previous_mark_position) -- Key should be far away from the others to prevent accidental deletes.
+  mp.add_key_binding("Alt+e", "export_mark_position", export_mark_position) -- Key should be far away from the others to prevent accidental deletes.
 
 
   -- Auto increment the number of likes, when playback has elapsed

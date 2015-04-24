@@ -14,6 +14,7 @@ TEST_DIR=test
 
 yes | cp xmpv.lua ${LUA_DIR}
 yes | cp xmpv-*.lua ${LUA_DIR}
+yes | cp *.lua ${LUA_DIR}
 
 
 ### Unit tests

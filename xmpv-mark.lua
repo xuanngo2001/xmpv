@@ -182,3 +182,18 @@ function Mark:get_mark_positions()
   table.sort(mark_position_values, function(a,b) return tonumber(a)<tonumber(b) end)  
   return mark_position_values
 end
+
+function Mark:export()
+  -- Get the tag values.
+  local mark_positions_string = self.TAG_NAME .. "=" .. table.concat(self:get_mark_positions(), " ".. self.TAG_NAME .. "=")
+  local mark_positions_cmd = self.tmsu:get_tag_cmd(mark_positions_string, self.file_path)
+  
+  -- Write tag values command to file.
+  local filename = get_basename(mp.get_property("path")) .. ".sh"
+  file = io.open(filename, "w")
+  io.output(file)
+  io.write(mark_positions_cmd)
+  io.close(file)
+  
+  print(string.format("Exported \n\t%s\n\tto \"%s\".", mark_positions_cmd, filename))
+end
