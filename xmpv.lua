@@ -10,6 +10,7 @@
   * Play next marked time position.
   * Play previous marked time position.
   * Delete previous marked time position.
+  * Export marked time positions to a file.
 
 # INSTALL
 
@@ -43,7 +44,8 @@ copy /Y xmpv-*.lua %APPDATA%\mpv\scripts\
   * `Alt+m`: Mark time position.
   * `Alt+n`: Play next marked time position.
   * `Alt+b`: Play previous marked time position.
-  * `Alt+x`: Delete previous marked time position.  
+  * `Alt+x`: Delete previous marked time position.
+  * `Alt+e`: Export marked time positions to a file.
 
 # EXAMPLES:
 ```
