@@ -183,17 +183,27 @@ function Mark:get_mark_positions()
   return mark_position_values
 end
 
+-- Export marked time positions into a file with extension XMP(X marked positions)
+--  * Human readable marked time positions.
+--  * Marked time positions command for TMSU.
 function Mark:export()
-  -- Get the tag values.
+  -- Get marked tag values command.
   local mark_positions_string = self.TAG_NAME .. "=" .. table.concat(self:get_mark_positions(), " ".. self.TAG_NAME .. "=")
   local mark_positions_cmd = self.tmsu:get_tag_cmd(mark_positions_string, self.file_path)
   
-  -- Write tag values command to file.
-  local filename = get_basename(mp.get_property("path")) .. ".sh"
+  -- Get formatted marked time positions
+  local formatted_mark_positions = "# Marked time positions: " .. self:get_formatted_positions() 
+  
+  -- Write marked time positions to file:
+  --  * Human readable marked time positions
+  --  * Tag values TMSU command 
+  local filename = get_basename(mp.get_property("path")) .. ".xmp"
   file = io.open(filename, "w")
   io.output(file)
-  io.write(mark_positions_cmd)
+  io.write(formatted_mark_positions .. "\n")
+  io.write(mark_positions_cmd .. "\n")
   io.close(file)
   
-  print(string.format("Exported \n\t%s\n\tto \"%s\".", mark_positions_cmd, filename))
+  -- Display actions messages.
+  print(string.format("Exported \n\t%s\n\tto \"%s\".", formatted_mark_positions, filename))
 end
