@@ -147,8 +147,8 @@ end
 -- Auto increment if played more than half of file
 function Likes:auto_increment()
 
-  local length_in_secs = math.floor(mp.get_property("length"))  -- Discard fraction of seconds.
-  local current_position = mp.get_property("time-pos")
+  local length_in_secs = math.floor(mp.get_property_number("length"))  -- Discard fraction of seconds.
+  local current_position = mp.get_property_number("time-pos")
   local threshold_position = length_in_secs/2
   if(tonumber(current_position)>tonumber(threshold_position)) then
     self:increment()

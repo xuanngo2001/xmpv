@@ -35,7 +35,7 @@ function Mark:delete_previous_position()
     self.msg:warn("No marked position")
   else
   
-    local current_pos = mp.get_property("time-pos")
+    local current_pos = mp.get_property_number("time-pos")
     local found_previous_pos = false
     local previous_pos = mark_positions[mark_positions_size] -- Initialize previous position to be the last pos.
     for i, mark_position in ipairs(mark_positions) do
@@ -77,7 +77,7 @@ function Mark:goto_next_position()
     self.msg:warn("No marked position")
   else
   
-    local current_pos = mp.get_property("time-pos")
+    local current_pos = mp.get_property_number("time-pos")
     local found_next_pos = false
     for i, mark_position in ipairs(mark_positions) do
       if tonumber(current_pos) < tonumber(mark_position) then
@@ -115,7 +115,7 @@ function Mark:goto_previous_position()
     self.msg:warn("No marked position")
   else
   
-    local current_pos = mp.get_property("time-pos") - 2 --  Minus 2 seconds to allow time for user to do Previous, Previous, ... 
+    local current_pos = mp.get_property_number("time-pos") - 2 --  Minus 2 seconds to allow time for user to do Previous, Previous, ... 
     local found_previous_pos = false
     local previous_pos = mark_positions[mark_positions_size] -- Initialize previous position to be the last pos.
     for i, mark_position in ipairs(mark_positions) do
@@ -144,7 +144,7 @@ end
 
 -- Mark position but discard fraction of second.
 function Mark:mark_position()
-  local current_position = math.floor(mp.get_property("time-pos"))
+  local current_position = math.floor(mp.get_property_number("time-pos"))
   self.tmsu:tag(self.TAG_NAME, current_position, self.file_path)
   
   local msg = string.format("M(+) %s", time_to_string(current_position))
