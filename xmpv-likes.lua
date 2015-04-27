@@ -143,3 +143,16 @@ function Likes:reset()
   end
   
 end
+
+-- Auto increment if played more than half of file
+function Likes:auto_increment()
+
+  local length_in_secs = math.floor(mp.get_property("length"))  -- Discard fraction of seconds.
+  local current_position = mp.get_property("time-pos")
+  local threshold_position = length_in_secs/2
+  if(tonumber(current_position)>tonumber(threshold_position)) then
+    self:increment()
+  end
+  -- ELSE Do nothing because another file is being played.
+  
+end

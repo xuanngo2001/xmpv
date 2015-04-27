@@ -143,7 +143,8 @@ function on_file_loaded_init()
   -- Auto increment the number of likes, when playback has elapsed
   --  for more than half.
   local length_in_secs = math.floor(mp.get_property("length"))  -- Discard fraction of seconds.
-  mp.add_timeout((length_in_secs/2), increment_likes)
+  mp.add_timeout(((length_in_secs+2)/2), function() likes:auto_increment() end) -- +2 to ensure more than half for Likes:auto_increment().
+  
   
 end
 
