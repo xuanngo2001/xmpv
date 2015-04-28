@@ -53,7 +53,8 @@ copy /Y xmpv-*.lua %APPDATA%\mpv\scripts\
 [xmpv]   Filename: some_music_file_name.mp3 
 [xmpv]      Likes: 11 
 [xmpv]       Tags: music, funky 
-[xmpv] Marked Pos: 00:01:04, 00:02:41 
+[xmpv]     Marked
+[xmpv]        00:01:04, 00:02:41 
 [xmpv] 
 ```
 
