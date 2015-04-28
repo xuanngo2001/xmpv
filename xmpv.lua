@@ -140,14 +140,8 @@ function on_file_loaded_init()
   mp.add_key_binding("Alt+e", "export_mark_position", export_mark_position) -- Key should be far away from the others to prevent accidental deletes.
 
 
-  -- Auto increment the number of likes, when playback has elapsed
-  --  for more than half.
-  local length_in_secs = math.floor(mp.get_property_number("length"))  -- Discard fraction of seconds.
-  mp.add_timeout(((length_in_secs+2)/2), function() likes:auto_increment() end) -- +2 to ensure more than half for Likes:auto_increment().
-  
-  
 end
 
 
-mp.register_event("file-loaded", on_file_loaded_init)  
+mp.register_event("file-loaded", on_file_loaded_init)
 
