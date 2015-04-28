@@ -18,14 +18,16 @@ function Tmsu:new(o)
 end
 
 -- ***** Functions *****
+function Tmsu:get_tag_cmd(tag, cmd_file_path)
+  return string.format("tmsu tag --tags=\"%s\" %s", tag, cmd_file_path)
+end
+
 function Tmsu:tag(tag_name, tag_value, cmd_file_path)
-  local cmd_tag = string.format("tmsu tag --tags=\"%s=%s\" %s", tag_name, tag_value, cmd_file_path)
+  local cmd_tag = self:get_tag_cmd(tag_name.."="..tag_value, cmd_file_path)
   return execute_command(cmd_tag)
 end
 
-function Tmsu:get_tag_cmd(tag_value, cmd_file_path)
-  return string.format("tmsu tag --tags=\"%s\" %s", tag_value, cmd_file_path)
-end
+
 
 function Tmsu:untag(tag_name, tag_value, cmd_file_path)
   local cmd_untag = string.format("tmsu untag --tags=\"%s=%s\" %s", tag_name, tag_value, cmd_file_path)
