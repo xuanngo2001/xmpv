@@ -48,23 +48,22 @@ copy /Y xmpv-*.lua %APPDATA%\mpv\scripts\
 
 # EXAMPLES:
 ```
-[xmpv] ----------------------------------------------------------- 
-[xmpv]   Filename: some_music_file_name.mp3 
-[xmpv]      Likes: 11 
-[xmpv]       Tags: music, funky 
-[xmpv]     Marked
-[xmpv]        00:01:04, 00:02:41 
-[xmpv] 
+[xmpv]   File: some_music_file_name.mp3
+[xmpv]  Likes: 17
+[xmpv]   Tags: funky, music
+[xmpv] Marked
+[xmpv]    00:00:07, 00:00:08, 00:00:15, 00:00:19
 ```
 
 ```
-[xmpv] ----------------------------------------------------------- 
-[xmpv] [Likes]--------------- TOP FAVORITES ---------------------- 
-[xmpv] [  34] /x/audio/UnderInfluence/Books, Books, Books_20120526_33300.mp3 
-[xmpv] [  11] ./some_music_file_name.mp3 
-[xmpv] [   9] /x/audio/UnderInfluence/Brand.Envy_20120512_72214.mp3 
-[xmpv] [   2] /x/audio/UnderInfluence/Colour.Schemes-How.Colours.Make.Us.Buy_2012-05-05.mp3 
-[xmpv] [   1] ./00 file name& weird.mp3 
+[xmpv] TOP FAVORITES
+[xmpv] [  37] ./00 file name& weird.mp3
+[xmpv] [  35] ./00 10sec.mp3
+[xmpv] [  27] ./00 10sec222222222.mp3
+[xmpv] [  20] ./00 09_30secd.mp3
+[xmpv] [  16] ./01 Myriiam - Nca Fazi Pa Mal.mp3
+[xmpv] [  14] ./some_music_file_name.mp3
+
 ```
 
 # REFERENCE: 
@@ -75,6 +74,8 @@ copy /Y xmpv-*.lua %APPDATA%\mpv\scripts\
 * http://docs.aegisub.org/3.2/ASS_Tags/
 * http://www.linuxquestions.org/questions/slackware-14/mplayer-shows-question-marks-for-some-characters-on-subtitle-works-fine-on-xine-906077/
 * http://boards.4chan.org/g/thread/47352550/mpv-mpv-general
+* https://github.com/lvml/mpv-plugin-excerpt (Begin & end markers)
+* https://raw.githubusercontent.com/mpv-player/mpv/master/TOOLS/lua/autoload.lua  (Append to playlist)
 
 # TODO: 
 * Queue
