@@ -76,11 +76,23 @@ copy /Y xmpv-*.lua %APPDATA%\mpv\scripts\
 * http://docs.aegisub.org/3.2/ASS_Tags/
 * http://www.linuxquestions.org/questions/slackware-14/mplayer-shows-question-marks-for-some-characters-on-subtitle-works-fine-on-xine-906077/
 * http://boards.4chan.org/g/thread/47352550/mpv-mpv-general
+* https://github.com/lvml/mpv-plugin-excerpt (Begin & end markers)
+* https://raw.githubusercontent.com/mpv-player/mpv/master/TOOLS/lua/autoload.lua  (Append to playlist)
 
 # TODO: 
 * Queue
 * Playlist
 </readme>
+
+DUMP
+mp.set_property("loop-file", "inf")
+mp.set_property("options/keep-open","yes")
+mp.set_property("options/keep-open","always")
+mp.register_event("eof-reached", function)
+mp.commandv("seek", 0.0, "absolute", "exact")
+mp.set_property("time-pos", tostring(pos))   ->Seek
+mp.set_property("pause", 'yes')
+mp.command('quit') 
 ]]--
 
 
@@ -95,19 +107,20 @@ require 'xmpv-likes'
 require 'xmpv-mark'
 require 'xmpv-stats'
 
+local start_time = 0
 
 -- On "file-loaded", this function will run.
 function on_file_loaded_init()
-
-	file_name_for_cmd = string.format('%q', mp.get_property("path")) -- file path with double quote escaped.
-	
+  
+  start_time = mp.get_time() -- Reset start for every new file loaded.
+  file_name_for_cmd = string.format('%q', mp.get_property("path")) -- file path with double quote escaped.
+  
   tmsu = Tmsu:new()
   mark = Mark:new(nil, file_name_for_cmd)
   likes = Likes:new(nil, file_name_for_cmd)
   stats = Stats:new(nil, file_name_for_cmd)
 	
 	tmsu:exists()
-	
 
   
   -- Binding functions
@@ -117,7 +130,7 @@ function on_file_loaded_init()
   function decrement_likes    () likes:decrement() end
   function reset_likes        () likes:reset()  end
   function print_top_favorites() likes:print_top_favorites()end
-  
+    
   -- Mark
   function mark_position                () mark:mark_position() end
   function goto_next_mark_position      () mark:goto_next_position() end
@@ -140,9 +153,28 @@ function on_file_loaded_init()
   mp.add_key_binding("Alt+x", "delete_previous_mark_position", delete_previous_mark_position) -- Key should be far away from the others to prevent accidental deletes.
   mp.add_key_binding("Alt+e", "export_mark_position", export_mark_position) -- Key should be far away from the others to prevent accidental deletes.
 
-
 end
-
-
 mp.register_event("file-loaded", on_file_loaded_init)
 
+
+-- Auto increment likes if playback has elapsed more than half.
+--  Don't know why. Putting this in "file-loaded" event will make it call cumulatively.
+--  Answer: https://github.com/mpv-player/mpv/issues/1892
+function auto_increment_likes()
+  local file_name_for_cmd = string.format('%q', mp.get_property("path")) -- file path with double quote escaped.
+  local time_elapsed = mp.get_time()-start_time
+  
+  local length_in_string = mp.get_property_number("length")
+  if(length_in_string~=nil) then  -- Process only playable file.
+    local length_in_secs = math.floor(length_in_string)  -- Discard fraction of seconds.
+    if(tonumber(length_in_secs)>8) then  -- Discard short media file.
+      local threshold_position = length_in_secs/2
+      if(tonumber(time_elapsed)>tonumber(threshold_position)) then
+        local likes = Likes:new(nil, file_name_for_cmd)
+        likes:increment()
+      end
+    end
+    
+  end  
+end
+mp.add_hook("on_unload", 50, auto_increment_likes)  
