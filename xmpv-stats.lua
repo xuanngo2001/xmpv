@@ -42,7 +42,9 @@ function Stats:print()
   local tags   = string.format("%6s: %s\n", "Tags", self:get_tags())
   local marked = string.format("%6s\n%s%s\n", "Marked", indent, self.mark:get_formatted_positions())
   
-  self.msg:print(file .. likes .. tags .. marked)
+  local stats = file .. likes .. tags .. marked
+  self.msg:print(stats)
+  print(stats)
 end
 
 
