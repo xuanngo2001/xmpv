@@ -158,7 +158,7 @@ mp.register_event("file-loaded", on_file_loaded_init)
 
 
 -- Auto increment likes if playback has elapsed more than half.
---  Don't know why. Putting this in "file-loaded" event will make it call cumulatively.
+--  Don't put this function in "file-loaded" event, it will make it call cumulatively.
 --  Answer: https://github.com/mpv-player/mpv/issues/1892
 function auto_increment_likes()
   local file_name_for_cmd = string.format('%q', mp.get_property("path")) -- file path with double quote escaped.
