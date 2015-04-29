@@ -49,7 +49,7 @@ copy /Y xmpv-*.lua %APPDATA%\mpv\scripts\
 # EXAMPLES:
 ```
 [xmpv]   File: some_music_file_name.mp3
-[xmpv]  Likes: 17
+[xmpv]  Likes: 14
 [xmpv]   Tags: funky, music
 [xmpv] Marked
 [xmpv]    00:00:07, 00:00:08, 00:00:15, 00:00:19
