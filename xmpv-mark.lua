@@ -167,7 +167,7 @@ end
 -- Return marked positions in ascending order
 function Mark:get_mark_positions()
 
-  local raw_tags = self.tmsu:get_tags()
+  local raw_tags = self.tmsu:get_tags(self.file_path)
   
   local mark_tag_label = self.TAG_NAME .."="
   local i = 1

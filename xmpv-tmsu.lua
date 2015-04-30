@@ -40,7 +40,7 @@ function Tmsu:untag(tag_name, tag_value, cmd_file_path)
 end
 
 -- Return raw tags, unformatted from TMSU.
-function Tmsu:get_tags()
+function Tmsu:get_tags(file_name_for_cmd)
   local cmd_get_tags = string.format("tmsu tags %s", file_name_for_cmd)
   return execute_command(cmd_get_tags)  
 end

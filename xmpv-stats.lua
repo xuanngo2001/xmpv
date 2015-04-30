@@ -52,7 +52,7 @@ end
 function Stats:get_tags()
 
   -- Get raw tags of current file.
-  local cmd_results = self.tmsu:get_tags()
+  local cmd_results = self.tmsu:get_tags(self.file_path)
   
   -- Remove <filename> from result.
   --    [ ]? => With or without a space. No space when no tag at all.

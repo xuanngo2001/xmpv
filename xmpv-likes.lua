@@ -68,7 +68,7 @@ end
 function Likes:get_number()
   
   -- Get raw tags of current file.
-  local cmd_results = self.tmsu:get_tags() 
+  local cmd_results = self.tmsu:get_tags(self.file_path) 
 
   -- Extract the number of likes.
   local likes_number = ""
