@@ -27,9 +27,36 @@ function Playlist:new(o, file_path)
 end
 
 function Playlist:log_played()
-  local current_position = math.floor(mp.get_property_number("time-pos"))
-  local current_date_time = os.date("%Y-%m-%d_%X")
+  -- Unlog played first
+  self:unlog_played()
   
-  local tags = self.TAG_NAME_ON .."="..current_date_time.." "..self.TAG_NAME_AT.."="..current_position
-  print(tags)
+  -- Log played.
+  local current_position = math.floor(mp.get_property_number("time-pos"))
+  local current_unix_time = os.time()
+  
+  local tags = self.TAG_NAME_ON .."="..current_unix_time.." "..self.TAG_NAME_AT.."="..current_position
+  self.tmsu:tags(tags, self.file_path)
+  
+end
+
+-- Untag all tag starting with 'xplayed'
+function Playlist:unlog_played()
+
+  -- Get raw tags of current file.
+  local cmd_results = self.tmsu:get_tags(self.file_path) 
+
+  -- Extract xplayedXXXX tags.
+  local xplayed_tags = ""
+  local tag_pattern = "xplayed"
+  for token in string.gmatch(cmd_results, "%S+") do
+    if string.starts(token, tag_pattern) then
+      xplayed_tags = xplayed_tags .. " " .. token
+    end
+  end
+
+  -- Untag all tag starting with 'xplayed'
+  if( xplayed_tags~="" ) then
+    self.tmsu:untags(xplayed_tags, self.file_path)
+  end
+  
 end
