@@ -33,11 +33,22 @@ function Tmsu:tags(tags_value, cmd_file_path)
   return execute_command(cmd_tag)
 end
 
-
+-- @deprecated. Use untags() instead.
 function Tmsu:untag(tag_name, tag_value, cmd_file_path)
   local cmd_untag = string.format("tmsu untag --tags=\"%s=%s\" %s", tag_name, tag_value, cmd_file_path)
   return execute_command(cmd_untag)
 end
+
+function Tmsu:get_untag_cmd(tags_value, cmd_file_path)
+  return string.format("tmsu untag --tags=\"%s\" %s", tags_value, cmd_file_path)
+end
+
+function Tmsu:untags(tags_value, cmd_file_path)
+  local cmd_untag = self:get_untag_cmd(tags_value, cmd_file_path)
+  print(cmd_untag)
+  return execute_command(cmd_untag)
+end
+
 
 -- Return raw tags, unformatted from TMSU.
 function Tmsu:get_tags(file_name_for_cmd)
