@@ -18,8 +18,8 @@ function Tmsu:new(o)
 end
 
 -- ***** Functions *****
-function Tmsu:get_tag_cmd(tag, cmd_file_path)
-  return string.format("tmsu tag --tags=\"%s\" %s", tag, cmd_file_path)
+function Tmsu:get_tag_cmd(tags_value, cmd_file_path)
+  return string.format("tmsu tag --tags=\"%s\" %s", tags_value, cmd_file_path)
 end
 
 function Tmsu:tag(tag_name, tag_value, cmd_file_path)
