@@ -67,6 +67,10 @@ function Stats:get_tags()
   local mark_tag_pattern = Mark.TAG_NAME .. "=%d*[.]?%d*"
   cmd_results = string.gsub(cmd_results, mark_tag_pattern, "")
   
+  -- Remove 'xplayedXXX=XXXXX' tags from result.
+  local xplayed_tag_pattern = "xplayed.*[ ]?"
+  cmd_results = string.gsub(cmd_results, xplayed_tag_pattern, "")  
+  
   -- Remove newline from result.
   cmd_results = string.gsub(cmd_results, "\n", "")
   
