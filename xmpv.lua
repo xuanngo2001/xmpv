@@ -105,6 +105,7 @@ require 'xmpv-tmsu'
 require 'xmpv-likes'
 require 'xmpv-mark'
 require 'xmpv-stats'
+require 'xmpv-playlist'
 
 local start_time = 0
 
@@ -155,25 +156,42 @@ function on_file_loaded_init()
 end
 mp.register_event("file-loaded", on_file_loaded_init)
 
+-- *********************************************************
+--  HOOKS
+-- *********************************************************
 
--- Auto increment likes if playback has elapsed more than half.
---  Don't put this function in "file-loaded" event, it will make it call cumulatively.
---  Answer: https://github.com/mpv-player/mpv/issues/1892
-function auto_increment_likes()
-  local file_name_for_cmd = string.format('%q', mp.get_property("path")) -- file path with double quote escaped.
-  local time_elapsed = mp.get_time()-start_time
-  
+-- Auto increment likes if played for more than half.
+--  Discard short media file.
+function auto_increment_likes(length, file_name_for_cmd)
+  local length_in_secs = math.floor(length)  -- Discard fraction of seconds.
+  if(tonumber(length_in_secs)>8) then  -- Discard short media file.
+    local threshold_position = length_in_secs/2
+    local time_elapsed = mp.get_time()-start_time
+    if(tonumber(time_elapsed)>tonumber(threshold_position)) then
+      local likes = Likes:new(nil, file_name_for_cmd)
+      likes:increment()
+    end
+  end
+end
+
+-- Log date, time and position played.
+function log_played(file_name_for_cmd)
+  local playlist = Playlist:new(nil, file_name_for_cmd)
+  playlist:log_played()
+end
+
+-- Run the followings when file is unloaded.
+function on_unload_main()
   local length_in_string = mp.get_property_number("length")
   if(length_in_string~=nil) then  -- Process only playable file.
-    local length_in_secs = math.floor(length_in_string)  -- Discard fraction of seconds.
-    if(tonumber(length_in_secs)>8) then  -- Discard short media file.
-      local threshold_position = length_in_secs/2
-      if(tonumber(time_elapsed)>tonumber(threshold_position)) then
-        local likes = Likes:new(nil, file_name_for_cmd)
-        likes:increment()
-      end
-    end
+  
+    local file_name_for_cmd = string.format('%q', mp.get_property("path")) -- file path with double quote escaped.
+    auto_increment_likes(length_in_string, file_name_for_cmd)
+    log_played(file_name_for_cmd)
     
-  end  
+  end 
+  
 end
-mp.add_hook("on_unload", 50, auto_increment_likes)  
+
+mp.add_hook("on_unload", 50, on_unload_main)
+
