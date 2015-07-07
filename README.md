@@ -45,24 +45,23 @@ copy /Y xmpv-*.lua %APPDATA%\mpv\scripts\
   * `Alt+e`: Export marked time positions to a file.
 
 # EXAMPLES:
-```
-[xmpv]   File: some_music_file_name.mp3
-[xmpv]  Likes: 14
-[xmpv]   Tags: funky, music
-[xmpv] Marked
-[xmpv]    00:00:07, 00:00:08, 00:00:15, 00:00:19
-```
 
-```
-[xmpv] TOP FAVORITES
-[xmpv] [  37] ./00 file name& weird.mp3
-[xmpv] [  35] ./00 10sec.mp3
-[xmpv] [  27] ./00 10sec222222222.mp3
-[xmpv] [  20] ./00 09_30secd.mp3
-[xmpv] [  16] ./01 Myriiam - Nca Fazi Pa Mal.mp3
-[xmpv] [  14] ./some_music_file_name.mp3
+    [xmpv]   File: some_music_file_name.mp3
+    [xmpv]  Likes: 14
+    [xmpv]   Tags: funky, music
+    [xmpv] Marked
+    [xmpv]    00:00:07, 00:00:08, 00:00:15, 00:00:19
 
-```
+
+    [xmpv] TOP FAVORITES
+    [xmpv] [  37] ./00 file name& weird.mp3
+    [xmpv] [  35] ./00 10sec.mp3
+    [xmpv] [  27] ./00 10sec222222222.mp3
+    [xmpv] [  20] ./00 09_30secd.mp3
+    [xmpv] [  16] ./01 Myriiam - Nca Fazi Pa Mal.mp3
+    [xmpv] [  14] ./some_music_file_name.mp3
+
+
 
 # REFERENCE: 
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
