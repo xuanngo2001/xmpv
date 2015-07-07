@@ -1,5 +1,3 @@
-
-
 # DESCRIPTION
 `xmpv` is a set of Lua scripts for **MPV** media player that uses **TMSU** to provide the following extra features:
   
