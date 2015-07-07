@@ -58,7 +58,6 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of MPV:
     [xmpv] [  35] ./00 10sec.mp3
     [xmpv] [  27] ./00 10sec222222222.mp3
     [xmpv] [  20] ./00 09_30secd.mp3
-    [xmpv] [  16] ./01 Myriiam - Nca Fazi Pa Mal.mp3
     [xmpv] [  14] ./some_music_file_name.mp3
 
 
