@@ -1,3 +1,5 @@
+
+
 # DESCRIPTION
 `xmpv` is a set of Lua scripts for **MPV** media player that uses **TMSU** to provide the following extra features:
   
@@ -19,17 +21,17 @@
   
 ## Install
 Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of MPV:
+```
+# In Linux
+cp xmpv.lua   ~/.config/mpv/scripts/
+cp xmpv-*.lua ~/.config/mpv/scripts/
+```
 
-    # In Linux
-    cp xmpv.lua   ~/.config/mpv/scripts/
-    cp xmpv-*.lua ~/.config/mpv/scripts/
-
-
-
-    :: In Windows
-    copy /Y xmpv.lua   %APPDATA%\mpv\scripts\
-    copy /Y xmpv-*.lua %APPDATA%\mpv\scripts\
-
+```
+:: In Windows
+copy /Y xmpv.lua   %APPDATA%\mpv\scripts\
+copy /Y xmpv-*.lua %APPDATA%\mpv\scripts\
+```
 
 # USAGE
 * Run your **MPV** as usual but now you have the following extra hot keys:
@@ -59,8 +61,8 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of MPV:
     [xmpv] [  27] ./00 10sec222222222.mp3
     [xmpv] [  20] ./00 09_30secd.mp3
     [xmpv] [  14] ./some_music_file_name.mp3
-
-
+    
+    
 
 # REFERENCE: 
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
