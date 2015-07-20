@@ -21,17 +21,15 @@
   
 ## Install
 Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of MPV:
-```
-# In Linux
-cp xmpv.lua   ~/.config/mpv/scripts/
-cp xmpv-*.lua ~/.config/mpv/scripts/
-```
 
-```
-:: In Windows
-copy /Y xmpv.lua   %APPDATA%\mpv\scripts\
-copy /Y xmpv-*.lua %APPDATA%\mpv\scripts\
-```
+    # In Linux
+    cp xmpv.lua   ~/.config/mpv/scripts/
+    cp xmpv-*.lua ~/.config/mpv/scripts/
+    
+    :: In Windows
+    copy /Y xmpv.lua   %APPDATA%\mpv\scripts\
+    copy /Y xmpv-*.lua %APPDATA%\mpv\scripts\
+
 
 # USAGE
 * Run your **MPV** as usual but now you have the following extra hot keys:
