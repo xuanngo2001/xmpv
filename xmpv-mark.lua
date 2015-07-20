@@ -30,7 +30,7 @@ end
 function Mark:delete_previous_position()
 
   local mark_positions = self:get_mark_positions()
-  local mark_positions_size = table.getn(mark_positions) 
+  local mark_positions_size = #mark_positions 
   if(mark_positions_size < 1) then
     self.msg:warn("No marked position")
   else
@@ -73,7 +73,7 @@ end
 function Mark:goto_next_position()
   
   local mark_positions = self:get_mark_positions()
-  if(table.getn(mark_positions) < 1) then
+  if(#mark_positions < 1) then
     self.msg:warn("No marked position")
   else
   
@@ -110,7 +110,7 @@ end
 function Mark:goto_previous_position()
   
   local mark_positions = self:get_mark_positions()
-  local mark_positions_size = table.getn(mark_positions) 
+  local mark_positions_size = #mark_positions 
   if(mark_positions_size < 1) then
     self.msg:warn("No marked position")
   else
