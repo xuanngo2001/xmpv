@@ -27,6 +27,7 @@ function get_script_path(script_name)
 
 end
 
+-- Get filename without extension.
 -- Reference: https://love2d.org/forums/viewtopic.php?f=4&t=11145
 function get_basename(filename)
   return filename:match("^([^%.]*)%.?") -- "myfile.lua" -> "myfile"
