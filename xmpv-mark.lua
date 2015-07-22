@@ -197,7 +197,7 @@ function Mark:export()
   -- Write marked time positions to file:
   --  * Human readable marked time positions
   --  * Tag values TMSU command 
-  local filename = get_basename(mp.get_property("path")) .. ".xmp"
+  local filename = mp.get_property("path") .. ".xmp"
   file = io.open(filename, "w")
   io.output(file)
   io.write(formatted_mark_positions .. "\n")
