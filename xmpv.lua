@@ -147,9 +147,14 @@ function on_file_loaded_init()
   mp.add_key_binding("Alt+n", "goto_next_mark_position", goto_next_mark_position)
   mp.add_key_binding("Alt+b", "goto_previous_mark_position", goto_previous_mark_position)
   mp.add_key_binding("Alt+x", "delete_previous_mark_position", delete_previous_mark_position) -- Key should be far away from the others to prevent accidental deletes.
-  mp.add_key_binding("Alt+e", "export_mark_position", export_mark_position) -- Key should be far away from the others to prevent accidental deletes.
-
+  mp.add_key_binding("Alt+e", "export_mark_position", export_mark_position) 
+  
+  -- Alternative keys
+  mp.add_key_binding("Alt+Shift+e", "export_mark_position", export_mark_position)
+  mp.add_key_binding("Alt+Shift+t", "top_favorites", print_top_favorites)
+  
 end
+
 mp.register_event("file-loaded", on_file_loaded_init)
 
 -- *********************************************************
