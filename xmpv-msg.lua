@@ -8,7 +8,7 @@
 -- ***** Variables *****
 Msg = {
   duration = 1,
-  error_duration = 5, 
+  error_duration = 5, -- Default display duration = 5 seconds.
 }
 
 -- 'Constructor'
@@ -24,6 +24,10 @@ function Msg:print(osd_text)
   mp.osd_message(osd_text, self.duration)
 end
 
+-- Logic:
+--  info(text)         -> Display same text on console and on OSD.
+--  info(nil, text)    -> Display only on OSD.
+--  info(text1, text2) -> Display text1 on console and text2 on OSD.
 function Msg:info(con_text, osd_text)
   
   if(con_text~=nil) then
