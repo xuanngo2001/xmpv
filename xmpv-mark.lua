@@ -205,5 +205,6 @@ function Mark:export()
   io.close(file)
   
   -- Display actions messages.
-  print(string.format("Exported \n\t%s\n\tto \"%s\".", formatted_mark_positions, filename))
+  local msg = string.format("Exported \n\t%s\n\tto \"%s\".", formatted_mark_positions, filename)
+  self.msg:info(msg)
 end
