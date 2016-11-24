@@ -44,7 +44,7 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
   * `Alt+x`: Delete previous marked time position.
   * `Alt+e`: Export marked time positions to a file.
 
-* Alternate key bindings provided due to conflicting shortcuts:
+* Alternative binding keys provided due to conflicting shortcuts with other application(e.g. xfce4-terminal):
   * `Alt+Shift+t`: Print top favorite files.
   * `Alt+Shift+e`: Export marked time positions to a file.
 
@@ -153,7 +153,7 @@ function on_file_loaded_init()
   mp.add_key_binding("Alt+x", "delete_previous_mark_position", delete_previous_mark_position) -- Key should be far away from the others to prevent accidental deletes.
   mp.add_key_binding("Alt+e", "export_mark_position", export_mark_position) 
   
-  -- Alternative keys
+  -- Alternative binding keys provided due to conflicting shortcuts with other applications(e.g. xfce4-terminal)
   mp.add_key_binding("Alt+Shift+e", "export_mark_position", export_mark_position)
   mp.add_key_binding("Alt+Shift+t", "top_favorites", print_top_favorites)
   
