@@ -48,6 +48,53 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of MPV:
 * Alternate key bindings:
   * `Alt+Shift+t`: Print top favorite files.
   * `Alt+Shift+e`: Export marked time positions to a file.
+# DESCRIPTION
+`xmpv` is a set of Lua scripts for `mpv` media player that uses `TMSU` to provide the following extra features:
+  
+  * Tag files that you like.
+  * Display your top favorite files.
+  * Mark play position.
+  * Play next marked position.
+  * Play previous marked position.
+  * Delete previous marked position.
+  * Export marked positions to a file.
+
+# INSTALL
+
+## Requirements
+* `mpv`: A media player. 
+  * http://mpv.io/
+* `TMSU`: A tool for tagging files. 
+  * http://tmsu.org/
+  
+## Install
+Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
+
+    # In Linux
+    cp xmpv.lua   ~/.config/mpv/scripts/
+    cp xmpv-*.lua ~/.config/mpv/scripts/
+    
+    :: In Windows
+    copy /Y xmpv.lua   %APPDATA%\mpv\scripts\
+    copy /Y xmpv-*.lua %APPDATA%\mpv\scripts\
+
+
+# USAGE
+* Run your `mpv` as usual but now you have the following extra hot keys:
+  * `Alt+l`: Increment likes.
+  * `Alt+d`: Decrement likes.
+  * `Alt+r`: Reset likes to zero.
+  * `Alt+i`: Print information of current playing file.
+  * `Alt+t`: Print top favorite files.
+  * `Alt+m`: Mark time position.
+  * `Alt+n`: Play next marked time position.
+  * `Alt+b`: Play previous marked time position.
+  * `Alt+x`: Delete previous marked time position.
+  * `Alt+e`: Export marked time positions to a file.
+
+* Alternate key bindings:
+  * `Alt+Shift+t`: Print top favorite files.
+  * `Alt+Shift+e`: Export marked time positions to a file.
 
 
 # EXAMPLES:
