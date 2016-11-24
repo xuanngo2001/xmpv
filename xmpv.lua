@@ -44,7 +44,7 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
   * `Alt+x`: Delete previous marked time position.
   * `Alt+e`: Export marked time positions to a file.
 
-* Alternate key bindings:
+* Alternate key bindings provided due to conflicting shortcuts:
   * `Alt+Shift+t`: Print top favorite files.
   * `Alt+Shift+e`: Export marked time positions to a file.
 
