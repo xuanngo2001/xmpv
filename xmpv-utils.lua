@@ -32,6 +32,13 @@ end
 function get_basename(filename)
   return filename:match("^([^%.]*)%.?") -- "myfile.lua" -> "myfile"
 end
+
+-- Return true if string is empty.
+-- Reference: http://stackoverflow.com/a/19667498
+function is_empty(s)
+  return s == nil or s == ''
+end
+
 -- ********************************************************************
 -- Library functions
 -- ********************************************************************
