@@ -5,11 +5,11 @@
   
   * Tag files that you like.
   * Display your top favorite files.
-  * Mark time position.
-  * Play next marked time position.
-  * Play previous marked time position.
-  * Delete previous marked time position.
-  * Export marked time positions to a file.
+  * Mark play position.
+  * Play next marked position.
+  * Play previous marked position.
+  * Delete previous marked position.
+  * Export marked positions to a file.
 
 # INSTALL
 
