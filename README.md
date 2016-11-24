@@ -1,7 +1,7 @@
 
 
 # DESCRIPTION
-`xmpv` is a set of Lua scripts for **MPV** media player that uses **TMSU** to provide the following extra features:
+`xmpv` is a set of Lua scripts for `mpv` media player that uses `TMSU` to provide the following extra features:
   
   * Tag files that you like.
   * Display your top favorite files.
@@ -14,13 +14,13 @@
 # INSTALL
 
 ## Requirements
-* MPV: A media player. 
+* `mpv`: A media player. 
   * http://mpv.io/
-* TMSU: A tool for tagging files. 
+* `TMSU`: A tool for tagging files. 
   * http://tmsu.org/
   
 ## Install
-Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of MPV:
+Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
 
     # In Linux
     cp xmpv.lua   ~/.config/mpv/scripts/
@@ -32,7 +32,7 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of MPV:
 
 
 # USAGE
-* Run your **MPV** as usual but now you have the following extra hot keys:
+* Run your `mpv` as usual but now you have the following extra hot keys:
   * `Alt+l`: Increment likes.
   * `Alt+d`: Decrement likes.
   * `Alt+r`: Reset likes to zero.
