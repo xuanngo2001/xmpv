@@ -1,5 +1,4 @@
 
-
 # DESCRIPTION
 `xmpv` is a set of Lua scripts for `mpv` media player that uses `TMSU` to provide the following extra features:
   
@@ -44,7 +43,7 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
   * `Alt+x`: Delete previous marked time position.
   * `Alt+e`: Export marked time positions to a file.
 
-* Alternate key bindings:
+* Alternative binding keys provided due to conflicting shortcuts with other application(e.g. xfce4-terminal):
   * `Alt+Shift+t`: Print top favorite files.
   * `Alt+Shift+e`: Export marked time positions to a file.
 
