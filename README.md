@@ -43,10 +43,7 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
   * `Alt+x`: Delete previous marked time position.
   * `Alt+e`: Export marked time positions to a file.
 
-* Alternative binding keys provided due to conflicting shortcuts with other application(e.g. xfce4-terminal):
-  * `Alt+Shift+t`: Print top favorite files.
-  * `Alt+Shift+e`: Export marked time positions to a file.
-
+**Note**: If there is a conflict shortcut key, use the alternative binding key. Simply also press the `Shift` key. 
 
 # EXAMPLES:
 
@@ -66,7 +63,8 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
     
     
 
-# REFERENCE: 
+# REFERENCE:
+* https://github.com/mpv-player/mpv/wiki/User-Scripts 
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/input.rst (also, search for 'osd-ass-cc')
 * `mpv --list-properties` lists all properties available.

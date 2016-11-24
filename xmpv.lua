@@ -44,10 +44,7 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
   * `Alt+x`: Delete previous marked time position.
   * `Alt+e`: Export marked time positions to a file.
 
-* Alternative binding keys provided due to conflicting shortcuts with other application(e.g. xfce4-terminal):
-  * `Alt+Shift+t`: Print top favorite files.
-  * `Alt+Shift+e`: Export marked time positions to a file.
-
+**Note**: If there is a conflict shortcut key, use the alternative binding key. Simply also press the `Shift` key. 
 
 # EXAMPLES:
 
@@ -161,8 +158,16 @@ function on_file_loaded_init()
   
   -- Alternative binding keys provided due to conflicting shortcuts with other applications(e.g. xfce4-terminal)
   mp.add_key_binding("Alt+Shift+h", "print_help", print_help)
-  mp.add_key_binding("Alt+Shift+e", "export_mark_position", export_mark_position)
+  mp.add_key_binding("Alt+Shift+l", "increment_likes", increment_likes)
+  mp.add_key_binding("Alt+Shift+d", "decrement_likes", decrement_likes)
+  mp.add_key_binding("Alt+Shift+r", "reset_likes", reset_likes)
   mp.add_key_binding("Alt+Shift+t", "top_favorites", print_top_favorites)
+  mp.add_key_binding("Alt+Shift+i", "show_statistics", print_stats)
+  mp.add_key_binding("Alt+Shift+m", "mark_position", mark_position)
+  mp.add_key_binding("Alt+Shift+n", "goto_next_mark_position", goto_next_mark_position)
+  mp.add_key_binding("Alt+Shift+b", "goto_previous_mark_position", goto_previous_mark_position)
+  mp.add_key_binding("Alt+Shift+x", "delete_previous_mark_position", delete_previous_mark_position) -- Key should be far away from the others to prevent accidental deletes.
+  mp.add_key_binding("Alt+Shift+e", "export_mark_position", export_mark_position)
   
 end
 
