@@ -120,6 +120,7 @@ function on_file_loaded_init()
   mark = Mark:new(nil, file_name_for_cmd)
   likes = Likes:new(nil, file_name_for_cmd)
   stats = Stats:new(nil, file_name_for_cmd)
+	msg = Msg:new()
 	
 	tmsu:exists()
 
@@ -142,7 +143,11 @@ function on_file_loaded_init()
   -- Stats
   function print_stats() stats:print() end
   
+  -- Msg
+  function print_help() msg:help() end
+  
   -- Set binding keys
+  mp.add_key_binding("Alt+h", "print_help", print_help)
   mp.add_key_binding("Alt+l", "increment_likes", increment_likes)
   mp.add_key_binding("Alt+d", "decrement_likes", decrement_likes)
   mp.add_key_binding("Alt+r", "reset_likes", reset_likes)
@@ -152,9 +157,10 @@ function on_file_loaded_init()
   mp.add_key_binding("Alt+n", "goto_next_mark_position", goto_next_mark_position)
   mp.add_key_binding("Alt+b", "goto_previous_mark_position", goto_previous_mark_position)
   mp.add_key_binding("Alt+x", "delete_previous_mark_position", delete_previous_mark_position) -- Key should be far away from the others to prevent accidental deletes.
-  mp.add_key_binding("Alt+e", "export_mark_position", export_mark_position) 
+  mp.add_key_binding("Alt+e", "export_mark_position", export_mark_position)
   
   -- Alternative binding keys provided due to conflicting shortcuts with other applications(e.g. xfce4-terminal)
+  mp.add_key_binding("Alt+Shift+h", "print_help", print_help)
   mp.add_key_binding("Alt+Shift+e", "export_mark_position", export_mark_position)
   mp.add_key_binding("Alt+Shift+t", "top_favorites", print_top_favorites)
   

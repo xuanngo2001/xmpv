@@ -70,4 +70,22 @@ function Msg:error(con_text, osd_text)
   
 end
 
+-- Display help information(take from xmpv.lua):
+--  * List binding keys and description.
+function Msg:help()
+  
+  local help_text = "HELP:".. "\n"
+        help_text = help_text .. " Alt+l: Increment likes" .. "\n"
+        help_text = help_text .. " Alt+d: Decrement likes" .. "\n"
+        help_text = help_text .. " Alt+r: Reset likes to zero" .. "\n"
+        help_text = help_text .. " Alt+i: Print information of current playing file" .. "\n"
+        help_text = help_text .. " Alt+t: Print top favorite files" .. "\n"
+        help_text = help_text .. " Alt+m: Mark time position" .. "\n"
+        help_text = help_text .. " Alt+n: Play next marked time position" .. "\n"
+        help_text = help_text .. " Alt+b: Play previous marked time position" .. "\n"
+        help_text = help_text .. " Alt+x: Delete previous marked time position" .. "\n"
+        help_text = help_text .. " Alt+e: Export marked time positions to a file" .. "\n"
+  
+  self:print(help_text)
+end
 
