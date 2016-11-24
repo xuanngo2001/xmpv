@@ -190,21 +190,28 @@ function Mark:export()
   -- Get marked tag values command.
   local mark_positions_string = self.TAG_NAME .. "=" .. table.concat(self:get_mark_positions(), " ".. self.TAG_NAME .. "=")
   local mark_positions_cmd = self.tmsu:get_tag_cmd(mark_positions_string, self.file_path)
+
+
+  local formatted_positions = self:get_formatted_positions()
+  if is_empty(formatted_positions) then
+    self.msg:warn("No marked position. Nothing to export.")
+  else
+    -- Construct formatted marked time positions
+    local formatted_mark_positions = "# Marked time positions: " .. formatted_positions 
+    
+    -- Write marked time positions to file:
+    --  * Human readable marked time positions
+    --  * Tag values TMSU command 
+    local filename = mp.get_property("path") .. ".xmp"
+    file = io.open(filename, "w")
+    io.output(file)
+    io.write(formatted_mark_positions .. "\n")
+    io.write(mark_positions_cmd .. "\n")
+    io.close(file)
+    
+    -- Display actions messages.
+    local msg = string.format("Exported \n\t%s\n\tto \"%s\".", formatted_mark_positions, filename)
+    self.msg:info(msg)
+  end
   
-  -- Get formatted marked time positions
-  local formatted_mark_positions = "# Marked time positions: " .. self:get_formatted_positions() 
-  
-  -- Write marked time positions to file:
-  --  * Human readable marked time positions
-  --  * Tag values TMSU command 
-  local filename = mp.get_property("path") .. ".xmp"
-  file = io.open(filename, "w")
-  io.output(file)
-  io.write(formatted_mark_positions .. "\n")
-  io.write(mark_positions_cmd .. "\n")
-  io.close(file)
-  
-  -- Display actions messages.
-  local msg = string.format("Exported \n\t%s\n\tto \"%s\".", formatted_mark_positions, filename)
-  self.msg:info(msg)
 end
