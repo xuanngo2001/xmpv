@@ -7,6 +7,7 @@ require 'xmpv-tmsu'
 require 'xmpv-likes'
 require 'xmpv-mark'
 require 'xmpv-msg'
+require 'xmpv-asst'
 
 -- ***** Variables *****
 Stats = {
@@ -14,6 +15,7 @@ Stats = {
 
   tmsu = Tmsu:new(),  
   msg = Msg:new(),
+  asst = Asst:new(),
   likes = nil,
   mark = nil,
 }
@@ -37,7 +39,7 @@ end
 function Stats:print()
 
   local indent = "   "
-  local file   = string.format("%6s: %s\n", "File", mp.get_property_osd("filename"))
+  local file   = string.format("%6s: %s\n", "File", self.asst:long_text(mp.get_property_osd("filename")))
   local likes  = string.format("%6s: %s\n", "Likes", self.likes:get_number())
   local tags   = string.format("%6s: %s\n", "Tags", self:get_tags())
   local marked = string.format("%6s\n%s%s\n", "Marked", indent, self.mark:get_formatted_positions())
@@ -46,7 +48,6 @@ function Stats:print()
   self.msg:print(stats)
   print(stats)
 end
-
 
 -- Get a list of tags, excluding xmark and xlikes.
 function Stats:get_tags()
