@@ -38,11 +38,11 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
   * `Alt+r`: Reset likes to zero.
   * `Alt+i`: Print information of current playing file.
   * `Alt+t`: Print top favorite files.
-  * `Alt+m`: Mark time position.
-  * `Alt+n`: Play next marked time position.
-  * `Alt+b`: Play previous marked time position.
-  * `Alt+x`: Delete previous marked time position.
-  * `Alt+e`: Export marked time positions to a file.
+  * `Alt+m`: Mark position.
+  * `Alt+n`: Play next marked position.
+  * `Alt+b`: Play previous marked position.
+  * `Alt+x`: Delete previous marked position.
+  * `Alt+e`: Export marked positions to a file.
 
 **Note**: If there is a conflict shortcut key, use the alternative binding key. Simply also press the `Shift` key. 
 
