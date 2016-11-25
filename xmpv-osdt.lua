@@ -1,3 +1,5 @@
 -----------------------------------------------------------------------------
--- OSD tag class: Simply display of OSD message. Hide ASS tags. 
+-- OSD tag class: 
+--  -Simplify display of OSD message. 
+--  -Hide ASS tags. 
 -----------------------------------------------------------------------------
