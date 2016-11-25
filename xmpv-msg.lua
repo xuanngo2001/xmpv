@@ -4,11 +4,14 @@
 -- Note:
 --  con_text = Display text in console.
 -----------------------------------------------------------------------------
+require 'xmpv-asst'
 
 -- ***** Variables *****
 Msg = {
   duration = 1,
   error_duration = 5, -- Default display duration = 5 seconds.
+  
+  asst = Asst:new(),  
 }
 
 -- 'Constructor'
@@ -87,5 +90,6 @@ function Msg:help()
         help_text = help_text .. " Alt+e: Export marked positions to a file" .. "\n"
   
   self:print(help_text)
+ 
 end
 
