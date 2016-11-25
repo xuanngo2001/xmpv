@@ -69,6 +69,7 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/input.rst (also, search for 'osd-ass-cc')
 * `mpv --list-properties` lists all properties available.
 * Sample lua scripts: https://github.com/mpv-player/mpv/wiki/User-Scripts
+* Text formatting example: https://github.com/Argon-/mpv-stats
 * http://docs.aegisub.org/3.2/ASS_Tags/
 * http://www.linuxquestions.org/questions/slackware-14/mplayer-shows-question-marks-for-some-characters-on-subtitle-works-fine-on-xine-906077/
 * http://boards.4chan.org/g/thread/47352550/mpv-mpv-general
