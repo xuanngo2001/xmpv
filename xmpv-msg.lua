@@ -74,8 +74,7 @@ end
 --  * List binding keys and description.
 function Msg:help()
   
-  local ass_green="{\\1c&H00FF00&}"
-  local help_text = ass_green .. "HELP:".. "\n"
+  local help_text = "HELP:" .. "\n"
         help_text = help_text .. " Alt+l: Increment likes" .. "\n"
         help_text = help_text .. " Alt+d: Decrement likes" .. "\n"
         help_text = help_text .. " Alt+r: Reset likes to zero" .. "\n"
