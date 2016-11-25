@@ -65,7 +65,6 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
     
 
 # REFERENCE:
-* https://github.com/mpv-player/mpv/wiki/User-Scripts 
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/input.rst (also, search for 'osd-ass-cc')
 * `mpv --list-properties` lists all properties available.
