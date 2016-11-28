@@ -23,12 +23,15 @@ function Msg:new(o)
   return o
 end
 
-function Msg:display(text, osd_text, duration)
+function Msg:print(text, osd_text, duration)
   
   if(duration~=nil) then
     print(text)
     mp.osd_message(osd_text, duration)
   else
+  
+    if(osd_text==nil) then osd_text = text end
+    
     print(text)
     mp.osd_message(osd_text, self.duration)    
   end
@@ -39,12 +42,6 @@ end
 -- ---------------------------------- -- 
 -- ALL FUNCTIONS BELOW ARE DEPRECATED --
 -- ---------------------------------- --
-
-
-function Msg:print(osd_text)
-  mp.osd_message(osd_text, self.duration)
-end
-
 -- Logic:
 --  info(text)         -> Display same text on console and on OSD.
 --  info(nil, text)    -> Display only on OSD.
