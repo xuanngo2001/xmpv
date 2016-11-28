@@ -4,6 +4,7 @@
 require 'xmpv-utils'
 require 'xmpv-tmsu'
 require 'xmpv-msg'
+require 'xmpv-asst'
 
 
 -- ***** Variables *****
@@ -12,7 +13,8 @@ Likes = {
   file_path="",
   
   tmsu = Tmsu:new(),
-  msg = Msg:new(),  
+  msg = Msg:new(),
+  asst = Asst:new(),
 }
 
 -- 'Constructor'
@@ -126,8 +128,7 @@ function Likes:print_top_favorites()
   --    the 10th likes.
   local favorites_msg = "TOP FAVORITES\n"
   favorites_msg = favorites_msg .. table.concat(top_favorites, '\n')
-  print(favorites_msg)
-  self.msg:print("See console for your favorites")
+  self.msg:display(favorites_msg, self.asst:long_text(favorites_msg, 10))
 end
 
 -- Reset by removing completely the likes tag.
