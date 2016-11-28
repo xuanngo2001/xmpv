@@ -28,6 +28,10 @@ function Asst:underline_f() return "{\\u0}" end
 
 function Asst:font_size(fs) return "{\\fs" .. fs .. "}" end
 
+function Asst:green() return "{\\c&H00FF00&}" end
+function Asst:red() return "{\\c&H0000FF&}" end
+function Asst:yellow() return "{\\c&H00FFFF&}" end
+
 -- -------------------------------- --
 -- BIGGER FUNCTIONS --
 -- -------------------------------- --
