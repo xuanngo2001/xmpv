@@ -23,6 +23,18 @@ function Msg:new(o)
   return o
 end
 
+function Msg:display(text, osd_text, duration)
+  
+  if(duration~=nil) then
+    print(text)
+    mp.osd_message(osd_text, duration)
+  else
+    print(text)
+    mp.osd_message(osd_text, self.duration)    
+  end
+  
+end
+
 function Msg:print(osd_text)
   mp.osd_message(osd_text, self.duration)
 end
