@@ -35,6 +35,12 @@ function Msg:display(text, osd_text, duration)
   
 end
 
+
+-- ---------------------------------- -- 
+-- ALL FUNCTIONS BELOW ARE DEPRECATED --
+-- ---------------------------------- --
+
+
 function Msg:print(osd_text)
   mp.osd_message(osd_text, self.duration)
 end
