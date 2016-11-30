@@ -37,13 +37,13 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
   * `Alt+r`: Reset likes to zero.
   * `Alt+i`: Print information of current playing file.
   * `Alt+t`: Print top favorite files.
-  * `Alt+m`: Mark time position.
-  * `Alt+n`: Play next marked time position.
-  * `Alt+b`: Play previous marked time position.
-  * `Alt+x`: Delete previous marked time position.
-  * `Alt+e`: Export marked time positions to a file.
+  * `Alt+m`: Mark position.
+  * `Alt+n`: Play next marked position.
+  * `Alt+b`: Play previous marked position.
+  * `Alt+x`: Delete previous marked position.
+  * `Alt+e`: Export marked positions to a file.
 
-**Note**: If there is a conflict shortcut key, use the alternative binding key. Simply also press the `Shift` key. 
+**Note**: If there is a conflicting hot key, then use the alternative binding key: simply **also** press the `Shift` key. 
 
 # EXAMPLES:
 
@@ -64,11 +64,11 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
     
 
 # REFERENCE:
-* https://github.com/mpv-player/mpv/wiki/User-Scripts 
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/input.rst (also, search for 'osd-ass-cc')
 * `mpv --list-properties` lists all properties available.
 * Sample lua scripts: https://github.com/mpv-player/mpv/wiki/User-Scripts
+* Text formatting example: https://github.com/Argon-/mpv-stats
 * http://docs.aegisub.org/3.2/ASS_Tags/
 * http://www.linuxquestions.org/questions/slackware-14/mplayer-shows-question-marks-for-some-characters-on-subtitle-works-fine-on-xine-906077/
 * http://boards.4chan.org/g/thread/47352550/mpv-mpv-general
