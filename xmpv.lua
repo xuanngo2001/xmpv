@@ -157,17 +157,17 @@ function on_file_loaded_init()
   mp.add_key_binding("Alt+e", "export_mark_position", export_mark_position)
   
   -- Alternative binding keys provided due to conflicting shortcuts with other applications(e.g. xfce4-terminal)
-  mp.add_key_binding("Alt+Shift+h", "print_help", print_help)
-  mp.add_key_binding("Alt+Shift+l", "increment_likes", increment_likes)
-  mp.add_key_binding("Alt+Shift+d", "decrement_likes", decrement_likes)
-  mp.add_key_binding("Alt+Shift+r", "reset_likes", reset_likes)
-  mp.add_key_binding("Alt+Shift+t", "top_favorites", print_top_favorites)
-  mp.add_key_binding("Alt+Shift+i", "show_statistics", print_stats)
-  mp.add_key_binding("Alt+Shift+m", "mark_position", mark_position)
-  mp.add_key_binding("Alt+Shift+n", "goto_next_mark_position", goto_next_mark_position)
-  mp.add_key_binding("Alt+Shift+b", "goto_previous_mark_position", goto_previous_mark_position)
-  mp.add_key_binding("Alt+Shift+x", "delete_previous_mark_position", delete_previous_mark_position) -- Key should be far away from the others to prevent accidental deletes.
-  mp.add_key_binding("Alt+Shift+e", "export_mark_position", export_mark_position)
+  mp.add_key_binding("Alt+Shift+h", "print_help_a", print_help)
+  mp.add_key_binding("Alt+Shift+l", "increment_likes_a", increment_likes)
+  mp.add_key_binding("Alt+Shift+d", "decrement_likes_a", decrement_likes)
+  mp.add_key_binding("Alt+Shift+r", "reset_likes_a", reset_likes)
+  mp.add_key_binding("Alt+Shift+t", "top_favorites_a", print_top_favorites)
+  mp.add_key_binding("Alt+Shift+i", "show_statistics_a", print_stats)
+  mp.add_key_binding("Alt+Shift+m", "mark_position_a", mark_position)
+  mp.add_key_binding("Alt+Shift+n", "goto_next_mark_position_a", goto_next_mark_position)
+  mp.add_key_binding("Alt+Shift+b", "goto_previous_mark_position_a", goto_previous_mark_position)
+  mp.add_key_binding("Alt+Shift+x", "delete_previous_mark_position_a", delete_previous_mark_position) -- Key should be far away from the others to prevent accidental deletes.
+  mp.add_key_binding("Alt+Shift+e", "export_mark_position_a", export_mark_position)
   
 end
 
