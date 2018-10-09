@@ -4,6 +4,7 @@
 require 'xmpv-utils'
 require 'xmpv-tmsu'
 require 'xmpv-msg'
+require 'xmpv-asst'
 
 -- ***** Variables *****
 Mark = {
@@ -210,7 +211,8 @@ function Mark:export()
     io.close(file)
     
     -- Display actions messages.
-    local msg = string.format("Exported \n\t%s\n\tto \"%s\".", formatted_mark_positions, filename)
+	  asst = Asst:new()
+    local msg = string.format("Exported \n\t%s\n\tto \"%s\".", asst:long_text(formatted_mark_positions), asst:long_text(filename))
     self.msg:info(msg)
   end
   
