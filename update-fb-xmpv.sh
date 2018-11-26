@@ -2,7 +2,7 @@
 set -e
 # Description: Update Firstboot vbox script.
 
-fb_xmpv_dir=$(readlink -ev /media/master/github/firstboot/firstboot/apps/xmpv/xmpv)
+fb_xmpv_dir=$(readlink -ev /media/master/github/firstboot/firstboot/scripts/ess-mpv-01-xmpv/xmpv)
 xmpv_script_dir=$(readlink -ev ./xmpv)
 
 # Update xmpv to firstboot.
