@@ -136,6 +136,7 @@ function on_file_loaded_init()
   function goto_previous_mark_position  () mark:goto_previous_position() end
   function delete_previous_mark_position() mark:delete_previous_position() end
   function export_mark_position         () mark:export() end
+  function export_delete_script         () mark:export_delete_script() end
   
   -- Stats
   function print_stats() stats:print() end
@@ -155,6 +156,7 @@ function on_file_loaded_init()
   mp.add_key_binding("Alt+b", "goto_previous_mark_position", goto_previous_mark_position)
   mp.add_key_binding("Alt+x", "delete_previous_mark_position", delete_previous_mark_position) -- Key should be far away from the others to prevent accidental deletes.
   mp.add_key_binding("Alt+e", "export_mark_position", export_mark_position)
+  mp.add_key_binding("Alt+k", "export_delete_script", export_delete_script)
   
   -- Alternative binding keys provided due to conflicting shortcuts with other applications(e.g. xfce4-terminal)
   mp.add_key_binding("Alt+Shift+h", "print_help_a", print_help)
@@ -168,6 +170,8 @@ function on_file_loaded_init()
   mp.add_key_binding("Alt+Shift+b", "goto_previous_mark_position_a", goto_previous_mark_position)
   mp.add_key_binding("Alt+Shift+x", "delete_previous_mark_position_a", delete_previous_mark_position) -- Key should be far away from the others to prevent accidental deletes.
   mp.add_key_binding("Alt+Shift+e", "export_mark_position_a", export_mark_position)
+  mp.add_key_binding("Alt+Shift+k", "export_delete_script_a", export_delete_script)
+
   
 end
 

@@ -217,3 +217,21 @@ function Mark:export()
   end
   
 end
+
+-- Export delete script, e.g. write 'rm -f filename' > filename.del
+function Mark:export_delete_script()
+
+
+    local filename = mp.get_property("path")
+    local output_filename = filename .. ".del"
+    file = io.open(output_filename, "w")
+    io.output(file)
+    io.write("rm -f \"".. filename .. "\"\n")
+    io.close(file)
+    
+    -- Display actions messages.
+    asst = Asst:new()
+    local msg = string.format("Delete command written in %s.\n", asst:long_text(output_filename))
+    self.msg:info(msg)
+  
+end
