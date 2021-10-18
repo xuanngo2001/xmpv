@@ -1,6 +1,9 @@
 -----------------------------------------------------------------------------
 -- Tmsu class will manipulate TMSU application. 
 -----------------------------------------------------------------------------
+local home = os.getenv("HOME")
+package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
+
 require 'xmpv-utils'
 require 'xmpv-msg'
 
