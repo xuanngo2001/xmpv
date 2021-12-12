@@ -22,7 +22,8 @@ end
 
 -- ***** Functions *****
 function Tmsu:get_tag_cmd(tags_value, cmd_file_path)
-  return string.format("tmsu tag --tags=\"%s\" %s", tags_value, cmd_file_path)
+  local shell_filename = get_shell_filename(cmd_file_path)
+  return string.format("tmsu tag --tags=\"%s\" %s", tags_value, shell_filename)
 end
 
 -- @deprecated Use tags() instead
@@ -55,7 +56,8 @@ end
 
 -- Return raw tags, unformatted from TMSU.
 function Tmsu:get_tags(file_name_for_cmd)
-  local cmd_get_tags = string.format("tmsu tags %s", file_name_for_cmd)
+  local shell_filename = get_shell_filename(file_name_for_cmd)
+  local cmd_get_tags = string.format("tmsu tags %s", shell_filename)
   return execute_command(cmd_get_tags)  
 end
 
