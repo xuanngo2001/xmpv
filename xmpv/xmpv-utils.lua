@@ -39,6 +39,11 @@ function is_empty(s)
   return s == nil or s == ''
 end
 
+-- Return filename formatted for shell. e.g escape $
+function get_shell_filename(s)
+    return string.gsub(s, "%$", "\\$")
+end
+
 -- ********************************************************************
 -- Library functions
 -- ********************************************************************
