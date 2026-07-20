@@ -4,6 +4,9 @@
 -- Note:
 --  con_text = Display text in console.
 -----------------------------------------------------------------------------
+local home = os.getenv("HOME")
+package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
+
 require 'xmpv-asst'
 
 -- ***** Variables *****

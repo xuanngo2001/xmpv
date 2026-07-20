@@ -1,6 +1,9 @@
 -----------------------------------------------------------------------------
 -- Stats class. 
 -----------------------------------------------------------------------------
+local home = os.getenv("HOME")
+package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
+
 require 'xmpv-utils'
 require 'mp.options'
 require 'xmpv-tmsu'
