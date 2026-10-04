@@ -44,6 +44,7 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
   * `Alt+x`: Delete previous marked position.
   * `Alt+e`: Export marked positions to a file.
   * `Alt+k`: Mark video to delete(*.del)
+  * `Alt+u`: Export current marked position to a file.
 
 **Note**: If there is a conflicting hot key, then use the alternative binding key: simply **also** press the `Shift` key. 
 
@@ -141,6 +142,7 @@ function on_file_loaded_init()
   function delete_previous_mark_position() mark:delete_previous_position() end
   function export_mark_position         () mark:export() end
   function export_delete_script         () mark:export_delete_script() end
+  function export_current_position_script   () mark:export_current_position_script() end
   
   -- Stats
   function print_stats() stats:print() end
@@ -161,7 +163,8 @@ function on_file_loaded_init()
   mp.add_key_binding("Alt+x", "delete_previous_mark_position", delete_previous_mark_position) -- Key should be far away from the others to prevent accidental deletes.
   mp.add_key_binding("Alt+e", "export_mark_position", export_mark_position)
   mp.add_key_binding("Alt+k", "export_delete_script", export_delete_script)
-  
+  mp.add_key_binding("Alt+u", "export_current_position_script", export_current_position_script)
+
   -- Alternative binding keys provided due to conflicting shortcuts with other applications(e.g. xfce4-terminal)
   mp.add_key_binding("Alt+Shift+h", "print_help_a", print_help)
   mp.add_key_binding("Alt+Shift+l", "increment_likes_a", increment_likes)
@@ -175,6 +178,7 @@ function on_file_loaded_init()
   mp.add_key_binding("Alt+Shift+x", "delete_previous_mark_position_a", delete_previous_mark_position) -- Key should be far away from the others to prevent accidental deletes.
   mp.add_key_binding("Alt+Shift+e", "export_mark_position_a", export_mark_position)
   mp.add_key_binding("Alt+Shift+k", "export_delete_script_a", export_delete_script)
+  mp.add_key_binding("Alt+Shift+u", "export_current_position_script_a", export_current_position_script)
 
   
 end

@@ -11,8 +11,14 @@ function execute_command(command)
 end
 
 -- Return seconds formatted as HH:MM:SS
-function time_to_string(seconds)
-  return string.format("%.2d:%.2d:%.2d", seconds/(60*60), seconds/60%60, seconds%60)
+function time_to_hh_mm_ss(time_pos_sec)
+    local hours = math.floor(time_pos_sec / 3600)
+    local minutes = math.floor((time_pos_sec % 3600) / 60)
+    local seconds = math.floor(time_pos_sec % 60)
+
+    -- Formats into HH:MM:SS with leading zeros
+    local formatted_time = string.format("%02d:%02d:%02d", hours, minutes, seconds)
+    return formatted_time
 end
 
 -- Return correct path depending on the operating system

@@ -47,7 +47,7 @@ function Mark:delete_previous_position()
       if tonumber(current_pos) < tonumber(mark_position) then
         self.tmsu:untag(self.TAG_NAME, previous_pos, self.file_path)
         found_previous_pos = true
-        local warn_msg = string.format("M(-) %s", time_to_string(previous_pos))
+        local warn_msg = string.format("M(-) %s", time_to_hh_mm_ss(previous_pos))
         self.msg:warn(warn_msg)        
         break
       else
@@ -59,7 +59,7 @@ function Mark:delete_previous_position()
     if ( not found_previous_pos ) then
       previous_pos = mark_positions[mark_positions_size]
       self.tmsu:untag(self.TAG_NAME, previous_pos, self.file_path)
-      local warn_msg = string.format("M(-) %s", time_to_string(previous_pos))
+      local warn_msg = string.format("M(-) %s", time_to_hh_mm_ss(previous_pos))
       self.msg:warn(warn_msg)
     end
     
@@ -88,7 +88,7 @@ function Mark:goto_next_position()
       if tonumber(current_pos) < tonumber(mark_position) then
         mp.commandv("seek", mark_position, "absolute", "exact")
         found_next_pos = true
-        local msg = string.format("-> %s", time_to_string(mark_position))
+        local msg = string.format("-> %s", time_to_hh_mm_ss(mark_position))
         self.msg:print(msg)   
         break
       end
@@ -97,7 +97,7 @@ function Mark:goto_next_position()
     -- 'Make it goes around logic' here.
     if ( not found_next_pos ) then
       mp.commandv("seek", mark_positions[1], "absolute", "exact")
-      local msg = string.format("@-> %s", time_to_string(mark_positions[1]))
+      local msg = string.format("@-> %s", time_to_hh_mm_ss(mark_positions[1]))
       self.msg:print(msg) 
     end
     
@@ -127,7 +127,7 @@ function Mark:goto_previous_position()
       if tonumber(current_pos) < tonumber(mark_position) then
         mp.commandv("seek", previous_pos, "absolute", "exact")
         found_previous_pos = true
-        local msg = string.format("%s <-", time_to_string(previous_pos))
+        local msg = string.format("%s <-", time_to_hh_mm_ss(previous_pos))
         self.msg:print(msg)     
         break
       else
@@ -139,7 +139,7 @@ function Mark:goto_previous_position()
     if ( not found_previous_pos ) then
       previous_pos = mark_positions[mark_positions_size]
       mp.commandv("seek", previous_pos, "absolute", "exact")
-      local msg = string.format("%s <-@", time_to_string(previous_pos))
+      local msg = string.format("%s <-@", time_to_hh_mm_ss(previous_pos))
       self.msg:print(msg)
     end
     
@@ -152,7 +152,7 @@ function Mark:mark_position()
   local current_position = math.floor(mp.get_property_number("time-pos"))
   self.tmsu:tag(self.TAG_NAME, current_position, self.file_path)
   
-  local msg = string.format("M(+) %s", time_to_string(current_position))
+  local msg = string.format("M(+) %s", time_to_hh_mm_ss(current_position))
   self.msg:print(msg)
 end
 
@@ -162,7 +162,7 @@ end
 function Mark:get_formatted_positions()
   local mark_positions = self:get_mark_positions()
   for i, mark_position in ipairs(mark_positions) do
-    mark_positions[i] = time_to_string(mark_position)
+    mark_positions[i] = time_to_hh_mm_ss(mark_position)
   end
   
   return table.concat(mark_positions, ", ")
@@ -251,4 +251,26 @@ function Mark:export_delete_script()
         self.msg:print(conMsg, osdMsg, 2)
         
     end
+end
+
+-- Export current marked position to a file(<video filename>.sh)
+function Mark:export_current_position_script()
+    local filename        = mp.get_property("path")
+    local output_filename = filename .. ".sh"
+    local file            = io.open(output_filename, "w")
+    local asst            = Asst:new()
+
+
+    io.output(file)
+    -- Write command shell: mpv --start=<current_position> "<video_filename>"
+    local current_pos = mp.get_property_number("time-pos")
+    local position_hh_mm_ss = time_to_hh_mm_ss(current_pos)
+    local shell_filename = get_shell_filename(output_filename)
+    io.write("mpv --start=" .. position_hh_mm_ss .. " \"" .. shell_filename .. "\"\n")
+    io.close(file)
+    local text = string.format("Created current position script: \n%s", output_filename)
+
+    local conMsg = string.format("%s%s%s", "\27[32m", text, "\27[0m")
+    local osdMsg = string.format("%s%s%s%s", asst:on(), asst:green(), text, asst:reset(), asst:off())
+    self.msg:print(conMsg, osdMsg, 2)
 end
