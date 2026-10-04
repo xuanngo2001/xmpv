@@ -265,7 +265,7 @@ function Mark:export_current_position_script()
     -- Write command shell: mpv --start=<current_position> "<video_filename>"
     local current_pos = mp.get_property_number("time-pos")
     local position_hh_mm_ss = time_to_hh_mm_ss(current_pos)
-    local shell_filename = get_shell_filename(output_filename)
+    local shell_filename = get_shell_filename(filename)
     io.write("mpv --start=" .. position_hh_mm_ss .. " \"" .. shell_filename .. "\"\n")
     io.close(file)
     local text = string.format("Created current position script: \n%s", output_filename)
