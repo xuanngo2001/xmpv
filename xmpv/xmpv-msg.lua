@@ -108,6 +108,7 @@ function Msg:help()
         help_text = help_text .. " Alt+x: Delete previous marked position" .. "\n"
         help_text = help_text .. " Alt+e: Export marked positions to a file" .. "\n"
         help_text = help_text .. " Alt+k: Mark video to delete(*.del)" .. "\n"
+        help_text = help_text .. " Alt+u: Export current marked position to a file" .. "\n"
   
   self:print(self.asst:long_text(help_text))
 end
