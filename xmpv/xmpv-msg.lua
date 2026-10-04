@@ -6,6 +6,7 @@
 -----------------------------------------------------------------------------
 local home = os.getenv("HOME")
 package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
+--package.path = package.path .. ';' .. 'C:\\xuan\\soft-bin\\mpv-x86_64-20200419-git-a09c769\\portable_config\\scripts\\?.lua'
 
 require 'xmpv-asst'
 
@@ -106,8 +107,8 @@ function Msg:help()
         help_text = help_text .. " Alt+b: Play previous marked position" .. "\n"
         help_text = help_text .. " Alt+x: Delete previous marked position" .. "\n"
         help_text = help_text .. " Alt+e: Export marked positions to a file" .. "\n"
+        help_text = help_text .. " Alt+k: Mark video to delete(*.del)" .. "\n"
   
-  self:print(help_text)
- 
+  self:print(self.asst:long_text(help_text))
 end
 

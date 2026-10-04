@@ -43,6 +43,7 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
   * `Alt+b`: Play previous marked position.
   * `Alt+x`: Delete previous marked position.
   * `Alt+e`: Export marked positions to a file.
+  * `Alt+k`: Mark video to delete(*.del)
 
 **Note**: If there is a conflicting hot key, then use the alternative binding key: simply **also** press the `Shift` key. 
 
@@ -94,6 +95,7 @@ mp.command('quit')
 
 local home = os.getenv("HOME")
 package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
+--package.path = package.path .. ';' .. 'C:\\xuan\\soft-bin\\mpv-x86_64-20200419-git-a09c769\\portable_config\\scripts\\?.lua'
 
 require 'os'
 require 'io'

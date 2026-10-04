@@ -3,6 +3,7 @@
 -----------------------------------------------------------------------------
 local home = os.getenv("HOME")
 package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
+--package.path = package.path .. ';' .. 'C:\\xuan\\soft-bin\\mpv-x86_64-20200419-git-a09c769\\portable_config\\scripts\\?.lua'
 
 require 'xmpv-utils'
 require 'xmpv-tmsu'
@@ -223,18 +224,31 @@ end
 
 -- Export delete script, e.g. write 'rm -f filename' > filename.del
 function Mark:export_delete_script()
-
-
-    local filename = mp.get_property("path")
+    local filename        = mp.get_property("path")
     local output_filename = filename .. ".del"
-    file = io.open(output_filename, "w")
-    io.output(file)
-    io.write("rm -f \"".. filename .. "\"\n")
-    io.close(file)
+    local f               = io.open(output_filename, "r")
+    local asst            = Asst:new()
     
-    -- Display actions messages.
-    asst = Asst:new()
-    local msg = string.format("Delete command written in %s.\n", asst:long_text(output_filename))
-    self.msg:info(msg)
-  
+    if f then
+        f:close()
+        os.remove(output_filename)
+        
+        local text = string.format("Removed delete script: \n%s", output_filename)
+
+        local conMsg = string.format("%s%s%s", "\27[31m", text, "\27[0m")
+        local osdMsg = string.format("%s%s%s%s", asst:on(), asst:red(), text, asst:reset(), asst:off())
+        self.msg:print(conMsg, osdMsg, 5)
+        
+    else
+        local file = io.open(output_filename, "w")
+        io.output(file)
+        io.write("rm -f \"" .. filename .. "\"\n")
+        io.close(file)
+        local text = string.format("Created delete script: \n%s", output_filename)
+
+        local conMsg = string.format("%s%s%s", "\27[32m", text, "\27[0m")
+        local osdMsg = string.format("%s%s%s%s", asst:on(), asst:green(), text, asst:reset(), asst:off())
+        self.msg:print(conMsg, osdMsg, 2)
+        
+    end
 end

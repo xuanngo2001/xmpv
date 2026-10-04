@@ -3,6 +3,7 @@
 -----------------------------------------------------------------------------
 local home = os.getenv("HOME")
 package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
+--package.path = package.path .. ';' .. 'C:\\xuan\\soft-bin\\mpv-x86_64-20200419-git-a09c769\\portable_config\\scripts\\?.lua'
 
 require 'xmpv-tmsu'
 require 'xmpv-msg'
