@@ -42,6 +42,8 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
   * `Alt+b`: Play previous marked position.
   * `Alt+x`: Delete previous marked position.
   * `Alt+e`: Export marked positions to a file.
+  * `Alt+k`: Mark video to delete(*.del).
+  * `Alt+u`: Export current marked position to a file.
 
 **Note**: If there is a conflicting hot key, then use the alternative binding key: simply **also** press the `Shift` key. 
 

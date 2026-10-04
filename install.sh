@@ -1,18 +1,14 @@
 #!/bin/bash
 
-# Description: 
-# Author: Xuan Ngo
-# Version: 0.0.1
-# Requirements: 
-# Reference: 
+# Description: Copy xmpv lua scripts to the mpv scripts directory
 
-LUA_DIR=~/.config/mpv/scripts
+LUA_DIR=${HOME}/.config/mpv/scripts
 mkdir -p ${LUA_DIR}
 
 # Add lua scripts
 TEST_DIR=test
 
-yes | cp -av ./xmpv/xmpv*.lua ${LUA_DIR}
+yes | cp -av ./xmpv/* ${LUA_DIR}
 
 
 ### Unit tests
