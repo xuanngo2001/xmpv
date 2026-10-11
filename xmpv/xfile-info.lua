@@ -4,10 +4,10 @@ Description:
 -- It shows the filename, path, and human-readable file size on the OSD.
 
 Usage: 
-    mpv --script-opts=xfile-info=yes "your_video_file.mp4"
+    mpv --script-opts=xfile_info=yes "your_video_file.mp4"
 
 mpv.conf:
-    script-opts=xfile-info=yes
+    script-opts=xfile_info=yes
 
 ]]--
 
@@ -23,39 +23,52 @@ local function get_readable_size(bytes)
     return string.format("%.2f %s", bytes, units[i])
 end
 
+-- Initialize the OSD overlay layer
+local overlay = mp.create_osd_overlay("ass-events")
+
 -- Main function to display the information
 local function show_file_info()
-    local xshow = mp.get_opt("xshow")
+    local xfile_info = mp.get_opt("xfile_info")
     
-    if xshow == "yes" then
+    if xfile_info == "yes" then
         local filename = mp.get_property("filename", "Unknown")
         local path = mp.get_property("path", "Unknown")
         local bytes = tonumber(mp.get_property("file-size", "0"))
         local size = get_readable_size(bytes)
 
         -- ASS Style tags
-        -- ${osd-ass-cc/0} tells mpv to stop escaping ASS code and render it
-        -- \an7 = Top-left alignment
-        -- \fs22 = Font size 22
-        -- \b1 = Bold text
-        local ass_enable   = "${osd-ass-cc/0}"
-        local style_start  = "{\\an7}{\\fs22}{\\b1}"
-        local label_style  = "{\\c&H33FF33&}" -- Green for labels
-        local value_style  = "{\\c&HFFFFFF&}" -- White for data
+        -- Positioning: Change \an7 to experiment with placement
+        -- Padding/Margin: \pos(20,20) nudges the text 50px from top and 20px from left
+        local position_style = "{\\an7}{\\pos(20,50)}"
+        
+        -- Text Properties: \fs20 = Font size 20, \b1 = Bold
+        local text_style     = "{\\fs20}{\\b1}"
+        
+        -- Bounding Box: \bord4 = 4px thick border, \3c&H111111& = Dark grey/black box background
+        -- \shad0 = Disable text shadow so it doesn't clip into our box
+        local box_style      = "{\\bord4}{\\3c&H111111&}{\\shad0}"
+        
+        -- Text Colors
+        local label_style    = "{\\c&H33FF33&}" -- Green for labels
+        local value_style    = "{\\c&HFFFFFF&}" -- White for data
 
-        -- Format the message text with styles
-        local message = string.format(
-            "%s%s%sFile:%s %s\n%s%sPath:%s %s\n%s%sSize:%s %s", 
-            ass_enable, style_start,
-            label_style, value_style, filename,
-            label_style, value_style, path,
-            label_style, value_style, size
-        )
+        -- Combine styles into a single block
+        local style_header = position_style .. text_style .. box_style
 
-        -- Display on screen for 3 seconds
-        mp.osd_message(message, 3)
+        -- Build the layout text
+        overlay.data = style_header ..
+            label_style .. "File: " .. value_style .. filename .. "\\N" ..
+            style_header .. label_style .. "Path: " .. value_style .. path .. "\\N" ..
+            style_header .. label_style .. "Size: " .. value_style .. size
+
+        -- Render the overlay onto the screen
+        overlay:update()
+
+        -- Hide the overlay automatically after 3 seconds
+        mp.add_timeout(5.0, function()
+            overlay:remove()
+        end)
     end
 end
 
--- Trigger the function automatically every time a new file finishes loading
 mp.register_event("file-loaded", show_file_info)
