@@ -10,7 +10,6 @@ mpv.conf:
     script-opts=xfile_info=yes
 
 ]]--
-
 -- Function to get human-readable file size
 local function get_readable_size(bytes)
     if not bytes or bytes == 0 then return "Unknown Size" end
@@ -26,27 +25,29 @@ end
 -- Initialize the OSD overlay layer
 local overlay = mp.create_osd_overlay("ass-events")
 
+-- Create a persistent variable to keep track of our active timer
+local active_timer = nil
+
 -- Main function to display the information
 local function show_file_info()
-    local xfile_info = mp.get_opt("xfile_info")
+    local xshow = mp.get_opt("xshow")
     
-    if xfile_info == "yes" then
+    if xshow == "yes" then
+        -- CRITICAL FIX: If a timer is already running from the previous video, kill it immediately
+        if active_timer then
+            active_timer:kill()
+            active_timer = nil
+        end
+
         local filename = mp.get_property("filename", "Unknown")
         local path = mp.get_property("path", "Unknown")
         local bytes = tonumber(mp.get_property("file-size", "0"))
         local size = get_readable_size(bytes)
 
         -- ASS Style tags
-        -- Positioning: Change \an7 to experiment with placement
-        -- Padding/Margin: \pos(20,20) nudges the text 50px from top and 20px from left
-        local position_style = "{\\an7}{\\pos(20,50)}"
-        
-        -- Text Properties: \fs20 = Font size 20, \b1 = Bold
-        local text_style     = "{\\fs20}{\\b1}"
-        
-        -- Bounding Box: \bord4 = 4px thick border, \3c&H111111& = Dark grey/black box background
-        -- \shad0 = Disable text shadow so it doesn't clip into our box
-        local box_style      = "{\\bord4}{\\3c&H111111&}{\\shad0}"
+        local position_style = "{\\an1}{\\pos(20, 640)}" 
+        local text_style     = "{\\fs18}{\\b1}"
+        local box_style      = "{\\bord5}{\\3c&H111111&}{\\shad0}"
         
         -- Text Colors
         local label_style    = "{\\c&H33FF33&}" -- Green for labels
@@ -64,11 +65,13 @@ local function show_file_info()
         -- Render the overlay onto the screen
         overlay:update()
 
-        -- Hide the overlay automatically after 3 seconds
-        mp.add_timeout(5.0, function()
+        -- Assign the countdown to our persistent variable
+        active_timer = mp.add_timeout(3.0, function()
             overlay:remove()
+            active_timer = nil -- Reset tracker once it finishes cleanly
         end)
     end
 end
 
 mp.register_event("file-loaded", show_file_info)
+
