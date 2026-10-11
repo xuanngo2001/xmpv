@@ -30,9 +30,9 @@ local active_timer = nil
 
 -- Main function to display the information
 local function show_file_info()
-    local xshow = mp.get_opt("xshow")
+    local xfile_info = mp.get_opt("xfile_info")
     
-    if xshow == "yes" then
+    if xfile_info == "yes" then
         -- CRITICAL FIX: If a timer is already running from the previous video, kill it immediately
         if active_timer then
             active_timer:kill()
