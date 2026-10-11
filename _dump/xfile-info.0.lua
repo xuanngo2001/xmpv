@@ -4,10 +4,10 @@ Description:
 -- It shows the filename, path, and human-readable file size on the OSD.
 
 Usage: 
-    mpv --script-opts=xshow-info=yes "your_video_file.mp4"
+    mpv --script-opts=xfile-info=yes "your_video_file.mp4"
 
 mpv.conf:
-    script-opts=xshow-info=yes
+    script-opts=xfile-info=yes
 
 ]]--
 
@@ -26,7 +26,7 @@ end
 -- Main function to display the information
 local function show_file_info()
     -- Read the custom xshow parameter from script-opts
-    local xshow = mp.get_opt("xshow-info")
+    local xshow = mp.get_opt("xfile-info")
     
     -- Only run if xshow equals "yes"
     if xshow == "yes" then

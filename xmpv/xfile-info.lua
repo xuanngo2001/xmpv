@@ -4,10 +4,10 @@ Description:
 -- It shows the filename, path, and human-readable file size on the OSD.
 
 Usage: 
-    mpv --script-opts=xshow-info=yes "your_video_file.mp4"
+    mpv --script-opts=xfile-info=yes "your_video_file.mp4"
 
 mpv.conf:
-    script-opts=xshow-info=yes
+    script-opts=xfile-info=yes
 
 ]]--
 
@@ -25,23 +25,34 @@ end
 
 -- Main function to display the information
 local function show_file_info()
-    -- Read the custom xshow parameter from script-opts
-    local xshow = mp.get_opt("xshow-info")
+    local xshow = mp.get_opt("xshow")
     
-    -- Only run if xshow equals "yes"
     if xshow == "yes" then
         local filename = mp.get_property("filename", "Unknown")
         local path = mp.get_property("path", "Unknown")
         local bytes = tonumber(mp.get_property("file-size", "0"))
         local size = get_readable_size(bytes)
 
-        -- Format the message text
+        -- ASS Style tags
+        -- ${osd-ass-cc/0} tells mpv to stop escaping ASS code and render it
+        -- \an7 = Top-left alignment
+        -- \fs22 = Font size 22
+        -- \b1 = Bold text
+        local ass_enable   = "${osd-ass-cc/0}"
+        local style_start  = "{\\an7}{\\fs22}{\\b1}"
+        local label_style  = "{\\c&H33FF33&}" -- Green for labels
+        local value_style  = "{\\c&HFFFFFF&}" -- White for data
+
+        -- Format the message text with styles
         local message = string.format(
-            "File: %s\nPath: %s\nSize: %s", 
-            filename, path, size
+            "%s%s%sFile:%s %s\n%s%sPath:%s %s\n%s%sSize:%s %s", 
+            ass_enable, style_start,
+            label_style, value_style, filename,
+            label_style, value_style, path,
+            label_style, value_style, size
         )
 
-        -- Display on screen for 3000 milliseconds (3 seconds)
+        -- Display on screen for 3 seconds
         mp.osd_message(message, 3)
     end
 end
