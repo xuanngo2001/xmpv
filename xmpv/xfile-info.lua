@@ -61,9 +61,10 @@ local function show_file_info()
         local text_style     = "{\\fs18}{\\b1}"
         local box_style      = "{\\bord5}{\\3c&H111111&}{\\shad0}"
         
-        -- Text Colors
+        -- Text Colors (ASS hex format is BGR: Blue-Green-Red)
         local label_style    = "{\\c&H33FF33&}" -- Green for labels
         local value_style    = "{\\c&HFFFFFF&}" -- White for data
+        local blue_dir_style = "{\\c&HFF9933&}" -- Vibrant Blue for the directory name
 
         -- Combine styles into a single block
         local style_header = position_style .. text_style .. box_style
@@ -71,7 +72,7 @@ local function show_file_info()
         -- Build the layout text
         overlay.data = style_header ..
             label_style .. "File: " .. value_style .. filename .. "\\N" ..
-            style_header .. label_style .. "Dir: " .. value_style .. dir_name .. "\\N" ..
+            style_header .. label_style .. "Dir: " .. blue_dir_style .. dir_name .. "\\N" ..
             style_header .. label_style .. "Path: " .. value_style .. path .. "\\N" ..
             style_header .. label_style .. "Size: " .. value_style .. size .. "\\N"
 
