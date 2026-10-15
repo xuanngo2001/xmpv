@@ -1,7 +1,7 @@
 --[[
 Description:
 -- This script displays information about the currently loaded file in mpv.
--- It shows the filename, path, and human-readable file size on the OSD.
+-- It shows the filename, path, parent directory, and human-readable file size on the OSD.
 
 Usage: 
     mpv --script-opts=xfile_info=yes "your_video_file.mp4"
@@ -10,6 +10,7 @@ mpv.conf:
     script-opts=xfile_info=yes
 
 ]]--
+
 -- Function to get human-readable file size
 local function get_readable_size(bytes)
     if not bytes or bytes == 0 then return "Unknown Size" end
@@ -20,6 +21,16 @@ local function get_readable_size(bytes)
         i = i + 1
     end
     return string.format("%.2f %s", bytes, units[i])
+end
+
+-- Function to extract the parent directory name from a path
+local function get_parent_dir(path)
+    if not path or path == "Unknown" then return "Unknown" end
+    -- Normalize trailing slashes/backslashes
+    local clean_path = path:gsub("[/\\]+$", "")
+    -- Extract the last folder name before the filename
+    local dir_name = clean_path:match("([^/\\]+)[/\\][^/\\]+$")
+    return dir_name or "Unknown"
 end
 
 -- Initialize the OSD overlay layer
@@ -41,6 +52,7 @@ local function show_file_info()
 
         local filename = mp.get_property("filename", "Unknown")
         local path = mp.get_property("path", "Unknown")
+        local dir_name = get_parent_dir(path)
         local bytes = tonumber(mp.get_property("file-size", "0"))
         local size = get_readable_size(bytes)
 
@@ -59,14 +71,16 @@ local function show_file_info()
         -- Build the layout text
         overlay.data = style_header ..
             label_style .. "File: " .. value_style .. filename .. "\\N" ..
+            style_header .. label_style .. "Dir: " .. value_style .. dir_name .. "\\N" ..
             style_header .. label_style .. "Path: " .. value_style .. path .. "\\N" ..
-            style_header .. label_style .. "Size: " .. value_style .. size
+            style_header .. label_style .. "Size: " .. value_style .. size .. "\\N"
+
 
         -- Render the overlay onto the screen
         overlay:update()
 
         -- Assign the countdown to our persistent variable
-        active_timer = mp.add_timeout(3.0, function()
+        active_timer = mp.add_timeout(10.0, function()
             overlay:remove()
             active_timer = nil -- Reset tracker once it finishes cleanly
         end)
@@ -74,4 +88,3 @@ local function show_file_info()
 end
 
 mp.register_event("file-loaded", show_file_info)
-
