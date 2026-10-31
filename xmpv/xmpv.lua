@@ -4,7 +4,6 @@
 `xmpv` is a set of Lua scripts for `mpv` media player that uses `TMSU` to provide the following extra features:
   
   * Tag files that you like.
-  * Display your top favorite files.
   * Mark play position.
   * Play next marked position.
   * Play previous marked position.
@@ -37,7 +36,6 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
   * `Alt+d`: Decrement likes.
   * `Alt+r`: Reset likes to zero.
   * `Alt+i`: Print information of current playing file.
-  * `Alt+t`: Print top favorite files.
   * `Alt+m`: Mark position.
   * `Alt+n`: Play next marked position.
   * `Alt+b`: Play previous marked position.
@@ -52,19 +50,9 @@ Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
 
     [xmpv]   File: some_music_file_name.mp3
     [xmpv]  Likes: 14
-    [xmpv]   Tags: funky, music
     [xmpv] Marked
     [xmpv]    00:00:07, 00:00:08, 00:00:15, 00:00:19
 
-
-    [xmpv] TOP FAVORITES
-    [xmpv] [  37] ./00 file name& weird.mp3
-    [xmpv] [  35] ./00 10sec.mp3
-    [xmpv] [  27] ./00 10sec222222222.mp3
-    [xmpv] [  20] ./00 09_30secd.mp3
-    [xmpv] [  14] ./some_music_file_name.mp3
-    
-    
 
 # REFERENCE:
 * https://github.com/mpv-player/mpv/blob/master/DOCS/man/lua.rst
@@ -104,7 +92,6 @@ require 'string'
 require 'mp'
 
 require 'xmpv-utils'
-require 'xmpv-tmsu'
 require 'xmpv-likes'
 require 'xmpv-mark'
 require 'xmpv-stats'
@@ -116,15 +103,11 @@ local start_time = 0
 function on_file_loaded_init()
   
   start_time = mp.get_time() -- Reset start for every new file loaded.
-  file_name_for_cmd = string.format('%q', mp.get_property("path")) -- file path with double quote escaped.
   
-  tmsu = Tmsu:new()
-  mark = Mark:new(nil, file_name_for_cmd)
-  likes = Likes:new(nil, file_name_for_cmd)
-  stats = Stats:new(nil, file_name_for_cmd)
+  mark = Mark:new()
+  likes = Likes:new()
+  stats = Stats:new()
 	msg = Msg:new()
-	
-	tmsu:exists()
 
   
   -- Binding functions
@@ -133,7 +116,6 @@ function on_file_loaded_init()
   function increment_likes    () likes:increment() end
   function decrement_likes    () likes:decrement() end
   function reset_likes        () likes:reset()  end
-  function print_top_favorites() likes:print_top_favorites()end
     
   -- Mark
   function mark_position                () mark:mark_position() end
@@ -155,7 +137,6 @@ function on_file_loaded_init()
   mp.add_key_binding("Alt+l", "increment_likes", increment_likes)
   mp.add_key_binding("Alt+d", "decrement_likes", decrement_likes)
   mp.add_key_binding("Alt+r", "reset_likes", reset_likes)
-  mp.add_key_binding("Alt+t", "top_favorites", print_top_favorites)
   mp.add_key_binding("Alt+i", "show_statistics", print_stats)
   mp.add_key_binding("Alt+m", "mark_position", mark_position)
   mp.add_key_binding("Alt+n", "goto_next_mark_position", goto_next_mark_position)
@@ -170,7 +151,6 @@ function on_file_loaded_init()
   mp.add_key_binding("Alt+Shift+l", "increment_likes_a", increment_likes)
   mp.add_key_binding("Alt+Shift+d", "decrement_likes_a", decrement_likes)
   mp.add_key_binding("Alt+Shift+r", "reset_likes_a", reset_likes)
-  mp.add_key_binding("Alt+Shift+t", "top_favorites_a", print_top_favorites)
   mp.add_key_binding("Alt+Shift+i", "show_statistics_a", print_stats)
   mp.add_key_binding("Alt+Shift+m", "mark_position_a", mark_position)
   mp.add_key_binding("Alt+Shift+n", "goto_next_mark_position_a", goto_next_mark_position)
@@ -191,32 +171,31 @@ mp.register_event("file-loaded", on_file_loaded_init)
 
 -- Auto increment likes if played for more than half.
 --  Discard short media file.
-function auto_increment_likes(length, file_name_for_cmd)
+function auto_increment_likes(length)
   local length_in_secs = math.floor(length)  -- Discard fraction of seconds.
   if(tonumber(length_in_secs)>8) then  -- Discard short media file.
     local threshold_position = length_in_secs/2
     local time_elapsed = mp.get_time()-start_time
     if(tonumber(time_elapsed)>tonumber(threshold_position)) then
-      local likes = Likes:new(nil, file_name_for_cmd)
+      local likes = Likes:new()
       likes:increment()
     end
   end
 end
 
 -- Log date, time and position played.
-function log_played(file_name_for_cmd)
-  local playlist = Playlist:new(nil, file_name_for_cmd)
+function log_played()
+  local playlist = Playlist:new()
   playlist:log_played()
 end
 
 -- Run the followings when file is unloaded.
 function on_unload_main()
-  local length_in_string = mp.get_property_number("length")
+  local length_in_string = mp.get_property_number("duration")
   if(length_in_string~=nil) then  -- Process only playable file.
   
-    local file_name_for_cmd = string.format('%q', mp.get_property("path")) -- file path with double quote escaped.
-    auto_increment_likes(length_in_string, file_name_for_cmd)
-    log_played(file_name_for_cmd)
+    auto_increment_likes(length_in_string)
+    log_played()
     
   end 
   

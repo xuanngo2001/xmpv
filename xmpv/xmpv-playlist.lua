@@ -1,66 +1,60 @@
 -----------------------------------------------------------------------------
--- Playlist class. 
+-- Playlist class. Played log is stored in `played_on` and `played_at`
+-- of `<video filename>.xmpv.json`.
 -----------------------------------------------------------------------------
 local home = os.getenv("HOME")
 package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
 --package.path = package.path .. ';' .. 'C:\\xuan\\soft-bin\\mpv-x86_64-20200419-git-a09c769\\portable_config\\scripts\\?.lua'
 
-require 'xmpv-tmsu'
+require 'xmpv-json'
 require 'xmpv-msg'
 
 -- ***** Variables *****
 Playlist = {
-  TAG_NAME_ON="xplayedon",
-  TAG_NAME_AT="xplayedat",
-  file_path="",
-  
-  tmsu = Tmsu:new(),
+  KEY_ON="played_on", -- Unix time when played.
+  KEY_AT="played_at", -- Position(seconds) when played.
+
+  json = Json:new(),
   msg = Msg:new(),  
 }
 
 -- 'Constructor'
-function Playlist:new(o, file_path)
+function Playlist:new(o)
   o = o or {}
   setmetatable(o, self)
   self.__index = self
-  
-  -- Extra arguments
-  self.file_path = file_path
-  
+
   return o
 end
 
+-- Log unix time and position played. It replaces the previous log.
 function Playlist:log_played()
-  -- Unlog played first
-  self:unlog_played()
-  
-  -- Log played.
-  local current_position = math.floor(mp.get_property_number("time-pos"))
-  local current_unix_time = os.time()
-  
-  local tags = self.TAG_NAME_ON .."="..current_unix_time.." "..self.TAG_NAME_AT.."="..current_position
-  self.tmsu:tags(tags, self.file_path)
-  
-end
+  local file_path = mp.get_property("path")
+  local time_pos = mp.get_property_number("time-pos")
 
--- Untag all tag starting with 'xplayed'
-function Playlist:unlog_played()
+  local ok, err = self.json:set_value(self.KEY_ON, os.time(), file_path)
+  if ok == nil then
+    self.msg:error("Cannot log played: " .. tostring(err))
+    return
+  end
 
-  -- Get raw tags of current file.
-  local cmd_results = self.tmsu:get_tags(self.file_path) 
-
-  -- Extract xplayedXXXX tags.
-  local xplayed_tags = ""
-  local tag_pattern = "xplayed"
-  for token in string.gmatch(cmd_results, "%S+") do
-    if string.starts(token, tag_pattern) then
-      xplayed_tags = xplayed_tags .. " " .. token
+  if time_pos ~= nil then
+    ok, err = self.json:set_value(self.KEY_AT, math.floor(time_pos), file_path)
+    if ok == nil then
+      self.msg:error("Cannot log played: " .. tostring(err))
     end
   end
+end
 
-  -- Untag all tag starting with 'xplayed'
-  if( xplayed_tags~="" ) then
-    self.tmsu:untags(xplayed_tags, self.file_path)
+-- Remove played log.
+function Playlist:unlog_played()
+  local file_path = mp.get_property("path")
+
+  for _, key in ipairs({self.KEY_ON, self.KEY_AT}) do
+    local ok, err = self.json:set_value(key, nil, file_path)
+    if ok == nil then
+      self.msg:error("Cannot unlog played: " .. tostring(err))
+      return
+    end
   end
-  
 end

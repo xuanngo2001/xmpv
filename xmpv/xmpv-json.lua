@@ -73,6 +73,53 @@ function Json:write_json(json_path, data)
   return true
 end
 
+-- Return value of `key` in `<file_path>.xmpv.json`.
+-- Return nil if key (or json file) does not exist.
+-- On failure return nil and error message.
+function Json:get_value(key, file_path)
+  local json_path = self:get_json_path(file_path)
+  if json_path == nil then
+    local err = "get_value: file path is empty"
+    print(err)
+    return nil, err
+  end
+
+  local data, read_err = self:read_json(json_path)
+  if data == nil then
+    print(read_err)
+    return nil, read_err
+  end
+
+  return data[key]
+end
+
+-- Set `key` to `value` in `<file_path>.xmpv.json`. Create json file if it does not exist.
+-- A nil value removes the key.
+-- Return true, or nil and error message on failure.
+function Json:set_value(key, value, file_path)
+  local json_path = self:get_json_path(file_path)
+  if json_path == nil then
+    local err = "set_value: file path is empty"
+    print(err)
+    return nil, err
+  end
+
+  local data, read_err = self:read_json(json_path)
+  if data == nil then
+    print(read_err)
+    return nil, read_err
+  end
+
+  data[key] = value
+
+  local ok, write_err = self:write_json(json_path, data)
+  if not ok then
+    print(write_err)
+    return nil, write_err
+  end
+  return true
+end
+
 -- Return positions in ascending order from `<file_path>.xmpv.json`.
 -- A missing json file returns an empty table.
 -- On failure return nil and error message.

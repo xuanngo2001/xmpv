@@ -6,37 +6,28 @@ package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
 --package.path = package.path .. ';' .. 'C:\\xuan\\soft-bin\\mpv-x86_64-20200419-git-a09c769\\portable_config\\scripts\\?.lua'
 
 require 'xmpv-utils'
-require 'xmpv-tmsu'
 require 'xmpv-json'
 require 'xmpv-msg'
 require 'xmpv-asst'
 
 -- ***** Variables *****
 Mark = {
-  TAG_NAME="xmark",
-  file_path="",
-  
-  tmsu = Tmsu:new(),
-
   json = Json:new(),
 
   msg = Msg:new(),
 }
 
 -- 'Constructor'
-function Mark:new(o, file_path)
+function Mark:new(o)
   o = o or {}
   setmetatable(o, self)
   self.__index = self
-  
-  -- Extra arguments
-  self.file_path = file_path
   
   return o
 end
 
 --  It breeds from goto_previous_position().
---  Delete the previous position from `<video filename>.xmpv.json` (and its TMSU tag).
+--  Delete the previous position from `<video filename>.xmpv.json`.
 function Mark:delete_previous_position()
 
   local mark_positions = self:get_mark_positions()
@@ -63,7 +54,6 @@ function Mark:delete_previous_position()
     return
   end
 
-  self.tmsu:untag(self.TAG_NAME, previous_pos, self.file_path)
   local warn_msg = string.format("M(-) %s", time_to_hh_mm_ss(previous_pos))
   self.msg:warn(warn_msg)
 
@@ -152,12 +142,11 @@ end
 -- Mark position but discard fraction of second.
 function Mark:mark_position()
   local current_position = math.floor(mp.get_property_number("time-pos"))
-  self.tmsu:tag(self.TAG_NAME, current_position, self.file_path)
 
-  -- self.file_path is quoted for shell; the JSON file needs the raw path.
   local ok, err = self.json:mark(current_position, mp.get_property("path"))
   if ok == nil then
-    self.msg:print("Mark JSON failed: " .. tostring(err))
+    self.msg:error("Cannot mark position: " .. tostring(err))
+    return
   end
   
   local msg = string.format("M(+) %s", time_to_hh_mm_ss(current_position))
@@ -191,7 +180,6 @@ end
 
 -- Export marked time positions from `<video filename>.xmpv.json` into a file with extension XMP(X marked positions)
 --  * Human readable marked time positions.
---  * Marked time positions command for TMSU.
 function Mark:export()
   local positions, err = self.json:get_positions(mp.get_property("path"))
   if positions == nil then
@@ -204,10 +192,6 @@ function Mark:export()
     return
   end
 
-  -- Get marked tag values command.
-  local mark_positions_string = self.TAG_NAME .. "=" .. table.concat(positions, " ".. self.TAG_NAME .. "=")
-  local mark_positions_cmd = self.tmsu:get_tag_cmd(mark_positions_string, self.file_path)
-
   -- Construct formatted marked time positions
   local formatted = {}
   for i, position in ipairs(positions) do
@@ -215,9 +199,7 @@ function Mark:export()
   end
   local formatted_mark_positions = "# Marked time positions: " .. table.concat(formatted, ", ")
 
-  -- Write marked time positions to file:
-  --  * Human readable marked time positions
-  --  * Tag values TMSU command
+  -- Write human readable marked time positions to file.
   local filename = mp.get_property("path") .. ".xmp"
   local file, open_err = io.open(filename, "w")
   if file == nil then
@@ -225,7 +207,7 @@ function Mark:export()
     return
   end
 
-  local ok, write_err = pcall(file.write, file, formatted_mark_positions .. "\n", mark_positions_cmd .. "\n")
+  local ok, write_err = pcall(file.write, file, formatted_mark_positions .. "\n")
   file:close()
   if not ok then
     self.msg:error("Cannot write \"" .. filename .. "\": " .. tostring(write_err))

@@ -101,7 +101,6 @@ function Msg:help()
         help_text = help_text .. " Alt+d: Decrement likes" .. "\n"
         help_text = help_text .. " Alt+r: Reset likes to zero" .. "\n"
         help_text = help_text .. " Alt+i: Print information of current playing file" .. "\n"
-        help_text = help_text .. " Alt+t: Print top favorite files" .. "\n"
         help_text = help_text .. " Alt+m: Mark position" .. "\n"
         help_text = help_text .. " Alt+n: Play next marked position" .. "\n"
         help_text = help_text .. " Alt+b: Play previous marked position" .. "\n"
