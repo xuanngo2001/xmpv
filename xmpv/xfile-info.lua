@@ -11,6 +11,15 @@ mpv.conf:
 
 ]]--
 
+-- Escape text so ASS does not interpret `{...}` or backslash sequences (e.g. `\N`) in file names.
+-- Same rules as mpv's `escape-ass` command: backslash is followed by U+2060 (word joiner).
+local function ass_escape(text)
+    text = text:gsub("\\", "\\\226\129\160")
+    text = text:gsub("{", "\\{")
+    text = text:gsub("\r?\n", "\\N")
+    return text
+end
+
 -- Function to get human-readable file size
 local function get_readable_size(bytes)
     if not bytes or bytes == 0 then return "Unknown Size" end
@@ -50,9 +59,10 @@ local function show_file_info()
             active_timer = nil
         end
 
-        local filename = mp.get_property("filename", "Unknown")
+        local filename = ass_escape(mp.get_property("filename", "Unknown"))
         local path = mp.get_property("path", "Unknown")
-        local dir_name = get_parent_dir(path)
+        local dir_name = ass_escape(get_parent_dir(path))
+        path = ass_escape(path)
         local bytes = tonumber(mp.get_property("file-size", "0"))
         local size = get_readable_size(bytes)
 
