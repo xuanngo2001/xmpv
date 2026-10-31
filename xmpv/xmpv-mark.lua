@@ -36,38 +36,36 @@ function Mark:new(o, file_path)
 end
 
 --  It breeds from goto_previous_position().
+--  Delete the previous position from `<video filename>.xmpv.json` (and its TMSU tag).
 function Mark:delete_previous_position()
 
   local mark_positions = self:get_mark_positions()
   local mark_positions_size = #mark_positions 
   if(mark_positions_size < 1) then
     self.msg:warn("No marked position")
-  else
-  
-    local current_pos = mp.get_property_number("time-pos")
-    local found_previous_pos = false
-    local previous_pos = mark_positions[mark_positions_size] -- Initialize previous position to be the last pos.
-    for i, mark_position in ipairs(mark_positions) do
-      if tonumber(current_pos) < tonumber(mark_position) then
-        self.tmsu:untag(self.TAG_NAME, previous_pos, self.file_path)
-        found_previous_pos = true
-        local warn_msg = string.format("M(-) %s", time_to_hh_mm_ss(previous_pos))
-        self.msg:warn(warn_msg)        
-        break
-      else
-        previous_pos = mark_position
-      end
-    end
-  
-    -- 'Make it goes around logic' here: If previous pos not found, then goes to the last pos.
-    if ( not found_previous_pos ) then
-      previous_pos = mark_positions[mark_positions_size]
-      self.tmsu:untag(self.TAG_NAME, previous_pos, self.file_path)
-      local warn_msg = string.format("M(-) %s", time_to_hh_mm_ss(previous_pos))
-      self.msg:warn(warn_msg)
-    end
-    
+    return
   end
+
+  local current_pos = mp.get_property_number("time-pos")
+  local previous_pos = mark_positions[mark_positions_size] -- Initialize previous position to be the last pos.
+  for i, mark_position in ipairs(mark_positions) do
+    if tonumber(current_pos) < tonumber(mark_position) then
+      break
+    else
+      previous_pos = mark_position
+    end
+  end
+  -- 'Make it goes around logic' here: If previous pos not found, then it is the last pos.
+
+  local ok, err = self.json:unmark(previous_pos, mp.get_property("path"))
+  if ok == nil then
+    self.msg:error("Cannot delete marked position: " .. tostring(err))
+    return
+  end
+
+  self.tmsu:untag(self.TAG_NAME, previous_pos, self.file_path)
+  local warn_msg = string.format("M(-) %s", time_to_hh_mm_ss(previous_pos))
+  self.msg:warn(warn_msg)
 
 end
 
