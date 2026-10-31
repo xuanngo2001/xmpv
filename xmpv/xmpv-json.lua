@@ -36,13 +36,13 @@ function Json:read_json(json_path)
     return {} -- File does not exist yet.
   end
 
-  local ok, content = pcall(file.read, file, "*a")
+  local content, read_err = file:read("*a")
   file:close()
-  if not ok then
-    return nil, "read_json: cannot read " .. json_path .. ": " .. tostring(content)
+  if content == nil then
+    return nil, "read_json: cannot read " .. json_path .. ": " .. tostring(read_err)
   end
 
-  if content == nil or content:match("^%s*$") then
+  if content:match("^%s*$") then
     return {}
   end
 
@@ -54,21 +54,36 @@ function Json:read_json(json_path)
 end
 
 -- Write table to json file. Return true, or nil and error message.
+-- Write to a temporary file first, then rename it over json_path,
+-- so a failed write never truncates or corrupts the existing json file.
 function Json:write_json(json_path, data)
   local content, format_err = utils.format_json(data)
   if content == nil then
     return nil, "write_json: cannot format JSON: " .. tostring(format_err)
   end
 
-  local file, open_err = io.open(json_path, "w")
+  local tmp_path = json_path .. ".tmp"
+  local file, open_err = io.open(tmp_path, "w")
   if file == nil then
-    return nil, "write_json: cannot open " .. json_path .. ": " .. tostring(open_err)
+    return nil, "write_json: cannot open " .. tmp_path .. ": " .. tostring(open_err)
   end
 
-  local ok, write_err = pcall(file.write, file, content, "\n")
-  file:close()
-  if not ok then
-    return nil, "write_json: cannot write " .. json_path .. ": " .. tostring(write_err)
+  local write_ok, write_err = file:write(content, "\n")
+  local close_ok, close_err = file:close() -- Close reports flush errors, e.g. disk full.
+  if not write_ok or not close_ok then
+    os.remove(tmp_path)
+    return nil, "write_json: cannot write " .. tmp_path .. ": " .. tostring(write_err or close_err)
+  end
+
+  local rename_ok, rename_err = os.rename(tmp_path, json_path)
+  if not rename_ok and package.config:sub(1, 1) == "\\" then
+    -- Windows cannot rename over an existing file.
+    os.remove(json_path)
+    rename_ok, rename_err = os.rename(tmp_path, json_path)
+  end
+  if not rename_ok then
+    os.remove(tmp_path)
+    return nil, "write_json: cannot replace " .. json_path .. ": " .. tostring(rename_err)
   end
   return true
 end
