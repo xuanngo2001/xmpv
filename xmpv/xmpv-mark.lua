@@ -148,6 +148,11 @@ function Mark:mark_position()
     self.msg:error("Cannot mark position: " .. tostring(err))
     return
   end
+
+  if ok == false then
+    self.msg:warn(string.format("Already marked %s", time_to_hh_mm_ss(current_position)))
+    return
+  end
   
   local msg = string.format("M(+) %s", time_to_hh_mm_ss(current_position))
   self.msg:print(msg)
