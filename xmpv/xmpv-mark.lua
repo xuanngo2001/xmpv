@@ -26,6 +26,15 @@ function Mark:new(o)
   return o
 end
 
+-- Return current playback position in seconds. Otherwise, warn and return nil.
+function Mark:get_time_pos()
+  local time_pos = mp.get_property_number("time-pos")
+  if time_pos == nil then
+    self.msg:warn("No current position")
+  end
+  return time_pos
+end
+
 --  It breeds from goto_previous_position().
 --  Delete the previous position from `<video filename>.xmpv.json`.
 function Mark:delete_previous_position()
@@ -37,7 +46,8 @@ function Mark:delete_previous_position()
     return
   end
 
-  local current_pos = mp.get_property_number("time-pos")
+  local current_pos = self:get_time_pos()
+  if current_pos == nil then return end
   local previous_pos = mark_positions[mark_positions_size] -- Initialize previous position to be the last pos.
   for i, mark_position in ipairs(mark_positions) do
     if tonumber(current_pos) < tonumber(mark_position) then
@@ -74,7 +84,8 @@ function Mark:goto_next_position()
     self.msg:warn("No marked position")
   else
   
-    local current_pos = mp.get_property_number("time-pos")
+    local current_pos = self:get_time_pos()
+    if current_pos == nil then return end
     local found_next_pos = false
     for i, mark_position in ipairs(mark_positions) do
       if tonumber(current_pos) < tonumber(mark_position) then
@@ -112,7 +123,9 @@ function Mark:goto_previous_position()
     self.msg:warn("No marked position")
   else
   
-    local current_pos = mp.get_property_number("time-pos") - 2 --  Minus 2 seconds to allow time for user to do Previous, Previous, ... 
+    local current_pos = self:get_time_pos()
+    if current_pos == nil then return end
+    current_pos = current_pos - 2 --  Minus 2 seconds to allow time for user to do Previous, Previous, ... 
     local found_previous_pos = false
     local previous_pos = mark_positions[mark_positions_size] -- Initialize previous position to be the last pos.
     for i, mark_position in ipairs(mark_positions) do
@@ -141,7 +154,9 @@ end
 
 -- Mark position but discard fraction of second.
 function Mark:mark_position()
-  local current_position = math.floor(mp.get_property_number("time-pos"))
+  local time_pos = self:get_time_pos()
+  if time_pos == nil then return end
+  local current_position = math.floor(time_pos)
 
   local ok, err = self.json:mark(current_position, mp.get_property("path"))
   if ok == nil then
