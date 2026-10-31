@@ -1,24 +1,36 @@
 -----------------------------------------------------------------------------
--- JSON functions for `<video filename>.xmpv.json`.
+-- Json class for `<video filename>.xmpv.json`.
 --
 -- File format:
 --   {"positions": [10, 25, 60]}
 -----------------------------------------------------------------------------
 local utils = require 'mp.utils'
 
-local JSON_EXTENSION = ".xmpv.json"
+-- ***** Variables *****
+Json = {
+  EXTENSION = ".xmpv.json",
+}
+
+-- 'Constructor'
+function Json:new(o)
+  o = o or {}
+  setmetatable(o, self)
+  self.__index = self
+
+  return o
+end
 
 -- Return json file path of video, or nil if file_path is empty.
-local function get_json_path(file_path)
+function Json:get_json_path(file_path)
   if file_path == nil or file_path == "" then
     return nil
   end
-  return file_path .. JSON_EXTENSION
+  return file_path .. self.EXTENSION
 end
 
 -- Read json file. Return table, or nil and error message.
 -- A missing or empty file returns an empty table.
-local function read_json(json_path)
+function Json:read_json(json_path)
   local file = io.open(json_path, "r")
   if file == nil then
     return {} -- File does not exist yet.
@@ -42,7 +54,7 @@ local function read_json(json_path)
 end
 
 -- Write table to json file. Return true, or nil and error message.
-local function write_json(json_path, data)
+function Json:write_json(json_path, data)
   local content, format_err = utils.format_json(data)
   if content == nil then
     return nil, "write_json: cannot format JSON: " .. tostring(format_err)
@@ -65,7 +77,7 @@ end
 -- if position is not already present. Create json file if it does not exist.
 -- Return true if position was added, false if already present,
 -- or nil and error message on failure.
-function mark(position, file_path)
+function Json:mark(position, file_path)
   position = tonumber(position)
   if position == nil then
     local err = "mark: invalid position"
@@ -73,14 +85,14 @@ function mark(position, file_path)
     return nil, err
   end
 
-  local json_path = get_json_path(file_path)
+  local json_path = self:get_json_path(file_path)
   if json_path == nil then
     local err = "mark: file path is empty"
     print(err)
     return nil, err
   end
 
-  local data, read_err = read_json(json_path)
+  local data, read_err = self:read_json(json_path)
   if data == nil then
     print(read_err)
     return nil, read_err
@@ -99,7 +111,7 @@ function mark(position, file_path)
   table.insert(data.positions, position)
   table.sort(data.positions, function(a, b) return tonumber(a) < tonumber(b) end)
 
-  local ok, write_err = write_json(json_path, data)
+  local ok, write_err = self:write_json(json_path, data)
   if not ok then
     print(write_err)
     return nil, write_err
