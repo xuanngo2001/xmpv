@@ -1,9 +1,9 @@
 --[[
 <readme>
 # DESCRIPTION
-`xmpv` is a set of Lua scripts for `mpv` media player that uses `TMSU` to provide the following extra features:
+`xmpv` is a set of Lua scripts for `mpv` media player that stores its data in `<video filename>.xmpv.json` to provide the following extra features:
   
-  * Tag files that you like.
+  * Count files that you like.
   * Mark play position.
   * Play next marked position.
   * Play previous marked position.
@@ -15,8 +15,6 @@
 ## Requirements
 * `mpv`: A media player. 
   * http://mpv.io/
-* `TMSU`: A tool for tagging files. 
-  * http://tmsu.org/
   
 ## Install
 Copy `xmpv.lua` and `xmpv-*.lua` to `scripts` directory of `mpv`:
