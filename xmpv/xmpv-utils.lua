@@ -45,9 +45,10 @@ function is_empty(s)
   return s == nil or s == ''
 end
 
--- Return filename formatted for shell. e.g escape $
+-- Return filename quoted for shell: wrapped in single quotes, so that
+-- $, `, ", \ and ! are not interpreted. Embedded single quote becomes '\''
 function get_shell_filename(s)
-    return string.gsub(s, "%$", "\\$")
+    return "'" .. string.gsub(s, "'", "'\\''") .. "'"
 end
 
 -- ********************************************************************
