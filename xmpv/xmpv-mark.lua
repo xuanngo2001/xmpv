@@ -179,23 +179,16 @@ function Mark:get_formatted_positions()
 end
 
 
--- Return marked positions in ascending order
+-- Return marked positions in ascending order from `<video filename>.xmpv.json`.
+-- Return empty table if there is no position or the json file cannot be read.
 function Mark:get_mark_positions()
-
-  local raw_tags = self.tmsu:get_tags(self.file_path)
-  
-  local mark_tag_label = self.TAG_NAME .."="
-  local i = 1
-  local mark_position_values = {}
-  for token in string.gmatch(raw_tags, "%S+") do
-    if string.starts(token, mark_tag_label) then
-      mark_position_values[i]=string.gsub(token, mark_tag_label, "")
-      i = i + 1
-    end
+  local positions, err = self.json:get_positions(mp.get_property("path"))
+  if positions == nil then
+    self.msg:warn("Cannot get marked positions: " .. tostring(err))
+    return {}
   end
 
-  table.sort(mark_position_values, function(a,b) return tonumber(a)<tonumber(b) end)  
-  return mark_position_values
+  return positions
 end
 
 -- Export marked time positions into a file with extension XMP(X marked positions)

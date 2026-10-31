@@ -73,6 +73,37 @@ function Json:write_json(json_path, data)
   return true
 end
 
+-- Return positions in ascending order from `<file_path>.xmpv.json`.
+-- A missing json file returns an empty table.
+-- On failure return nil and error message.
+function Json:get_positions(file_path)
+  local json_path = self:get_json_path(file_path)
+  if json_path == nil then
+    local err = "get_positions: file path is empty"
+    print(err)
+    return nil, err
+  end
+
+  local data, read_err = self:read_json(json_path)
+  if data == nil then
+    print(read_err)
+    return nil, read_err
+  end
+
+  local positions = {}
+  if type(data.positions) == "table" then
+    for _, value in ipairs(data.positions) do
+      local position = tonumber(value)
+      if position ~= nil then
+        table.insert(positions, position)
+      end
+    end
+  end
+
+  table.sort(positions)
+  return positions
+end
+
 -- Mark position in `positions` array of `<file_path>.xmpv.json`
 -- if position is not already present. Create json file if it does not exist.
 -- Return true if position was added, false if already present,
