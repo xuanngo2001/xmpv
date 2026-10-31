@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------------
--- Json class will manipulate TMSU application. 
+-- xJson class will manipulate TMSU application. 
 -----------------------------------------------------------------------------
 local home = os.getenv("HOME")
 package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
@@ -8,101 +8,53 @@ package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
 require 'xmpv-utils'
 require 'xmpv-msg'
 
--- ***** Variables *****
-Json = {
-  msg = Msg:new(),  
-}
+local json = require("json") -- Assumes a standard JSON library is available
 
--- 'Constructor'
-function Json:new(o)
-  o = o or {}
-  setmetatable(o, self)
-  self.__index = self
-  return o
-end
+--- Marks a playback position in a sidecar json file (<video filename>.xmpv.json).
+-- Creates the JSON file and the 'positions' array if they do not exist.
+-- Appends the position only if it's unique.
+-- @param position The position to store (number, string, or table)
+-- @param file_path The original video file path
+function mark(position, file_path)
+    local json_path = file_path .. ".xmpv.json"
+    local data = { positions = {} }
 
--- ***** Functions *****
-function Json:get_tag_cmd(tags_value, cmd_file_path)
-  local shell_filename = get_shell_filename(cmd_file_path)
-  return string.format("tmsu tag --tags=\"%s\" %s", tags_value, shell_filename)
-end
-
--- @deprecated Use tags() instead
-function Json:tag(tag_name, tag_value, cmd_file_path)
-  local cmd_tag = self:get_tag_cmd(tag_name.."="..tag_value, cmd_file_path)
-  return execute_command(cmd_tag)
-end
-
-function Json:tags(tags_value, cmd_file_path)
-  local cmd_tag = self:get_tag_cmd(tags_value, cmd_file_path)
-  return execute_command(cmd_tag)
-end
-
--- @deprecated. Use untags() instead.
-function Json:untag(tag_name, tag_value, cmd_file_path)
-  local cmd_untag = string.format("tmsu untag --tags=\"%s=%s\" %s", tag_name, tag_value, cmd_file_path)
-  return execute_command(cmd_untag)
-end
-
-function Json:get_untag_cmd(tags_value, cmd_file_path)
-  return string.format("tmsu untag --tags=\"%s\" %s", tags_value, cmd_file_path)
-end
-
-function Json:untags(tags_value, cmd_file_path)
-  local cmd_untag = self:get_untag_cmd(tags_value, cmd_file_path)
-  print(cmd_untag)
-  return execute_command(cmd_untag)
-end
-
-
--- Return raw tags, unformatted from TMSU.
-function Json:get_tags(file_name_for_cmd)
-  local shell_filename = get_shell_filename(file_name_for_cmd)
-  local cmd_get_tags = string.format("tmsu tags %s", shell_filename)
-  return execute_command(cmd_get_tags)  
-end
-
--- Check if TMSU application exists.
-function Json:exists()
-  local cmd_get_tmsu_version = "tmsu --version"
-  local cmd_results = execute_command(cmd_get_tmsu_version)
-  
-  if (string.find(cmd_results, "TMSU")==nil) then
-    local error_msg = string.format("%s can't run.\n", mp.get_script_name())
-		  error_msg = error_msg .. string.format("It requires TMSU. Download it at http://tmsu.org/.")
-		  self.msg:error(error_msg)
-	
-  end 
-end
-
--- Mark position in positions array in <video filename>.xmpv.json if position is not already present. 
---  If file json does not exist, it will be created.
-function Json:mark(position, file_path)
-  local json_filename = file_path .. ".xmpv.json"
-  local positions = {}
-  local f = io.open(json_filename, "r")
-  if f then
-    local content = f:read("*a")
-    f:close()
-    if content ~= "" then
-      local ok, data = pcall(function() return require("json").decode(content) end)
-      if ok and data and data.positions then
-        positions = data.positions
-      end
+    -- 1. Try to read and parse the existing file
+    local file = io.open(json_path, "r")
+    if file then
+        local content = file:read("*a")
+        file:close()
+        
+        if content and content ~= "" then
+            local status, parsed_data = pcall(json.decode, content)
+            if status and type(parsed_data) == "table" then
+                data = parsed_data
+                if type(data.positions) ~= "table" then
+                    data.positions = {}
+                end
+            end
+        end
     end
-  end
 
-  for _, pos in ipairs(positions) do
-    if pos == position then
-      return
+    -- 2. Check if the position is already present in the array
+    local exists = false
+    for _, val in ipairs(data.positions) do
+        if val == position then
+            exists = true
+            break
+        end
     end
-  end
 
-  table.insert(positions, position)
-  local data = { positions = positions }
-  local file = io.open(json_filename, "w")
-  io.output(file)
-  io.write(require("json").encode(data))
-  io.close(file)
+    -- 3. If unique, append and write the updated table back to the file
+    if not exists then
+        table.insert(data.positions, position)
+        
+        local write_file = io.open(json_path, "w")
+        if write_file then
+            write_file:write(json.encode(data))
+            write_file:close()
+        end
+    end
 end
+
 
