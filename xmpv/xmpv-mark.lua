@@ -1,8 +1,12 @@
 -----------------------------------------------------------------------------
 -- Mark class. 
 -----------------------------------------------------------------------------
-local home = os.getenv("HOME")
-package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
+local home, appdata = os.getenv("HOME"), os.getenv("APPDATA") -- APPDATA on Windows, where HOME is not set.
+if home then
+  package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
+elseif appdata then
+  package.path = package.path .. ';' .. appdata .. '\\mpv\\scripts\\?.lua'
+end
 --package.path = package.path .. ';' .. 'C:\\xuan\\soft-bin\\mpv-x86_64-20200419-git-a09c769\\portable_config\\scripts\\?.lua'
 
 require 'xmpv-utils'
