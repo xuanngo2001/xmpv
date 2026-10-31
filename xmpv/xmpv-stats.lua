@@ -41,6 +41,6 @@ function Stats:print()
   local marked = string.format("%6s\n%s%s\n", "Marked", indent, self.asst:long_text(self.mark:get_formatted_positions()))
   
   local stats = file .. likes .. marked
-  self.msg:print(stats)
+  self.msg:print(stats, stats, 5)
   print(stats)
 end

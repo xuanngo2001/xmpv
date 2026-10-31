@@ -12,7 +12,7 @@ require 'xmpv-asst'
 
 -- ***** Variables *****
 Msg = {
-  duration = 1,
+  duration = 3,
   error_duration = 5, -- Default display duration = 5 seconds.
   
   asst = Asst:new(),  
