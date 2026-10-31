@@ -8,6 +8,7 @@ package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
 require 'xmpv-utils'
 require 'xmpv-tmsu'
 require 'xmpv-json'
+local json_mark = mark -- xmpv.lua later reassigns global 'mark' to a Mark instance
 require 'xmpv-msg'
 require 'xmpv-asst'
 
@@ -153,6 +154,12 @@ end
 function Mark:mark_position()
   local current_position = math.floor(mp.get_property_number("time-pos"))
   self.tmsu:tag(self.TAG_NAME, current_position, self.file_path)
+
+  -- self.file_path is quoted for shell; the JSON file needs the raw path.
+  local ok, err = json_mark(current_position, mp.get_property("path"))
+  if ok == nil then
+    self.msg:print("Mark JSON failed: " .. tostring(err))
+  end
   
   local msg = string.format("M(+) %s", time_to_hh_mm_ss(current_position))
   self.msg:print(msg)
