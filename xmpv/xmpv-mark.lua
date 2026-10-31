@@ -225,16 +225,9 @@ function Mark:export()
 
   -- Write human readable marked time positions to file.
   local filename = mp.get_property("path") .. ".xmp"
-  local file, open_err = io.open(filename, "w")
-  if file == nil then
-    self.msg:error("Cannot export to \"" .. filename .. "\": " .. tostring(open_err))
-    return
-  end
-
-  local ok, write_err = pcall(file.write, file, formatted_mark_positions .. "\n")
-  file:close()
+  local ok, write_err = self:write_file(filename, formatted_mark_positions .. "\n")
   if not ok then
-    self.msg:error("Cannot write \"" .. filename .. "\": " .. tostring(write_err))
+    self.msg:error("Cannot export to \"" .. filename .. "\": " .. tostring(write_err))
     return
   end
 
@@ -242,6 +235,24 @@ function Mark:export()
   local asst = Asst:new()
   local msg = string.format("Exported \n\t%s\n\tto \"%s\".", asst:long_text(formatted_mark_positions), asst:long_text(filename))
   self.msg:info(msg)
+end
+
+-- Write content to file. Return true, or nil and error message.
+function Mark:write_file(path, content)
+    local file, open_err = io.open(path, "w")
+    if file == nil then
+        return nil, tostring(open_err)
+    end
+
+    local write_ok, write_err = file:write(content)
+    local close_ok, close_err = file:close() -- Close reports flush errors, e.g. disk full.
+    if not write_ok then
+        return nil, tostring(write_err)
+    end
+    if not close_ok then
+        return nil, tostring(close_err)
+    end
+    return true
 end
 
 -- Export delete script, e.g. write 'rm -f <quoted filename>' > filename.del
@@ -262,10 +273,11 @@ function Mark:export_delete_script()
         self.msg:print(conMsg, osdMsg, 5)
         
     else
-        local file = io.open(output_filename, "w")
-        io.output(file)
-        io.write("rm -f " .. get_shell_filename(filename) .. "\n")
-        io.close(file)
+        local ok, write_err = self:write_file(output_filename, "rm -f " .. get_shell_filename(filename) .. "\n")
+        if not ok then
+            self.msg:error("Cannot create delete script: " .. tostring(write_err))
+            return
+        end
         local text = string.format("Created delete script: \n%s", output_filename)
 
         local conMsg = string.format("%s%s%s", "\27[32m", text, "\27[0m")
@@ -279,17 +291,22 @@ end
 function Mark:export_current_position_script()
     local filename        = mp.get_property("path")
     local output_filename = filename .. ".sh"
-    local file            = io.open(output_filename, "w")
     local asst            = Asst:new()
 
-
-    io.output(file)
-    -- Write command shell: mpv --start=<current_position> '<video_filename>'
     local current_pos = mp.get_property_number("time-pos")
+    if current_pos == nil then
+        self.msg:warn("No current position")
+        return
+    end
+
+    -- Write command shell: mpv --start=<current_position> '<video_filename>'
     local position_hh_mm_ss = time_to_hh_mm_ss(current_pos)
     local shell_filename = get_shell_filename(filename)
-    io.write("mpv --start=" .. position_hh_mm_ss .. " " .. shell_filename .. "\n")
-    io.close(file)
+    local ok, write_err = self:write_file(output_filename, "mpv --start=" .. position_hh_mm_ss .. " " .. shell_filename .. "\n")
+    if not ok then
+        self.msg:error("Cannot create current position script: " .. tostring(write_err))
+        return
+    end
     local text = string.format("Created current position script: \n%s", output_filename)
 
     local conMsg = string.format("%s%s%s", "\27[32m", text, "\27[0m")
