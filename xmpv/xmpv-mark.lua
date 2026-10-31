@@ -7,6 +7,7 @@ package.path = package.path .. ';' .. home .. '/.config/mpv/scripts/?.lua'
 
 require 'xmpv-utils'
 require 'xmpv-tmsu'
+require 'xmpv-json'
 require 'xmpv-msg'
 require 'xmpv-asst'
 
@@ -16,6 +17,8 @@ Mark = {
   file_path="",
   
   tmsu = Tmsu:new(),
+  json = Json:new(),
+
   msg = Msg:new(),
 }
 
@@ -150,6 +153,8 @@ end
 -- Mark position but discard fraction of second.
 function Mark:mark_position()
   local current_position = math.floor(mp.get_property_number("time-pos"))
+  self.json:mark(current_position, self.file_path)
+  -- to delete
   self.tmsu:tag(self.TAG_NAME, current_position, self.file_path)
   
   local msg = string.format("M(+) %s", time_to_hh_mm_ss(current_position))
