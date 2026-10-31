@@ -5,5 +5,5 @@
 LUA_DIR=${HOME}/.config/mpv/scripts
 mkdir -p ${LUA_DIR}
 
-yes | cp -av * ${LUA_DIR}
+yes | cp -av *.lua ${LUA_DIR}
 
