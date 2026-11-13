@@ -3,11 +3,16 @@ local border_overlay = mp.create_osd_overlay("ass-events")
 local msg_overlay = mp.create_osd_overlay("ass-events")
 local msg_timer = nil
 
-local function show_colored_osd(text, bgr_hex, duration)
+local function clear_colored_osd()
     if msg_timer then
         msg_timer:kill()
         msg_timer = nil
     end
+    msg_overlay:remove()
+end
+
+local function show_colored_osd(text, bgr_hex, duration)
+    clear_colored_osd()
 
     -- Top-left aligned (\an7) at (25, 75) with bold text (\b1) and custom BGR color
     -- Changed \pos(25,25) to \pos(25,75) to lower the text by 50 pixels
@@ -106,8 +111,14 @@ local function toggle_del_marker()
     update_border()
 end
 
--- Run when a file loads
-mp.register_event("file-loaded", update_border)
+local function on_file_loaded()
+    clear_colored_osd()
+    update_border()
+end
+
+-- Clear any leftover message and update border when a new file loads
+mp.register_event("file-loaded", on_file_loaded)
+mp.register_event("end-file", clear_colored_osd)
 
 -- Redraw if the window is resized
 mp.observe_property("osd-width", "number", update_border)
