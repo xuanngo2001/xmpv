@@ -1,6 +1,28 @@
--- Press Ctrl+d to toggle the .del file and red border
 local utils = require("mp.utils")
-local overlay = mp.create_osd_overlay("ass-events")
+local border_overlay = mp.create_osd_overlay("ass-events")
+local msg_overlay = mp.create_osd_overlay("ass-events")
+local msg_timer = nil
+
+local function show_colored_osd(text, bgr_hex, duration)
+    if msg_timer then
+        msg_timer:kill()
+        msg_timer = nil
+    end
+
+    -- Top-left aligned (\an7) at (25, 75) with bold text (\b1) and custom BGR color
+    -- Changed \pos(25,25) to \pos(25,75) to lower the text by 50 pixels
+    msg_overlay.data = string.format(
+        "{\\an7\\pos(25,75)\\fs28\\b1\\bord2\\1c&H%s&\\3c&H000000&}%s",
+        bgr_hex,
+        text
+    )
+    msg_overlay:update()
+
+    msg_timer = mp.add_timeout(duration, function()
+        msg_overlay:remove()
+        msg_timer = nil
+    end)
+end
 
 local function get_del_path()
     local path = mp.get_property("path")
@@ -17,7 +39,7 @@ end
 local function update_border()
     local del_file = get_del_path()
     if not del_file then
-        overlay:remove()
+        border_overlay:remove()
         return
     end
 
@@ -42,19 +64,19 @@ local function update_border()
             t, h - t
         )
 
-        overlay.res_x = w
-        overlay.res_y = h
-        overlay.data = ass
-        overlay:update()
+        border_overlay.res_x = w
+        border_overlay.res_y = h
+        border_overlay.data = ass
+        border_overlay:update()
     else
-        overlay:remove()
+        border_overlay:remove()
     end
 end
 
 local function toggle_del_marker()
     local del_file = get_del_path()
     if not del_file then
-        mp.osd_message("Cannot mark streams for deletion")
+        show_colored_osd("Cannot mark streams for deletion", "00FFFF", 3)
         return
     end
 
@@ -63,19 +85,21 @@ local function toggle_del_marker()
     if info and info.is_file then
         local ok, err = os.remove(del_file)
         if ok then
-            mp.osd_message("Removed .del marker")
+            -- 00FF00 = Green in BGR format
+            show_colored_osd("Removed .del marker", "00FF00", 3)
         else
             mp.msg.error("Failed to remove .del file: " .. tostring(err))
-            mp.osd_message("Error removing .del marker")
+            show_colored_osd("Error removing .del marker", "0000FF", 3)
         end
     else
         local f, err = io.open(del_file, "w")
         if f then
             f:close()
-            mp.osd_message("Marked for deletion (.del created)")
+            -- 0000FF = Red in BGR format
+            show_colored_osd("Marked for deletion (.del created)", "0000FF", 3)
         else
             mp.msg.error("Failed to create .del file: " .. tostring(err))
-            mp.osd_message("Error creating .del marker")
+            show_colored_osd("Error creating .del marker", "0000FF", 3)
         end
     end
 
