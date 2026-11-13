@@ -29,20 +29,29 @@ local function show_colored_osd(text, bgr_hex, duration)
     end)
 end
 
-local function get_del_path()
+-- Safely wrap any file path in POSIX single quotes (handles spaces, $, `, ", and ')
+local function shell_quote(str)
+    return "'" .. str:gsub("'", "'\\''") .. "'"
+end
+
+local function get_video_and_del_paths()
     local path = mp.get_property("path")
     if not path then
-        return nil
+        return nil, nil
     end
     -- Skip URLs/streams where local marker files cannot be created
     if path:match("^[%a][%w%+%-%.]*://") then
-        return nil
+        return nil, nil
     end
-    return path .. ".del"
+
+    -- Resolve to an absolute path so the .del script works from any working directory
+    local wd = mp.get_property("working-directory") or ""
+    local full_path = utils.join_path(wd, path)
+    return full_path, full_path .. ".del"
 end
 
 local function update_border()
-    local del_file = get_del_path()
+    local _, del_file = get_video_and_del_paths()
     if not del_file then
         border_overlay:remove()
         return
@@ -79,7 +88,7 @@ local function update_border()
 end
 
 local function toggle_del_marker()
-    local del_file = get_del_path()
+    local video_file, del_file = get_video_and_del_paths()
     if not del_file then
         show_colored_osd("Cannot mark streams for deletion", "00FFFF", 3)
         return
@@ -99,8 +108,17 @@ local function toggle_del_marker()
     else
         local f, err = io.open(del_file, "w")
         if f then
+            local script_content = string.format(
+                "#!/usr/bin/env bash\nrm -fv -- %s\nrm -fv -- %s\n",
+                shell_quote(video_file),
+                shell_quote(del_file)
+            )
+            f:write(script_content)
             f:close()
-            -- 0000FF = Red in BGR format
+
+            -- Make the .del file executable so it can be run directly
+            os.execute("chmod +x -- " .. shell_quote(del_file))
+
             show_colored_osd("Marked for deletion (.del created)", "0000FF", 3)
         else
             mp.msg.error("Failed to create .del file: " .. tostring(err))
